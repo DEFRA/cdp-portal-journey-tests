@@ -7,6 +7,7 @@ import SecretsPage from 'page-objects/secrets.page'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import PageHeadingComponent from 'components/page-heading.component.js'
+import AdminPage from 'page-objects/admin.page.js'
 
 const tenantService = 'cdp-portal-frontend'
 
@@ -17,7 +18,7 @@ describe('Secrets feature', () => {
       await expect(ServicesPage.logInLink()).toHaveText('Sign in')
     })
 
-    it('Should not be a tab on a "Service" page', async () => {
+    it('Should not be any tabs on a "Service" page', async () => {
       await expect(await ServicesPage.navIsActive()).toBe(true)
       await expect(ServicesPage.pageHeading()).toHaveText(tenantService)
       await expect(TabsComponent.secondTab()).not.toExist()
@@ -43,7 +44,9 @@ describe('Secrets feature', () => {
       await expect(PageHeadingComponent.title(tenantService)).toExist()
 
       await expect(TabsComponent.activeTab()).toHaveText('About')
-      await expect(TabsComponent.secondTab()).toHaveText('Secrets')
+      await expect(TabsComponent.secondTab()).toHaveText('Buckets')
+      await expect(TabsComponent.thirdTab()).toHaveText('Secrets')
+      await expect(TabsComponent.fourthTab()).toHaveText('Terminal')
     })
 
     describe('When navigating to Secrets overview page', () => {
@@ -58,8 +61,8 @@ describe('Secrets feature', () => {
 
       it('Should be an overview page of all secrets page', async () => {
         await ServicesPage.open(`/${tenantService}`)
-        await expect(await TabsComponent.secondTab()).toHaveText('Secrets')
-        await TabsComponent.secondTab().click()
+        await expect(await TabsComponent.thirdTab()).toHaveText('Secrets')
+        await TabsComponent.thirdTab().click()
 
         await expect(PageHeadingComponent.caption('Secrets')).toExist()
         await expect(PageHeadingComponent.title(tenantService)).toExist()
@@ -153,6 +156,29 @@ describe('Secrets feature', () => {
           await SecretsPage.secretStatus(keyName, 'Secret available')
         ).toExist()
       })
+    })
+
+    after(async () => {
+      await AdminPage.logOut()
+    })
+  })
+
+  describe('When logged in a tenant user', () => {
+    before(async () => {
+      await LoginStubPage.loginAsNonAdmin()
+      await ServicesPage.open(`/${tenantService}`)
+      await expect(await ServicesPage.logOutLink()).toHaveText('Sign out')
+    })
+
+    it('Should be 2 tabs on a "Service" page', async () => {
+      await expect(await ServicesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Service')).toExist()
+      await expect(PageHeadingComponent.title(tenantService)).toExist()
+
+      await expect(TabsComponent.activeTab()).toHaveText('About')
+      await expect(TabsComponent.secondTab()).toHaveText('Buckets')
+      await expect(TabsComponent.thirdTab()).not.toExist()
+      await expect(TabsComponent.fourthTab()).not.toExist()
     })
   })
 })

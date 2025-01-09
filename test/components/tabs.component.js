@@ -9,6 +9,14 @@ class TabsComponent {
   secondTab() {
     return $('[data-testid="app-tabs-list-item-2"]')
   }
+
+  thirdTab() {
+    return $('[data-testid="app-tabs-list-item-3"]')
+  }
+
+  fourthTab() {
+    return $('[data-testid="app-tabs-list-item-4"]')
+  }
 }
 
 export default new TabsComponent()
