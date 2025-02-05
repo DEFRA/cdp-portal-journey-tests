@@ -154,7 +154,7 @@ describe('Deploy service', () => {
 
       await expect(headingCaption).toExist()
       await expect(headingCaption).toHaveText(
-        `Microservice deployment for ${imageName}, version ${version}.`
+        `Microservice deployment for ${imageName}, version ${version}`
       )
 
       // Check deployment summary contents
