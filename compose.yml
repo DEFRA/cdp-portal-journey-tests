@@ -75,7 +75,7 @@ services:
 #
 ################################################################################
   cdp-portal-frontend:
-    image: defradigital/cdp-portal-frontend:latest
+    image: defradigital/cdp-portal-frontend:${CDP_PORTAL_FRONTEND:-latest}
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "cdp.127.0.0.1.sslip.io:host-gateway"
@@ -104,7 +104,7 @@ services:
 
 ################################################################################
   cdp-portal-backend:
-    image: defradigital/cdp-portal-backend:latest
+    image: defradigital/cdp-portal-backend:${CDP_PORTAL_BACKEND:-latest}
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "cdp.127.0.0.1.sslip.io:host-gateway"
@@ -127,7 +127,7 @@ services:
 
 ################################################################################
   cdp-user-service-backend:
-    image: defradigital/cdp-user-service-backend:latest
+    image: defradigital/cdp-user-service-backend:${CDP_USER_SERVICE_BACKEND:-latest}
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "cdp.127.0.0.1.sslip.io:host-gateway"
@@ -151,7 +151,7 @@ services:
 
 ################################################################################
   cdp-self-service-ops:
-    image: defradigital/cdp-self-service-ops:latest
+    image: defradigital/cdp-self-service-ops:${CDP_SELF_SERVICE_OPS:-latest}
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "cdp.127.0.0.1.sslip.io:host-gateway"
@@ -175,7 +175,7 @@ services:
 
 ################################################################################
   cdp-portal-stubs:
-    image: defradigital/cdp-portal-stubs:latest
+    image: defradigital/cdp-portal-stubs:${CDP_PORTAL_STUBS:-latest}
     env_file:
       - ./docker/config/defaults.env
       - ./docker/config/cdp-portal-stubs.env

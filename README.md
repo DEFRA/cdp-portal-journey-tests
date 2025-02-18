@@ -157,8 +157,7 @@ provides full run, debug and breakpoint capabilities in your WebDriverIO tests.
    ![WebDriverIO with test controls](docs/webdriverio-plugin/with-test-controls.png)
 
 > [!NOTE]
-> If you wish to run against cdp-local-environment, you will need to set the `Wdio config file` to point at `wdio.
-docker.conf.js` in the `WebdriverIO` configuration template:
+> If you wish to run against cdp-local-environment, you will need to set the `Wdio config file` to point at `wdio.docker.conf.js` in the `WebdriverIO` configuration template:
 
 ### Debug environment variable
 

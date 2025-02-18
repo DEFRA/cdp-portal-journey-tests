@@ -7,6 +7,7 @@ permissions:
 on:
   workflow_dispatch:
   workflow_call:
+
 jobs:
   build:
     name: run-tests
@@ -24,6 +25,7 @@ jobs:
           cache: npm
       - name: Setup the tests
         run: npm i
+
       - name: Start docker compose
         run: docker compose up --wait-timeout 300 -d --quiet-pull
       - name: Run the tests
