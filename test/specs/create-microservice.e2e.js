@@ -8,6 +8,7 @@ import PageHeadingComponent from 'components/page-heading.component'
 import EntityTableComponent from 'components/entity-table.component'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
+import GovukSummaryListComponent from 'components/govuk-summary-list.component.js'
 
 describe('Create microservice', () => {
   describe('When logged out', () => {
@@ -95,6 +96,22 @@ describe('Create microservice', () => {
           'Information about the new microservice you are going to create.'
         )
       ).toExist()
+
+      await expect(await GovukSummaryListComponent.row('row-Kind')).toHaveText(
+        'Microservice'
+      )
+      await expect(await GovukSummaryListComponent.row('row-Name')).toHaveText(
+        testRepositoryName
+      )
+      await expect(
+        await GovukSummaryListComponent.row('row-Template')
+      ).toHaveText(serviceType)
+      await expect(
+        await GovukSummaryListComponent.row('row-Templatetag')
+      ).toHaveText('')
+      await expect(
+        await GovukSummaryListComponent.row('row-OwningTeam')
+      ).toHaveText('Platform')
 
       await FormComponent.submitButton('Create').click()
     })
