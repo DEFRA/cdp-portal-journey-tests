@@ -30,6 +30,7 @@ class Page {
   }
 
   async login() {
+    await this.open('/logout')
     await this.open('/')
     await this.logInLink().click()
   }

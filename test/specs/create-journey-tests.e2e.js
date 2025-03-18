@@ -1,4 +1,4 @@
-import { browser, expect } from '@wdio/globals'
+import { $, browser, expect } from '@wdio/globals'
 
 import CreatePage from 'page-objects/create.page'
 import FormComponent from 'components/form.component'
@@ -7,6 +7,11 @@ import BannerComponent from 'components/banner.component'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import TestSuitesPage from 'page-objects/test-suites.page'
+import PageHeadingComponent from 'components/page-heading.component.js'
+import TabsComponent from 'components/tabs.component.js'
+import TestSuitePage from 'page-objects/test-suite.page.js'
+import SecretsPage from 'page-objects/secrets.page.js'
+import SplitPaneComponent from 'components/split-pane.component.js'
 
 describe('Create journey tests', () => {
   describe('When logged out', () => {
@@ -23,11 +28,26 @@ describe('Create journey tests', () => {
     })
   })
 
-  describe('When logged in as admin user', () => {
+  describe('When logged in as admin user can see the create page', () => {
+    before(async () => {
+      await LoginStubPage.loginAsAdmin()
+      await CreatePage.open()
+    })
+
+    it('Should be on the "Create" page', async () => {
+      await expect(browser).toHaveTitle(
+        'Create | Core Delivery Platform - Portal'
+      )
+      await expect(await CreatePage.navIsActive()).toBe(true)
+      await expect(HeadingComponent.title('Create')).toExist()
+    })
+  })
+
+  describe('When logged in as non-admin user can create journey tests', () => {
     const testRepositoryName = `jrny-test-suite-${new Date().getTime()}`
 
     before(async () => {
-      await LoginStubPage.loginAsAdmin()
+      await LoginStubPage.loginAsNonAdmin()
       await CreatePage.open()
     })
 
@@ -64,7 +84,7 @@ describe('Create journey tests', () => {
       await browser.keys(testRepositoryName)
 
       await FormComponent.inputLabel('Owning Team').click()
-      await browser.keys('Platform')
+      await browser.keys('TenantTeam1')
 
       await FormComponent.submitButton('Next').click()
     })
@@ -120,11 +140,61 @@ describe('Create journey tests', () => {
         'infrastructure'
       ]) {
         await $(
-          `[data-testid="${statusTag}-status-tag"]*=Success`
+          '[data-testid="' + statusTag + '-status-tag"]*=Success'
         ).waitForExist()
       }
 
+      // eslint-disable-next-line wdio/no-pause
+      await browser.pause(5000) // Wait for service to populate in PBE with teams info to validate service owner
+
       await TestSuitesPage.link('new test suite page').click()
+    })
+
+    it('Should be on "Test Suite" page with 2 tabs', async () => {
+      await expect(await TestSuitePage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Test Suite')).toExist()
+      await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
+
+      await expect(TabsComponent.activeTab()).toHaveText('About')
+      await expect(TabsComponent.tab('Secrets')).toExist()
+      await expect(TabsComponent.tab('Proxy')).not.toExist()
+    })
+
+    it('Should be able to go to the "Secrets" overview', async () => {
+      await TabsComponent.tab('Secrets').click()
+
+      await expect(PageHeadingComponent.caption('Secrets')).toExist()
+      await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
+
+      await expect(TabsComponent.activeTab()).toHaveText('Secrets')
+      await expect(await SplitPaneComponent.subNavIsActive('all')).toBe(true)
+      await expect(await SplitPaneComponent.subNavItem('dev')).toExist()
+      await expect(await SplitPaneComponent.subNavItem('test')).toExist()
+      await expect(await SplitPaneComponent.subNavItem('perf-test')).toExist()
+      await expect(await SplitPaneComponent.subNavItem('prod')).toExist()
+      await expect(
+        await SplitPaneComponent.subNavItem('infra-dev')
+      ).not.toExist()
+      await expect(
+        await SplitPaneComponent.subNavItem('management')
+      ).not.toExist()
+    })
+
+    it('Should be able to create a new secret', async () => {
+      const keyName = 'TEST_SECRET'
+
+      await SplitPaneComponent.subNavItem('dev').click()
+
+      await expect($(`[data-testid="no-test-suite-secrets"]`)).toExist()
+      await SecretsPage.createSecretName().click()
+      await browser.keys(keyName)
+
+      await SecretsPage.createSecretValue().click()
+      await browser.keys('SomeValue')
+
+      await SecretsPage.createSecretButton().click()
+
+      await expect(await SecretsPage.secretCell(keyName)).toExist()
     })
   })
 })

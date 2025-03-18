@@ -1,7 +1,8 @@
 import { browser, expect } from '@wdio/globals'
-import TestRunPage from 'page-objects/test-run.page'
+import TestSuitePage from 'page-objects/test-suite.page.js'
 import LoginStubPage from 'page-objects/login-stub.page'
 import BannerComponent from 'components/banner.component.js'
+import TabsComponent from 'components/tabs.component.js'
 
 describe('Run Test Suite', () => {
   const testSuiteName = 'cdp-env-test-suite'
@@ -10,7 +11,7 @@ describe('Run Test Suite', () => {
     browser.waitUntil(
       async () => {
         const statusText =
-          (await TestRunPage.latestTestRun().getText()) ?? 'no match'
+          (await TestSuitePage.latestTestRun().getText()) ?? 'no match'
         return statusText.match(regex)
       },
       {
@@ -21,36 +22,39 @@ describe('Run Test Suite', () => {
 
   describe('When logged out', () => {
     before(async () => {
-      await TestRunPage.open(testSuiteName)
+      await TestSuitePage.open(testSuiteName)
     })
 
     it('Should show the test run page without the run button', async () => {
       await expect(browser).toHaveTitle(
         `Test Suite - ${testSuiteName} | Core Delivery Platform - Portal`
       )
-      await expect(TestRunPage.selectEnvironment()).not.toBeDisplayed()
-      await expect(TestRunPage.startButton()).not.toBeDisplayed()
+      await expect(TestSuitePage.selectEnvironment()).not.toBeDisplayed()
+      await expect(TestSuitePage.startButton()).not.toBeDisplayed()
     })
   })
 
   describe('When logged in as admin user', () => {
     before(async () => {
       await LoginStubPage.loginAsAdmin()
-      await TestRunPage.open(testSuiteName)
+      await TestSuitePage.open(testSuiteName)
     })
 
     it('Should be on the test run page', async () => {
       await expect(browser).toHaveTitle(
         `Test Suite - ${testSuiteName} | Core Delivery Platform - Portal`
       )
-      await expect(TestRunPage.selectEnvironment()).toBeDisplayed()
-      await expect(TestRunPage.startButton()).toBeDisplayed()
+      await expect(TestSuitePage.selectEnvironment()).toBeDisplayed()
+      await expect(TestSuitePage.startButton()).toBeDisplayed()
+
+      await expect(TabsComponent.activeTab()).toHaveText('About')
+      await expect(TabsComponent.tab('Secrets')).toExist()
     })
 
     it('should allow the test suite to be run in infra-dev', async () => {
-      await expect(TestRunPage.selectEnvironment()).toBeDisplayed()
-      await TestRunPage.selectEnvironment().selectByVisibleText('infra-dev')
-      await TestRunPage.startButton().click()
+      await expect(TestSuitePage.selectEnvironment()).toBeDisplayed()
+      await TestSuitePage.selectEnvironment().selectByVisibleText('infra-dev')
+      await TestSuitePage.startButton().click()
       await BannerComponent.content(
         'Test run requested successfully'
       ).isDisplayed()

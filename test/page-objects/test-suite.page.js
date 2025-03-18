@@ -2,7 +2,7 @@ import { $ } from '@wdio/globals'
 
 import { Page } from 'page-objects/page'
 
-class TestRunPage extends Page {
+class TestSuitePage extends Page {
   /**
    * Check if the test-suites nav link is active
    * @returns {Promise<boolean>}
@@ -28,4 +28,4 @@ class TestRunPage extends Page {
   }
 }
 
-export default new TestRunPage()
+export default new TestSuitePage()
