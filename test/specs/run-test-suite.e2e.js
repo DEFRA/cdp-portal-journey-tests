@@ -49,6 +49,7 @@ describe('Run Test Suite', () => {
 
       await expect(TabsComponent.activeTab()).toHaveText('About')
       await expect(TabsComponent.tab('Secrets')).toExist()
+      await expect(TabsComponent.tab('Proxy')).toExist()
     })
 
     it('should allow the test suite to be run in infra-dev', async () => {
@@ -61,6 +62,28 @@ describe('Run Test Suite', () => {
       // Depending on polling intervals the in-progress set can be missed
       await waitForTestStatus('In-progress|Finished')
       await waitForTestStatus('Finished')
+    })
+  })
+
+  describe('When logged in as tenant user who doesnt own the test-suite', () => {
+    before(async () => {
+      await LoginStubPage.loginAsNonAdmin()
+      await TestSuitePage.open(testSuiteName)
+    })
+
+    it('Should be on the test run page', async () => {
+      await expect(browser).toHaveTitle(
+        `Test Suite - ${testSuiteName} | Core Delivery Platform - Portal`
+      )
+
+      await expect(TabsComponent.activeTab()).toHaveText('About')
+      await expect(TabsComponent.tab('Secrets')).not.toExist()
+      await expect(TabsComponent.tab('Proxy')).toExist()
+    })
+
+    it('should not allow the test suite to be run in infra-dev', async () => {
+      await expect(TestSuitePage.selectEnvironment()).not.toBeDisplayed()
+      await expect(TestSuitePage.startButton()).not.toBeDisplayed()
     })
   })
 })

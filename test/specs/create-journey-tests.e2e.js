@@ -157,7 +157,7 @@ describe('Create journey tests', () => {
 
       await expect(TabsComponent.activeTab()).toHaveText('About')
       await expect(TabsComponent.tab('Secrets')).toExist()
-      await expect(TabsComponent.tab('Proxy')).not.toExist()
+      await expect(TabsComponent.tab('Proxy')).toExist()
     })
 
     it('Should be able to go to the "Secrets" overview', async () => {
