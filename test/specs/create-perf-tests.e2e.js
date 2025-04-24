@@ -7,6 +7,10 @@ import BannerComponent from 'components/banner.component'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import TestSuitesPage from 'page-objects/test-suites.page'
+import PageHeadingComponent from 'components/page-heading.component.js'
+import TestSuitePage from 'page-objects/test-suite.page.js'
+import TabsComponent from 'components/tabs.component.js'
+import EntityTableComponent from 'components/entity-table.component.js'
 
 describe('Create perf tests', () => {
   describe('When logged out', () => {
@@ -125,6 +129,30 @@ describe('Create perf tests', () => {
       }
 
       await TestSuitesPage.link('new test suite page').click()
+    })
+
+    it('Should be on "Test Suite" page with 2 tabs', async () => {
+      await expect(await TestSuitePage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Test Suite')).toExist()
+      await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
+
+      await expect(TabsComponent.activeTab()).toHaveText('About')
+      await expect(TabsComponent.tab('Secrets')).toExist()
+      await expect(TabsComponent.tab('Proxy')).toExist()
+    })
+
+    it('Should be able to view list of test-suites with new test-suite listed', async () => {
+      await TestSuitesPage.open()
+
+      await expect(browser).toHaveTitle(
+        'Test Suites | Core Delivery Platform - Portal'
+      )
+      await expect(await TestSuitesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.title('Test Suites')).toExist()
+
+      await expect(
+        EntityTableComponent.entityLink(testRepositoryName)
+      ).toExist()
     })
   })
 })

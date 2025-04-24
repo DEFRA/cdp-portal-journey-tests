@@ -12,6 +12,7 @@ import TabsComponent from 'components/tabs.component.js'
 import TestSuitePage from 'page-objects/test-suite.page.js'
 import SecretsPage from 'page-objects/secrets.page.js'
 import SplitPaneComponent from 'components/split-pane.component.js'
+import EntityTableComponent from 'components/entity-table.component.js'
 
 describe('Create journey tests', () => {
   describe('When logged out', () => {
@@ -195,6 +196,22 @@ describe('Create journey tests', () => {
       await SecretsPage.createSecretButton().click()
 
       await expect(await SecretsPage.secretCell(keyName)).toExist()
+    })
+
+    it('Should be able to view list of test-suites with new test-suite listed', async () => {
+      // eslint-disable-next-line wdio/no-pause
+      await browser.pause(1000) // Wait for the secret to be created
+      await TestSuitesPage.open()
+
+      await expect(browser).toHaveTitle(
+        'Test Suites | Core Delivery Platform - Portal'
+      )
+      await expect(await TestSuitesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.title('Test Suites')).toExist()
+
+      await expect(
+        EntityTableComponent.entityLink(testRepositoryName)
+      ).toExist()
     })
   })
 })

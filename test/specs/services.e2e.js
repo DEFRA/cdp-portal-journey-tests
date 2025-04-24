@@ -10,6 +10,7 @@ import HeadingComponent from 'components/heading.component.js'
 import FormComponent from 'components/form.component'
 import CreatePage from 'page-objects/create.page.js'
 import { createMicroService } from 'helpers/create-micro-service.js'
+import EntityTableComponent from 'components/entity-table.component.js'
 
 const adminService = 'cdp-portal-frontend'
 
@@ -30,8 +31,16 @@ describe('Services page', () => {
       await expect(PageHeadingComponent.title('Services')).toExist()
     })
 
-    it("Should navigate to a 'Service' page", async () => {
-      await ServicesPage.open(`/${adminService}`)
+    it("Should be able to search for a service on the 'Service' page", async () => {
+      await ServicesPage.serviceSearchBox().click()
+      await browser.keys(adminService)
+
+      await expect(EntityTableComponent.entityLink(adminService)).toExist()
+    })
+
+    it("Should navigate to a 'Service' page via the result", async () => {
+      await EntityTableComponent.entityLink(adminService).click()
+
       await expect(browser).toHaveTitle(
         `${adminService} microservice | Core Delivery Platform - Portal`
       )
