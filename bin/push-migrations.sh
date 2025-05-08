@@ -2,6 +2,7 @@
 
 DIRECTORY="assets"
 LOCALSTACK_URL="http://localstack:4566"
+AWS_REGION=eu-west-2
 
 echo "Pushing migrations to S3"
 
