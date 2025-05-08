@@ -214,7 +214,10 @@ describe('Postgres service page', () => {
       const $databaseChangesSection = $(`[data-testid="database-changes"]`)
       await expect($databaseChangesSection).toExist()
 
-      const $updateButton = await LinkComponent.link('update-button', 'Update')
+      const $updateButton = await LinkComponent.link(
+        'update-button-0.1.0',
+        'Update'
+      )
       await expect($updateButton).toExist()
       await $updateButton.click()
     })
@@ -350,7 +353,7 @@ describe('Postgres service page', () => {
         await expect($databaseChangesSection).toExist()
 
         const $updateButton = await LinkComponent.link(
-          'update-button',
+          'update-button-0.1.0',
           'Update'
         )
         await expect($updateButton).not.toExist()
