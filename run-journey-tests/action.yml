@@ -33,7 +33,7 @@ runs:
 
     - name: Start docker compose
       run: |
-        CDP_SELF_SERVICE_OPS=${{inputs.self-service-ops}} \
+          CDP_SELF_SERVICE_OPS=${{inputs.self-service-ops}} \
           CDP_PORTAL_FRONTEND=${{inputs.portal-frontend}} \
           CDP_PORTAL_BACKEND=${{inputs.portal-backend}} \
           CDP_USER_SERVICE_BACKEND=${{inputs.user-service-backend}} \
