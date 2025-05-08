@@ -215,8 +215,9 @@ describe('Postgres service page', () => {
       await expect($databaseChangesSection).toExist()
 
       const $updateButton = await LinkComponent.link('update-button', 'Update')
-      await expect($updateButton).toExist()
 
+      await $updateButton.scrollIntoView()
+      await expect($updateButton).toExist()
       await $updateButton.click()
     })
 
