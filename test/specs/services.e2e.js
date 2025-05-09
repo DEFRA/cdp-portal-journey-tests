@@ -6,7 +6,6 @@ import DeploymentsPage from 'page-objects/deployments.page.js'
 import EntityTableComponent from 'components/entity-table.component.js'
 import FormComponent from 'components/form.component'
 import GovukSummaryListComponent from 'components/govuk-summary-list.component.js'
-import HeadingComponent from 'components/heading.component.js'
 import LinkComponent from 'components/link.component'
 import LoginStubPage from 'page-objects/login-stub.page'
 import PageHeadingComponent from 'components/page-heading.component'
@@ -17,7 +16,9 @@ import { addPermission, deletePermission } from 'helpers/add-permission.js'
 import { createMicroService } from 'helpers/create-micro-service.js'
 
 const adminService = 'cdp-portal-frontend'
+const adminServiceVersion = '0.172.0'
 const postgresService = 'cdp-postgres-service'
+const postgresServiceVersion = '0.1.0'
 
 describe('Services page', () => {
   describe('When logged in as admin user', () => {
@@ -69,7 +70,10 @@ describe('Services page', () => {
       const $publishedImagesSection = $(`[data-testid="published-images"]`)
       await expect($publishedImagesSection).toExist()
 
-      const $deployButton = await LinkComponent.link('deploy-button', 'Deploy')
+      const $deployButton = await LinkComponent.link(
+        `deploy-button-${adminServiceVersion}`,
+        'Deploy'
+      )
       await expect($deployButton).toExist()
 
       $deployButton.click()
@@ -80,19 +84,29 @@ describe('Services page', () => {
         'Deploy service details | Core Delivery Platform - Portal'
       )
       await expect(await DeployPage.navIsActive()).toBe(true)
-      await expect(HeadingComponent.title('Details')).toExist()
-      await expect(
-        HeadingComponent.caption(
-          'Provide the microservice image name, version and environment to deploy to.'
+
+      await expect(PageHeadingComponent.caption('Deploy service')).toExist()
+      await expect(PageHeadingComponent.title('Details')).toExist()
+
+      const $pageHeadingIntro = PageHeadingComponent.intro()
+      await expect($pageHeadingIntro).toExist()
+      await expect($pageHeadingIntro).toHaveHTML(
+        expect.stringContaining(
+          'Provide the microservice image name, version and environment to deploy to'
         )
-      ).toExist()
+      )
+
       await expect(FormComponent.input('image-name')).toHaveValue(adminService)
+      await expect(FormComponent.input('version')).toHaveValue(
+        adminServiceVersion
+      )
     })
   })
 
   describe('When logged in as non-admin user', () => {
     const testRepositoryName = `test-repo-${new Date().getTime()}`
     const teamName = 'TenantTeam1'
+    const artifactVersion = '0.3.0'
 
     before(async () => {
       await LoginStubPage.loginAsNonAdmin()
@@ -125,7 +139,7 @@ describe('Services page', () => {
         await expect($publishedImagesSection).toExist()
 
         const $deployButton = await LinkComponent.link(
-          'deploy-button',
+          `deploy-button-${artifactVersion}`,
           'Deploy'
         )
         await expect($deployButton).toExist()
@@ -138,14 +152,22 @@ describe('Services page', () => {
           'Deploy service details | Core Delivery Platform - Portal'
         )
         await expect(await DeployPage.navIsActive()).toBe(true)
-        await expect(HeadingComponent.title('Details')).toExist()
-        await expect(
-          HeadingComponent.caption(
-            'Provide the microservice image name, version and environment to deploy to.'
+
+        await expect(PageHeadingComponent.caption('Deploy service')).toExist()
+        await expect(PageHeadingComponent.title('Details')).toExist()
+
+        const $pageHeadingIntro = PageHeadingComponent.intro()
+        await expect($pageHeadingIntro).toExist()
+        await expect($pageHeadingIntro).toHaveHTML(
+          expect.stringContaining(
+            'Provide the microservice image name, version and environment to deploy to'
           )
-        ).toExist()
+        )
         await expect(FormComponent.input('image-name')).toHaveValue(
           testRepositoryName
+        )
+        await expect(FormComponent.input('version')).toHaveValue(
+          artifactVersion
         )
       })
     })
@@ -154,6 +176,7 @@ describe('Services page', () => {
 
 describe('Postgres service page', () => {
   const dbApplyChangelogEnv = 'dev'
+  const postgresArtifactVersion = '0.100.0'
 
   describe('Logged in as "admin" with "restrictedTechPostgres" permission', () => {
     before(async () => {
@@ -208,7 +231,10 @@ describe('Postgres service page', () => {
       const $publishedImagesSection = $(`[data-testid="published-images"]`)
       await expect($publishedImagesSection).toExist()
 
-      const $deployButton = await LinkComponent.link('deploy-button', 'Deploy')
+      const $deployButton = await LinkComponent.link(
+        `deploy-button-${postgresArtifactVersion}`,
+        'Deploy'
+      )
       await expect($deployButton).toExist()
     })
 
@@ -217,7 +243,7 @@ describe('Postgres service page', () => {
       await expect($databaseChangesSection).toExist()
 
       const $applyButton = await LinkComponent.link(
-        'apply-button-0.1.0',
+        `apply-button-${postgresServiceVersion}`,
         'Apply'
       )
       await expect($applyButton).toExist()
@@ -231,16 +257,20 @@ describe('Postgres service page', () => {
       await expect(await ApplyChangelog.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Apply changelog')).toExist()
       await expect(PageHeadingComponent.title('Details')).toExist()
-      await expect(
-        PageHeadingComponent.intro(
+
+      const $pageHeadingIntro = PageHeadingComponent.intro()
+      await expect($pageHeadingIntro).toExist()
+      await expect($pageHeadingIntro).toHaveHTML(
+        expect.stringContaining(
           'Provide the microservice name, database changelog version and environment you wish to apply your database changes to'
         )
-      ).toExist()
-
+      )
       await expect(FormComponent.input('service-name')).toHaveValue(
         postgresService
       )
-      await expect(FormComponent.input('version')).toHaveValue('0.1.0')
+      await expect(FormComponent.input('version')).toHaveValue(
+        postgresServiceVersion
+      )
     })
 
     it('Should be able to complete the details form', async () => {
@@ -268,7 +298,9 @@ describe('Postgres service page', () => {
       const summary = await ApplyChangelog.summary()
 
       await expect(summary).toHaveHTML(expect.stringContaining(postgresService))
-      await expect(summary).toHaveHTML(expect.stringContaining('0.1.0'))
+      await expect(summary).toHaveHTML(
+        expect.stringContaining(postgresServiceVersion)
+      )
       await expect(summary).toHaveHTML(
         expect.stringContaining(dbApplyChangelogEnv)
       )
@@ -278,14 +310,14 @@ describe('Postgres service page', () => {
 
     it('Should be redirected to the "Database update" deployment page', async () => {
       await expect(browser).toHaveTitle(
-        `${postgresService} 0.1.0 database update - Dev | Core Delivery Platform - Portal`
+        `${postgresService} ${postgresServiceVersion} database update - Dev | Core Delivery Platform - Portal`
       )
       await expect(await DeploymentsPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Database update')).toExist()
       await expect(PageHeadingComponent.title(postgresService)).toExist()
       await expect(
         PageHeadingComponent.intro(
-          `Database update for ${postgresService}, changelog version 0.1.0 in ${dbApplyChangelogEnv}`
+          `Database update for ${postgresService}, changelog version ${postgresServiceVersion} in ${dbApplyChangelogEnv}`
         )
       ).toExist()
 
@@ -297,7 +329,9 @@ describe('Postgres service page', () => {
       await expect($summaryList).toHaveHTML(
         expect.stringContaining(dbApplyChangelogEnv)
       )
-      await expect($summaryList).toHaveHTML(expect.stringContaining('0.1.0'))
+      await expect($summaryList).toHaveHTML(
+        expect.stringContaining(postgresServiceVersion)
+      )
       await expect($summaryList).toHaveHTML(
         expect.stringContaining('Database update - liquibase')
       )
@@ -328,7 +362,7 @@ describe('Postgres service page', () => {
         `[data-testid="database-details"]`
       )
       await expect($databaseDetailsSection).toHaveHTML(
-        expect.stringContaining('0.1.0')
+        expect.stringContaining(postgresServiceVersion)
       )
     })
   })
@@ -364,7 +398,7 @@ describe('Postgres service page', () => {
         await expect($databaseChangesSection).toExist()
 
         const $applyButton = await LinkComponent.link(
-          'apply-button-0.1.0',
+          `apply-button-${postgresServiceVersion}`,
           'Apply'
         )
         await expect($applyButton).not.toExist()

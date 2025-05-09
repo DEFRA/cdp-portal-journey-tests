@@ -126,19 +126,20 @@ describe('Deploy service', () => {
 
       await expect(PageHeadingComponent.caption('Deploy service')).toExist()
       await expect(PageHeadingComponent.title('Summary')).toExist()
-      await expect(
-        PageHeadingComponent.intro(
+
+      const $pageHeadingIntro = PageHeadingComponent.intro()
+      await expect($pageHeadingIntro).toExist()
+      await expect($pageHeadingIntro).toHaveHTML(
+        expect.stringContaining(
           'Information about the microservice you are going to deploy'
         )
-      ).toExist()
+      )
 
       // Check deploy summary contents
       const $summary = $('[data-testid="deploy-summary"]')
       await expect($summary).toHaveHTML(expect.stringContaining(imageName))
       await expect($summary).toHaveHTML(expect.stringContaining(version))
-      await expect($summary).toHaveHTML(
-        expect.stringContaining(formattedEnvironment)
-      )
+      await expect($summary).toHaveHTML(expect.stringContaining(environment))
       await expect($summary).toHaveHTML(expect.stringContaining(instanceCount))
       await expect($summary).toHaveHTML(expect.stringContaining(cpuText))
       await expect($summary).toHaveHTML(expect.stringContaining(memoryText))

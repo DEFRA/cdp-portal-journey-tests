@@ -18,7 +18,9 @@ class PageHeadingComponent {
   }
 
   intro(content) {
-    return $('[data-testid="app-page-heading-intro"]*=' + content)
+    return $(
+      '[data-testid="app-page-heading-intro"]' + (content ? '*=' + content : '')
+    )
   }
 }
 
