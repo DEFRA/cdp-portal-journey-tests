@@ -12,7 +12,7 @@ import LoginStubPage from 'page-objects/login-stub.page'
 import PageHeadingComponent from 'components/page-heading.component'
 import ServicesPage from 'page-objects/services.page'
 import TabsComponent from 'components/tabs.component.js'
-import UpdateDatabase from 'page-objects/update-database.page.js'
+import ApplyChangelog from 'page-objects/apply-changelog.page.js'
 import { addPermission, deletePermission } from 'helpers/add-permission.js'
 import { createMicroService } from 'helpers/create-micro-service.js'
 
@@ -77,7 +77,7 @@ describe('Services page', () => {
 
     it('Should be redirected to the deploy journey', async () => {
       await expect(browser).toHaveTitle(
-        'Deploy Service details | Core Delivery Platform - Portal'
+        'Deploy service details | Core Delivery Platform - Portal'
       )
       await expect(await DeployPage.navIsActive()).toBe(true)
       await expect(HeadingComponent.title('Details')).toExist()
@@ -135,7 +135,7 @@ describe('Services page', () => {
 
       it('Should be redirected to the deploy journey', async () => {
         await expect(browser).toHaveTitle(
-          'Deploy Service details | Core Delivery Platform - Portal'
+          'Deploy service details | Core Delivery Platform - Portal'
         )
         await expect(await DeployPage.navIsActive()).toBe(true)
         await expect(HeadingComponent.title('Details')).toExist()
@@ -153,6 +153,8 @@ describe('Services page', () => {
 })
 
 describe('Postgres service page', () => {
+  const dbApplyChangelogEnv = 'dev'
+
   describe('Logged in as "admin" with "restrictedTechPostgres" permission', () => {
     before(async () => {
       await addPermission('restrictedTechPostgres', 'Platform')
@@ -214,24 +216,24 @@ describe('Postgres service page', () => {
       const $databaseChangesSection = $(`[data-testid="database-changes"]`)
       await expect($databaseChangesSection).toExist()
 
-      const $updateButton = await LinkComponent.link(
-        'update-button-0.1.0',
-        'Update'
+      const $applyButton = await LinkComponent.link(
+        'apply-button-0.1.0',
+        'Apply'
       )
-      await expect($updateButton).toExist()
-      await $updateButton.click()
+      await expect($applyButton).toExist()
+      await $applyButton.click()
     })
 
-    it("Should be redirected to the 'Update Database' journey with prefilled form values", async () => {
+    it("Should be redirected to the 'Apply Changelog' journey with prefilled form values", async () => {
       await expect(browser).toHaveTitle(
-        'Update Database change details | Core Delivery Platform - Portal'
+        'Apply changelog details | Core Delivery Platform - Portal'
       )
-      await expect(await UpdateDatabase.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Update database')).toExist()
+      await expect(await ApplyChangelog.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Apply changelog')).toExist()
       await expect(PageHeadingComponent.title('Details')).toExist()
       await expect(
         PageHeadingComponent.intro(
-          'Provide the microservice service name, database update version and environment'
+          'Provide the microservice name, database changelog version and environment you wish to apply your database changes to'
         )
       ).toExist()
 
@@ -243,54 +245,62 @@ describe('Postgres service page', () => {
 
     it('Should be able to complete the details form', async () => {
       await FormComponent.inputLabel('Environment').click()
-      await browser.keys('dev')
+      await browser.keys(dbApplyChangelogEnv)
 
       await FormComponent.submitButton('Next').click()
     })
 
-    it("Should be on the 'Update Database' summary page", async () => {
+    it("Should be on the 'Apply Changelog' summary page", async () => {
       await expect(browser).toHaveTitle(
-        'Update Database summary | Core Delivery Platform - Portal'
+        'Apply changelog summary | Core Delivery Platform - Portal'
       )
-      await expect(await UpdateDatabase.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Summary')).toExist()
-      await expect(PageHeadingComponent.title('Update database')).toExist()
+      await expect(await ApplyChangelog.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Apply changelog')).toExist()
+      await expect(PageHeadingComponent.title('Summary')).toExist()
       await expect(
         PageHeadingComponent.intro(
-          'Information about the database update you are about to run'
+          'Information about the database changelog update you are about to run'
         )
       ).toExist()
     })
 
-    it("'Update Database' summary page should contain expected details'", async () => {
-      const summaryMarkup = await UpdateDatabase.summary().getHTML()
+    it("'Apply changelog' summary page should contain expected details", async () => {
+      const summary = await ApplyChangelog.summary()
 
-      await expect(summaryMarkup.includes(postgresService)).toBe(true)
-      await expect(summaryMarkup.includes('0.1.0')).toBe(true)
-      await expect(summaryMarkup.includes('Dev')).toBe(true)
+      await expect(summary).toHaveHTML(expect.stringContaining(postgresService))
+      await expect(summary).toHaveHTML(expect.stringContaining('0.1.0'))
+      await expect(summary).toHaveHTML(
+        expect.stringContaining(dbApplyChangelogEnv)
+      )
 
-      await FormComponent.submitButton('Update').click()
+      await FormComponent.submitButton('Apply').click()
     })
 
-    it('Should be redirected to the "Update Database" page', async () => {
+    it('Should be redirected to the "Database update" deployment page', async () => {
       await expect(browser).toHaveTitle(
         `${postgresService} 0.1.0 database update - Dev | Core Delivery Platform - Portal`
       )
       await expect(await DeploymentsPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Database update')).toExist()
-      await expect(PageHeadingComponent.title('Dev')).toExist()
+      await expect(PageHeadingComponent.title(postgresService)).toExist()
       await expect(
         PageHeadingComponent.intro(
-          `Database update for ${postgresService}, version 0.1.0`
+          `Database update for ${postgresService}, changelog version 0.1.0 in ${dbApplyChangelogEnv}`
         )
       ).toExist()
 
-      const summaryList = await GovukSummaryListComponent.content().getHTML()
+      const $summaryList = await GovukSummaryListComponent.content()
 
-      await expect(summaryList.includes(postgresService)).toBe(true)
-      await expect(summaryList.includes('dev')).toBe(true)
-      await expect(summaryList.includes('0.1.0')).toBe(true)
-      await expect(summaryList.includes('Liquibase')).toBe(true)
+      await expect($summaryList).toHaveHTML(
+        expect.stringContaining(postgresService)
+      )
+      await expect($summaryList).toHaveHTML(
+        expect.stringContaining(dbApplyChangelogEnv)
+      )
+      await expect($summaryList).toHaveHTML(expect.stringContaining('0.1.0'))
+      await expect($summaryList).toHaveHTML(
+        expect.stringContaining('Database update - liquibase')
+      )
 
       await $(`[data-testid="succeeded-status-tag"]*=Succeeded`).waitForExist()
 
@@ -309,16 +319,17 @@ describe('Postgres service page', () => {
         `${postgresService} microservice | Core Delivery Platform - Portal`
       )
       await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title(postgresService)).toExist()
       await expect(PageHeadingComponent.caption('Service')).toExist()
+      await expect(PageHeadingComponent.title(postgresService)).toExist()
     })
 
     it('Should see the update database change', async () => {
       const $databaseDetailsSection = await $(
         `[data-testid="database-details"]`
-      ).getHTML()
-
-      await expect($databaseDetailsSection.includes('0.1.0')).toBe(true)
+      )
+      await expect($databaseDetailsSection).toHaveHTML(
+        expect.stringContaining('0.1.0')
+      )
     })
   })
 
@@ -344,19 +355,19 @@ describe('Postgres service page', () => {
           `${postgresService} microservice | Core Delivery Platform - Portal`
         )
         await expect(await ServicesPage.navIsActive()).toBe(true)
-        await expect(PageHeadingComponent.title(postgresService)).toExist()
         await expect(PageHeadingComponent.caption('Service')).toExist()
+        await expect(PageHeadingComponent.title(postgresService)).toExist()
       })
 
-      it("Should not be able to see the 'update' button in 'Database Changes' section", async () => {
+      it("Should not be able to see the 'apply' button in 'Database Changes' section", async () => {
         const $databaseChangesSection = $(`[data-testid="database-changes"]`)
         await expect($databaseChangesSection).toExist()
 
-        const $updateButton = await LinkComponent.link(
-          'update-button-0.1.0',
-          'Update'
+        const $applyButton = await LinkComponent.link(
+          'apply-button-0.1.0',
+          'Apply'
         )
-        await expect($updateButton).not.toExist()
+        await expect($applyButton).not.toExist()
       })
     })
   })

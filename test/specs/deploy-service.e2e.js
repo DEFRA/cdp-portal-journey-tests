@@ -5,7 +5,7 @@ import upperFirst from 'lodash/upperFirst.js'
 import DeployPage from 'page-objects/deploy.page'
 import DeploymentsPage from 'page-objects/deployments.page'
 import FormComponent from 'components/form.component'
-import HeadingComponent from 'components/heading.component'
+import PageHeadingComponent from 'components/page-heading.component'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 
@@ -56,21 +56,22 @@ describe('Deploy service', () => {
 
     it('Should be on the "Deploy details" page', async () => {
       await expect(browser).toHaveTitle(
-        'Deploy Service details | Core Delivery Platform - Portal'
+        'Deploy service details | Core Delivery Platform - Portal'
       )
       await expect(await DeployPage.navIsActive()).toBe(true)
-      await expect(HeadingComponent.title('Details')).toExist()
+      await expect(PageHeadingComponent.caption('Deploy service')).toExist()
+      await expect(PageHeadingComponent.title('Details')).toExist()
       await expect(
-        HeadingComponent.caption(
-          'Provide the microservice image name, version and environment to deploy to.'
+        PageHeadingComponent.intro(
+          'Provide the microservice image name, version and environment to deploy to'
         )
       ).toExist()
 
-      await FormComponent.inputLabel('Image Name').click()
+      await FormComponent.inputLabel('Image name').click()
       await browser.keys(imageName)
       await browser.keys('Enter')
 
-      await FormComponent.inputLabel('Image Version').click()
+      await FormComponent.inputLabel('Image version').click()
 
       // Wait for version to appear in info panel
       await expect(
@@ -89,13 +90,15 @@ describe('Deploy service', () => {
 
     it('Should be on the "Deploy options" page', async () => {
       await expect(browser).toHaveTitle(
-        'Deploy Service options | Core Delivery Platform - Portal'
+        'Deploy service options | Core Delivery Platform - Portal'
       )
       await expect(await DeployPage.navIsActive()).toBe(true)
-      await expect(HeadingComponent.title('Options')).toExist()
+
+      await expect(PageHeadingComponent.caption('Deploy service')).toExist()
+      await expect(PageHeadingComponent.title('Options')).toExist()
       await expect(
-        HeadingComponent.caption(
-          'Choose Microservice Instance count, CPU and Memory allocation.'
+        PageHeadingComponent.intro(
+          'Choose microservice instance count, CPU and memory allocation'
         )
       ).toExist()
 
@@ -117,26 +120,28 @@ describe('Deploy service', () => {
 
     it('Should be able to view deployment summary', async () => {
       await expect(browser).toHaveTitle(
-        'Deploy Service summary | Core Delivery Platform - Portal'
+        'Deploy service summary | Core Delivery Platform - Portal'
       )
       await expect(await DeployPage.navIsActive()).toBe(true)
-      await expect(HeadingComponent.title('Deployment summary')).toExist()
+
+      await expect(PageHeadingComponent.caption('Deploy service')).toExist()
+      await expect(PageHeadingComponent.title('Summary')).toExist()
       await expect(
-        HeadingComponent.caption(
-          'Information about the Microservice you are going to deploy.'
+        PageHeadingComponent.intro(
+          'Information about the microservice you are going to deploy'
         )
       ).toExist()
 
       // Check deploy summary contents
-      const summary = $('[data-testid="deploy-summary"]')
-      await expect(summary).toHaveHTML(expect.stringContaining(imageName))
-      await expect(summary).toHaveHTML(expect.stringContaining(version))
-      await expect(summary).toHaveHTML(
+      const $summary = $('[data-testid="deploy-summary"]')
+      await expect($summary).toHaveHTML(expect.stringContaining(imageName))
+      await expect($summary).toHaveHTML(expect.stringContaining(version))
+      await expect($summary).toHaveHTML(
         expect.stringContaining(formattedEnvironment)
       )
-      await expect(summary).toHaveHTML(expect.stringContaining(instanceCount))
-      await expect(summary).toHaveHTML(expect.stringContaining(cpuText))
-      await expect(summary).toHaveHTML(expect.stringContaining(memoryText))
+      await expect($summary).toHaveHTML(expect.stringContaining(instanceCount))
+      await expect($summary).toHaveHTML(expect.stringContaining(cpuText))
+      await expect($summary).toHaveHTML(expect.stringContaining(memoryText))
 
       await FormComponent.submitButton('Deploy').click()
     })
@@ -146,17 +151,18 @@ describe('Deploy service', () => {
         `${imageName} ${version} deployment - ${formattedEnvironment} | Core Delivery Platform - Portal`
       )
       await expect(await DeploymentsPage.navIsActive()).toBe(true)
-      await expect(
-        HeadingComponent.title(`${formattedEnvironment} deployment`)
-      ).toExist()
 
-      const headingCaption = HeadingComponent.caption(
+      await expect(
+        PageHeadingComponent.caption('Microservice deployment')
+      ).toExist()
+      await expect(PageHeadingComponent.title(imageName)).toExist()
+
+      const pageHeadingIntro = PageHeadingComponent.intro(
         'Microservice deployment for'
       )
-
-      await expect(headingCaption).toExist()
-      await expect(headingCaption).toHaveText(
-        `Microservice deployment for ${imageName}, version ${version}`
+      await expect(pageHeadingIntro).toExist()
+      await expect(pageHeadingIntro).toHaveText(
+        `Microservice deployment for ${imageName}, version ${version} in ${environment}`
       )
 
       // Check deployment summary contents
@@ -168,7 +174,7 @@ describe('Deploy service', () => {
         expect.stringContaining(version)
       )
       await expect(deploymentSummary).toHaveHTML(
-        expect.stringContaining(formattedEnvironment)
+        expect.stringContaining(environment)
       )
       await expect(deploymentSummary).toHaveHTML(
         expect.stringContaining(instanceCount)
