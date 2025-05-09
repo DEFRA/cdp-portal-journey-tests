@@ -34,7 +34,7 @@ describe('Services page', () => {
       )
 
       await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title('Services')).toExist()
+      await expect(await PageHeadingComponent.title('Services')).toExist()
     })
 
     it("Should be able to search for a service on the 'Service' page", async () => {
@@ -53,8 +53,8 @@ describe('Services page', () => {
         `${adminService} microservice | Core Delivery Platform - Portal`
       )
       await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title(adminService)).toExist()
-      await expect(PageHeadingComponent.caption('Service')).toExist()
+      await expect(await PageHeadingComponent.title(adminService)).toExist()
+      await expect(await PageHeadingComponent.caption('Service')).toExist()
     })
 
     it("Should be able to see the expected admin tabs on 'Service' page", async () => {
@@ -85,8 +85,10 @@ describe('Services page', () => {
       )
       await expect(await DeployPage.navIsActive()).toBe(true)
 
-      await expect(PageHeadingComponent.caption('Deploy service')).toExist()
-      await expect(PageHeadingComponent.title('Details')).toExist()
+      await expect(
+        await PageHeadingComponent.caption('Deploy service')
+      ).toExist()
+      await expect(await PageHeadingComponent.title('Details')).toExist()
 
       const $pageHeadingIntro = PageHeadingComponent.intro()
       await expect($pageHeadingIntro).toExist()
@@ -121,8 +123,10 @@ describe('Services page', () => {
           `${testRepositoryName} microservice | Core Delivery Platform - Portal`
         )
         await expect(await ServicesPage.navIsActive()).toBe(true)
-        await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
-        await expect(PageHeadingComponent.caption('Service')).toExist()
+        await expect(
+          await PageHeadingComponent.title(testRepositoryName)
+        ).toExist()
+        await expect(await PageHeadingComponent.caption('Service')).toExist()
       })
 
       it("Should be able to see the expected non-admin tabs on 'Service' page", async () => {
@@ -153,8 +157,10 @@ describe('Services page', () => {
         )
         await expect(await DeployPage.navIsActive()).toBe(true)
 
-        await expect(PageHeadingComponent.caption('Deploy service')).toExist()
-        await expect(PageHeadingComponent.title('Details')).toExist()
+        await expect(
+          await PageHeadingComponent.caption('Deploy service')
+        ).toExist()
+        await expect(await PageHeadingComponent.title('Details')).toExist()
 
         const $pageHeadingIntro = PageHeadingComponent.intro()
         await expect($pageHeadingIntro).toExist()
@@ -195,7 +201,7 @@ describe('Postgres service page', () => {
       )
 
       await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title('Services')).toExist()
+      await expect(await PageHeadingComponent.title('Services')).toExist()
     })
 
     it("Should be able to search for a service on the 'Service' page", async () => {
@@ -214,8 +220,8 @@ describe('Postgres service page', () => {
         `${postgresService} microservice | Core Delivery Platform - Portal`
       )
       await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title(postgresService)).toExist()
-      await expect(PageHeadingComponent.caption('Service')).toExist()
+      await expect(await PageHeadingComponent.title(postgresService)).toExist()
+      await expect(await PageHeadingComponent.caption('Service')).toExist()
     })
 
     it("Should be able to see the expected admin tabs on 'Service' page", async () => {
@@ -255,8 +261,10 @@ describe('Postgres service page', () => {
         'Apply changelog details | Core Delivery Platform - Portal'
       )
       await expect(await ApplyChangelog.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Apply changelog')).toExist()
-      await expect(PageHeadingComponent.title('Details')).toExist()
+      await expect(
+        await PageHeadingComponent.caption('Apply changelog')
+      ).toExist()
+      await expect(await PageHeadingComponent.title('Details')).toExist()
 
       const $pageHeadingIntro = PageHeadingComponent.intro()
       await expect($pageHeadingIntro).toExist()
@@ -285,8 +293,10 @@ describe('Postgres service page', () => {
         'Apply changelog summary | Core Delivery Platform - Portal'
       )
       await expect(await ApplyChangelog.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Apply changelog')).toExist()
-      await expect(PageHeadingComponent.title('Summary')).toExist()
+      await expect(
+        await PageHeadingComponent.caption('Apply changelog')
+      ).toExist()
+      await expect(await PageHeadingComponent.title('Summary')).toExist()
       await expect(
         PageHeadingComponent.intro(
           'Information about the database changelog update you are about to run'
@@ -313,8 +323,10 @@ describe('Postgres service page', () => {
         `${postgresService} ${postgresServiceVersion} database update - Dev | Core Delivery Platform - Portal`
       )
       await expect(await DeploymentsPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Database update')).toExist()
-      await expect(PageHeadingComponent.title(postgresService)).toExist()
+      await expect(
+        await PageHeadingComponent.caption('Database update')
+      ).toExist()
+      await expect(await PageHeadingComponent.title(postgresService)).toExist()
       await expect(
         PageHeadingComponent.intro(
           `Database update for ${postgresService}, changelog version ${postgresServiceVersion} in ${dbApplyChangelogEnv}`
@@ -353,8 +365,8 @@ describe('Postgres service page', () => {
         `${postgresService} microservice | Core Delivery Platform - Portal`
       )
       await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Service')).toExist()
-      await expect(PageHeadingComponent.title(postgresService)).toExist()
+      await expect(await PageHeadingComponent.caption('Service')).toExist()
+      await expect(await PageHeadingComponent.title(postgresService)).toExist()
     })
 
     it('Should see the update database change', async () => {
@@ -381,7 +393,7 @@ describe('Postgres service page', () => {
         )
 
         await expect(await ServicesPage.navIsActive()).toBe(true)
-        await expect(PageHeadingComponent.title('Services')).toExist()
+        await expect(await PageHeadingComponent.title('Services')).toExist()
 
         await EntityTableComponent.entityLink(postgresService).click()
 
@@ -389,8 +401,10 @@ describe('Postgres service page', () => {
           `${postgresService} microservice | Core Delivery Platform - Portal`
         )
         await expect(await ServicesPage.navIsActive()).toBe(true)
-        await expect(PageHeadingComponent.caption('Service')).toExist()
-        await expect(PageHeadingComponent.title(postgresService)).toExist()
+        await expect(await PageHeadingComponent.caption('Service')).toExist()
+        await expect(
+          await PageHeadingComponent.title(postgresService)
+        ).toExist()
       })
 
       it("Should not be able to see the 'apply' button in 'Database Changes' section", async () => {

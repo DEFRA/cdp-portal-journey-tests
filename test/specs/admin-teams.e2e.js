@@ -16,7 +16,7 @@ async function onTheAdminTeamsPage() {
   await expect(browser).toHaveTitle('Teams | Core Delivery Platform - Portal')
   await expect(await AdminPage.navIsActive()).toBe(true)
   await expect(await AdminTeamsPage.subNavIsActive()).toBe(true)
-  await expect(PageHeadingComponent.title('Teams')).toExist()
+  await expect(await PageHeadingComponent.title('Teams')).toExist()
 }
 
 async function onTheAnotherTenantTeamAdminPage() {
@@ -25,8 +25,8 @@ async function onTheAnotherTenantTeamAdminPage() {
   )
   await expect(await AdminPage.navIsActive()).toBe(true)
   await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
-  await expect(PageHeadingComponent.title(mockTenantTeam)).toExist()
-  await expect(PageHeadingComponent.caption('Team')).toExist()
+  await expect(await PageHeadingComponent.title(mockTenantTeam)).toExist()
+  await expect(await PageHeadingComponent.caption('Team')).toExist()
 }
 
 describe('Admin Teams', () => {
@@ -48,8 +48,8 @@ describe('Admin Teams', () => {
       )
       await expect(await AdminPage.navIsActive()).toBe(true)
       await expect(await AdminTeamsPage.subNavIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title('Create New')).toExist()
-      await expect(PageHeadingComponent.caption('Team')).toExist()
+      await expect(await PageHeadingComponent.title('Create New')).toExist()
+      await expect(await PageHeadingComponent.caption('Team')).toExist()
     })
 
     it('Should be able to Create a team', async () => {
@@ -65,8 +65,10 @@ describe('Admin Teams', () => {
       )
       await expect(await AdminPage.navIsActive()).toBe(true)
       await expect(await AdminTeamsPage.subNavIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title('DEFRA GitHub Team')).toExist()
-      await expect(PageHeadingComponent.caption('Find')).toExist()
+      await expect(
+        await PageHeadingComponent.title('DEFRA GitHub Team')
+      ).toExist()
+      await expect(await PageHeadingComponent.caption('Find')).toExist()
     })
 
     it('Should be able to find GitHub team', async () => {
@@ -87,7 +89,7 @@ describe('Admin Teams', () => {
       )
       await expect(await AdminPage.navIsActive()).toBe(true)
       await expect(await AdminTeamsPage.subNavIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title(mockTenantTeam)).toExist()
+      await expect(await PageHeadingComponent.title(mockTenantTeam)).toExist()
       await expect(
         PageHeadingComponent.caption('Create Team Summary')
       ).toExist()
@@ -131,8 +133,8 @@ describe('Admin Teams', () => {
       )
       await expect(await AdminPage.navIsActive()).toBe(true)
       await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title(mockTenantTeam)).toExist()
-      await expect(PageHeadingComponent.caption('Delete Team')).toExist()
+      await expect(await PageHeadingComponent.title(mockTenantTeam)).toExist()
+      await expect(await PageHeadingComponent.caption('Delete Team')).toExist()
     })
 
     it('Should be able to Delete the team', async () => {

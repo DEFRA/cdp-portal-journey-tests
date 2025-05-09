@@ -38,8 +38,8 @@ async function addPermission(permissionName, teamName) {
 
   await FormComponent.submitButton('Add permission').click()
 
-  await expect(PageHeadingComponent.title(permissionName)).toExist()
-  await expect(PageHeadingComponent.caption('Permission')).toExist()
+  await expect(await PageHeadingComponent.title(permissionName)).toExist()
+  await expect(await PageHeadingComponent.caption('Permission')).toExist()
 }
 
 async function deletePermission(permissionName) {

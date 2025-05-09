@@ -17,7 +17,7 @@ async function onTheAdminUsersPage() {
   await expect(browser).toHaveTitle('Users | Core Delivery Platform - Portal')
   await expect(await AdminPage.navIsActive()).toBe(true)
   await expect(await UsersPage.subNavIsActive()).toBe(true)
-  await expect(PageHeadingComponent.title('Users')).toExist()
+  await expect(await PageHeadingComponent.title('Users')).toExist()
 }
 
 async function onTheAdminPlatformTeamPage() {
@@ -26,16 +26,16 @@ async function onTheAdminPlatformTeamPage() {
   )
   await expect(await AdminPage.navIsActive()).toBe(true)
   await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
-  await expect(PageHeadingComponent.title('Platform')).toExist()
-  await expect(PageHeadingComponent.caption('Team')).toExist()
+  await expect(await PageHeadingComponent.title('Platform')).toExist()
+  await expect(await PageHeadingComponent.caption('Team')).toExist()
 }
 
 async function onTheTestUsersPage() {
   await expect(browser).toHaveTitle('A Stub | Core Delivery Platform - Portal')
   await expect(await AdminPage.navIsActive()).toBe(true)
   await expect(await UsersPage.subNavIsActive()).toBe(true)
-  await expect(PageHeadingComponent.caption('User')).toExist()
-  await expect(PageHeadingComponent.title(mockUserName)).toExist()
+  await expect(await PageHeadingComponent.caption('User')).toExist()
+  await expect(await PageHeadingComponent.title(mockUserName)).toExist()
 }
 
 async function searchAndSelectACdpUser() {
@@ -75,8 +75,8 @@ describe('Admin Users', () => {
         )
         await expect(await AdminPage.navIsActive()).toBe(true)
         await expect(await UsersPage.subNavIsActive()).toBe(true)
-        await expect(PageHeadingComponent.title('DEFRA user')).toExist()
-        await expect(PageHeadingComponent.caption('Find')).toExist()
+        await expect(await PageHeadingComponent.title('DEFRA user')).toExist()
+        await expect(await PageHeadingComponent.caption('Find')).toExist()
       })
 
       it('Should be able to find DEFRA AAD user', async () => {
@@ -98,8 +98,10 @@ describe('Admin Users', () => {
         )
         await expect(await AdminPage.navIsActive()).toBe(true)
         await expect(await UsersPage.subNavIsActive()).toBe(true)
-        await expect(PageHeadingComponent.title('DEFRA GitHub User')).toExist()
-        await expect(PageHeadingComponent.caption('Find')).toExist()
+        await expect(
+          await PageHeadingComponent.title('DEFRA GitHub User')
+        ).toExist()
+        await expect(await PageHeadingComponent.caption('Find')).toExist()
       })
 
       it('Should be able to find GitHub user', async () => {
@@ -120,8 +122,8 @@ describe('Admin Users', () => {
         )
         await expect(await AdminPage.navIsActive()).toBe(true)
         await expect(await UsersPage.subNavIsActive()).toBe(true)
-        await expect(PageHeadingComponent.title('User Details')).toExist()
-        await expect(PageHeadingComponent.caption('Add')).toExist()
+        await expect(await PageHeadingComponent.title('User Details')).toExist()
+        await expect(await PageHeadingComponent.caption('Add')).toExist()
       })
 
       it('Should be able to Skip to summary', async () => {
@@ -137,7 +139,7 @@ describe('Admin Users', () => {
         await expect(
           PageHeadingComponent.caption('Create User Summary')
         ).toExist()
-        await expect(PageHeadingComponent.title(mockUserName)).toExist()
+        await expect(await PageHeadingComponent.title(mockUserName)).toExist()
       })
 
       it('User Summary page Should contain expected details', async () => {
@@ -175,7 +177,7 @@ describe('Admin Users', () => {
         )
         await expect(await AdminPage.navIsActive()).toBe(true)
         await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
-        await expect(PageHeadingComponent.title('Teams')).toExist()
+        await expect(await PageHeadingComponent.title('Teams')).toExist()
 
         await expect(EntityTableComponent.content('Platform')).toExist()
         await expect(EntityTableComponent.content('@cdp-platform')).toExist()
@@ -197,7 +199,7 @@ describe('Admin Users', () => {
         )
         await expect(await AdminPage.navIsActive()).toBe(true)
         await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
-        await expect(PageHeadingComponent.title('Platform')).toExist()
+        await expect(await PageHeadingComponent.title('Platform')).toExist()
         await expect(
           PageHeadingComponent.caption('Add Member to Team')
         ).toExist()
@@ -242,7 +244,7 @@ describe('Admin Users', () => {
         await expect(
           PageHeadingComponent.caption('Remove Member from Team')
         ).toExist()
-        await expect(PageHeadingComponent.title('Platform')).toExist()
+        await expect(await PageHeadingComponent.title('Platform')).toExist()
 
         await FormComponent.submitButton('Remove team member').click()
       })
@@ -279,8 +281,10 @@ describe('Admin Users', () => {
         )
         await expect(await AdminPage.navIsActive()).toBe(true)
         await expect(await UsersPage.subNavIsActive()).toBe(true)
-        await expect(PageHeadingComponent.caption('Delete User')).toExist()
-        await expect(PageHeadingComponent.title(mockUserName)).toExist()
+        await expect(
+          await PageHeadingComponent.caption('Delete User')
+        ).toExist()
+        await expect(await PageHeadingComponent.title(mockUserName)).toExist()
       })
 
       it('Should be able to Delete the user', async () => {

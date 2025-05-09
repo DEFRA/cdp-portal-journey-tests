@@ -59,8 +59,10 @@ describe('Deploy service', () => {
         'Deploy service details | Core Delivery Platform - Portal'
       )
       await expect(await DeployPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Deploy service')).toExist()
-      await expect(PageHeadingComponent.title('Details')).toExist()
+      await expect(
+        await PageHeadingComponent.caption('Deploy service')
+      ).toExist()
+      await expect(await PageHeadingComponent.title('Details')).toExist()
       await expect(
         PageHeadingComponent.intro(
           'Provide the microservice image name, version and environment to deploy to'
@@ -94,8 +96,10 @@ describe('Deploy service', () => {
       )
       await expect(await DeployPage.navIsActive()).toBe(true)
 
-      await expect(PageHeadingComponent.caption('Deploy service')).toExist()
-      await expect(PageHeadingComponent.title('Options')).toExist()
+      await expect(
+        await PageHeadingComponent.caption('Deploy service')
+      ).toExist()
+      await expect(await PageHeadingComponent.title('Options')).toExist()
       await expect(
         PageHeadingComponent.intro(
           'Choose microservice instance count, CPU and memory allocation'
@@ -124,8 +128,10 @@ describe('Deploy service', () => {
       )
       await expect(await DeployPage.navIsActive()).toBe(true)
 
-      await expect(PageHeadingComponent.caption('Deploy service')).toExist()
-      await expect(PageHeadingComponent.title('Summary')).toExist()
+      await expect(
+        await PageHeadingComponent.caption('Deploy service')
+      ).toExist()
+      await expect(await PageHeadingComponent.title('Summary')).toExist()
 
       const $pageHeadingIntro = PageHeadingComponent.intro()
       await expect($pageHeadingIntro).toExist()
@@ -156,7 +162,7 @@ describe('Deploy service', () => {
       await expect(
         PageHeadingComponent.caption('Microservice deployment')
       ).toExist()
-      await expect(PageHeadingComponent.title(imageName)).toExist()
+      await expect(await PageHeadingComponent.title(imageName)).toExist()
 
       const pageHeadingIntro = PageHeadingComponent.intro(
         'Microservice deployment for'

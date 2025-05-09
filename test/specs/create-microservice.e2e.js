@@ -165,8 +165,10 @@ describe('Create microservice', () => {
         `${testRepositoryName} microservice | Core Delivery Platform - Portal`
       )
       await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Service')).toExist()
-      await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
+      await expect(await PageHeadingComponent.caption('Service')).toExist()
+      await expect(
+        await PageHeadingComponent.title(testRepositoryName)
+      ).toExist()
     })
 
     it('Should display new microservice on services list page', async () => {
@@ -176,7 +178,7 @@ describe('Create microservice', () => {
         'Services | Core Delivery Platform - Portal'
       )
       await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title('Services')).toExist()
+      await expect(await PageHeadingComponent.title('Services')).toExist()
 
       await expect(
         EntityTableComponent.entityLink(testRepositoryName)

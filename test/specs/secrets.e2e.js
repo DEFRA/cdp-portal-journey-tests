@@ -46,8 +46,10 @@ describe('Secrets feature', () => {
 
     it('And viewing a service you own, Should see expected tabs', async () => {
       await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Service')).toExist()
-      await expect(PageHeadingComponent.title(adminOwnedService)).toExist()
+      await expect(await PageHeadingComponent.caption('Service')).toExist()
+      await expect(
+        await PageHeadingComponent.title(adminOwnedService)
+      ).toExist()
 
       await expect(TabsComponent.activeTab()).toHaveText('About')
       await expect(TabsComponent.tab('Automation')).toExist()
@@ -61,8 +63,10 @@ describe('Secrets feature', () => {
       it('Should be able to go direct to "Secrets" overview', async () => {
         await SecretsPage.open(adminOwnedService)
 
-        await expect(PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(PageHeadingComponent.title(adminOwnedService)).toExist()
+        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+        await expect(
+          await PageHeadingComponent.title(adminOwnedService)
+        ).toExist()
 
         await expect(TabsComponent.activeTab()).toHaveText('Secrets')
       })
@@ -74,8 +78,10 @@ describe('Secrets feature', () => {
         await expect(secretsTab).toExist()
         await secretsTab.click()
 
-        await expect(PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(PageHeadingComponent.title(adminOwnedService)).toExist()
+        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+        await expect(
+          await PageHeadingComponent.title(adminOwnedService)
+        ).toExist()
 
         await expect(TabsComponent.activeTab()).toHaveText('Secrets')
       })
@@ -85,8 +91,10 @@ describe('Secrets feature', () => {
       it('Should be a page of that environments secrets', async () => {
         await SecretsPage.open(adminOwnedService, 'management')
 
-        await expect(PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(PageHeadingComponent.title(adminOwnedService)).toExist()
+        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+        await expect(
+          await PageHeadingComponent.title(adminOwnedService)
+        ).toExist()
 
         await expect(SecretsPage.environmentHeader()).toHaveText(
           'Management secrets'
@@ -102,8 +110,10 @@ describe('Secrets feature', () => {
         await expect(await SplitPaneComponent.subNavIsActive('all')).toBe(true)
         await SplitPaneComponent.subNavItemLink('management').click()
 
-        await expect(PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(PageHeadingComponent.title(adminOwnedService)).toExist()
+        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+        await expect(
+          await PageHeadingComponent.title(adminOwnedService)
+        ).toExist()
 
         await expect(SecretsPage.environmentHeader()).toHaveText(
           'Management secrets'
@@ -140,8 +150,10 @@ describe('Secrets feature', () => {
         // Create a secret to test against
         await SecretsPage.open(adminOwnedService, 'management')
 
-        await expect(PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(PageHeadingComponent.title(adminOwnedService)).toExist()
+        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+        await expect(
+          await PageHeadingComponent.title(adminOwnedService)
+        ).toExist()
 
         await SecretsPage.createSecretName().setValue(keyName)
         await SecretsPage.createSecretValue().setValue('test-value')
@@ -153,8 +165,12 @@ describe('Secrets feature', () => {
       it('Should be listed as updated secrets', async () => {
         await SecretsPage.secretAction(keyName).click()
 
-        await expect(PageHeadingComponent.caption('Update Secret')).toExist()
-        await expect(PageHeadingComponent.title(adminOwnedService)).toExist()
+        await expect(
+          await PageHeadingComponent.caption('Update Secret')
+        ).toExist()
+        await expect(
+          await PageHeadingComponent.title(adminOwnedService)
+        ).toExist()
 
         await SecretsPage.updateHeader().waitForExist()
         await SecretsPage.updateSecretValue().setValue('test-updated-value')
@@ -182,8 +198,10 @@ describe('Secrets feature', () => {
 
     it('And viewing a service you do not own, Should see expected tabs', async () => {
       await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Service')).toExist()
-      await expect(PageHeadingComponent.title(adminOwnedService)).toExist()
+      await expect(await PageHeadingComponent.caption('Service')).toExist()
+      await expect(
+        await PageHeadingComponent.title(adminOwnedService)
+      ).toExist()
 
       await expect(TabsComponent.activeTab()).toHaveText('About')
       await expect(TabsComponent.tab('Buckets')).toExist()

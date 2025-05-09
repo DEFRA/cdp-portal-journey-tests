@@ -36,7 +36,7 @@ describe('Users', () => {
         await expect(browser).toHaveTitle(
           'Teams | Core Delivery Platform - Portal'
         )
-        await expect(PageHeadingComponent.title('Teams')).toExist()
+        await expect(await PageHeadingComponent.title('Teams')).toExist()
       })
 
       it('Should be able to go to the TenantTeam1 page and see the buttons', async () => {
@@ -45,8 +45,8 @@ describe('Users', () => {
         await expect(browser).toHaveTitle(
           'TenantTeam1 Team | Core Delivery Platform - Portal'
         )
-        await expect(PageHeadingComponent.caption('Team')).toExist()
-        await expect(PageHeadingComponent.title('TenantTeam1')).toExist()
+        await expect(await PageHeadingComponent.caption('Team')).toExist()
+        await expect(await PageHeadingComponent.title('TenantTeam1')).toExist()
 
         await expect(
           LinkComponent.link('add-team-member', 'Add member to team')
@@ -64,7 +64,7 @@ describe('Users', () => {
           'Add Team Member | Core Delivery Platform - Portal'
         )
         await expect(await TeamPage.navIsActive()).toBe(true)
-        await expect(PageHeadingComponent.title('TenantTeam1')).toExist()
+        await expect(await PageHeadingComponent.title('TenantTeam1')).toExist()
         await expect(
           PageHeadingComponent.caption('Add Member to Team')
         ).toExist()
@@ -98,7 +98,7 @@ describe('Users', () => {
         await expect(
           PageHeadingComponent.caption('Remove Member from Team')
         ).toExist()
-        await expect(PageHeadingComponent.title('TenantTeam1')).toExist()
+        await expect(await PageHeadingComponent.title('TenantTeam1')).toExist()
 
         await FormComponent.submitButton('Remove team member').click()
       })
@@ -125,7 +125,7 @@ describe('Users', () => {
         await expect(browser).toHaveTitle(
           'Teams | Core Delivery Platform - Portal'
         )
-        await expect(PageHeadingComponent.title('Teams')).toExist()
+        await expect(await PageHeadingComponent.title('Teams')).toExist()
       })
 
       it('Should be able to go to the Platform page but NOT see the buttons', async () => {
@@ -134,8 +134,8 @@ describe('Users', () => {
         await expect(browser).toHaveTitle(
           'Platform Team | Core Delivery Platform - Portal'
         )
-        await expect(PageHeadingComponent.caption('Team')).toExist()
-        await expect(PageHeadingComponent.title('Platform')).toExist()
+        await expect(await PageHeadingComponent.caption('Team')).toExist()
+        await expect(await PageHeadingComponent.title('Platform')).toExist()
 
         await expect(
           LinkComponent.link('add-team-member', 'Add member to team')

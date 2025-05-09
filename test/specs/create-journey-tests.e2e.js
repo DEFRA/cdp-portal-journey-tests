@@ -153,8 +153,10 @@ describe('Create journey tests', () => {
 
     it('Should be on "Test Suite" page with 2 tabs', async () => {
       await expect(await TestSuitePage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.caption('Test Suite')).toExist()
-      await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
+      await expect(await PageHeadingComponent.caption('Test Suite')).toExist()
+      await expect(
+        await PageHeadingComponent.title(testRepositoryName)
+      ).toExist()
 
       await expect(TabsComponent.activeTab()).toHaveText('About')
       await expect(TabsComponent.tab('Secrets')).toExist()
@@ -164,8 +166,10 @@ describe('Create journey tests', () => {
     it('Should be able to go to the "Secrets" overview', async () => {
       await TabsComponent.tab('Secrets').click()
 
-      await expect(PageHeadingComponent.caption('Secrets')).toExist()
-      await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
+      await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+      await expect(
+        await PageHeadingComponent.title(testRepositoryName)
+      ).toExist()
 
       await expect(TabsComponent.activeTab()).toHaveText('Secrets')
       await expect(await SplitPaneComponent.subNavIsActive('all')).toBe(true)
@@ -207,7 +211,7 @@ describe('Create journey tests', () => {
         'Test Suites | Core Delivery Platform - Portal'
       )
       await expect(await TestSuitesPage.navIsActive()).toBe(true)
-      await expect(PageHeadingComponent.title('Test Suites')).toExist()
+      await expect(await PageHeadingComponent.title('Test Suites')).toExist()
 
       await expect(
         EntityTableComponent.entityLink(testRepositoryName)
