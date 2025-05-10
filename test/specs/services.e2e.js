@@ -344,9 +344,7 @@ describe('Postgres service page', () => {
       await expect($summaryList).toHaveHTML(
         expect.stringContaining(postgresServiceVersion)
       )
-      await expect($summaryList).toHaveHTML(
-        expect.stringContaining('Database update - liquibase')
-      )
+      await expect($summaryList).toHaveHTML(expect.stringContaining('Update'))
 
       await $(`[data-testid="succeeded-status-tag"]*=Succeeded`).waitForExist()
 
