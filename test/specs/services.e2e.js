@@ -345,6 +345,11 @@ describe('Postgres service page', () => {
         expect.stringContaining(postgresServiceVersion)
       )
       await expect($summaryList).toHaveHTML(expect.stringContaining('Update'))
+      await expect($summaryList).toHaveHTML(
+        expect.stringContaining(
+          `https://metrics.${dbApplyChangelogEnv}.cdp-int.defra.cloud`
+        )
+      )
 
       await $(`[data-testid="succeeded-status-tag"]*=Succeeded`).waitForExist()
 
@@ -352,7 +357,9 @@ describe('Postgres service page', () => {
         await GovukSummaryListComponent.content().getHTML()
 
       await expect(
-        updatedSummaryList.includes('https://logs.dev.cdp-int.defra.cloud')
+        updatedSummaryList.includes(
+          `https://logs.${dbApplyChangelogEnv}.cdp-int.defra.cloud`
+        )
       ).toBe(true)
     })
 
