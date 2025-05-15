@@ -23,8 +23,9 @@ class ServicesPage extends Page {
     return $('[data-testid="service-summary"]')
   }
 
-  open(value = '') {
-    return super.open('/services' + value)
+  open(serviceName) {
+    const pathValue = serviceName ? `/services/${serviceName}` : '/services'
+    return super.open(pathValue)
   }
 }
 

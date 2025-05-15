@@ -10,7 +10,7 @@ import TestSuitesPage from 'page-objects/test-suites.page'
 import PageHeadingComponent from 'components/page-heading.component.js'
 import TabsComponent from 'components/tabs.component.js'
 import TestSuitePage from 'page-objects/test-suite.page.js'
-import SecretsPage from 'page-objects/secrets.page.js'
+import ServicesSecretsPage from 'page-objects/services-secrets.page.js'
 import SplitPaneComponent from 'components/split-pane.component.js'
 import EntityTableComponent from 'components/entity-table.component.js'
 
@@ -191,15 +191,15 @@ describe('Create journey tests', () => {
       await SplitPaneComponent.subNavItem('dev').click()
 
       await expect($(`[data-testid="no-test-suite-secrets"]`)).toExist()
-      await SecretsPage.createSecretName().click()
+      await ServicesSecretsPage.createSecretName().click()
       await browser.keys(keyName)
 
-      await SecretsPage.createSecretValue().click()
+      await ServicesSecretsPage.createSecretValue().click()
       await browser.keys('SomeValue')
 
-      await SecretsPage.createSecretButton().click()
+      await ServicesSecretsPage.createSecretButton().click()
 
-      await expect(await SecretsPage.secretCell(keyName)).toExist()
+      await expect(await ServicesSecretsPage.secretCell(keyName)).toExist()
     })
 
     it('Should be able to view list of test-suites with new test-suite listed', async () => {

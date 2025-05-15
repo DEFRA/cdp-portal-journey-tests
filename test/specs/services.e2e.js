@@ -59,7 +59,7 @@ describe('Services page', () => {
 
     it("Should be able to see the expected admin tabs on 'Service' page", async () => {
       await expect(TabsComponent.activeTab()).toHaveText('About')
-      await expect(TabsComponent.tab('Automation')).toExist()
+      await expect(TabsComponent.tab('Automations')).toExist()
       await expect(TabsComponent.tab('Buckets')).toExist()
       await expect(TabsComponent.tab('Proxy')).toExist()
       await expect(TabsComponent.tab('Secrets')).toExist()
@@ -118,7 +118,7 @@ describe('Services page', () => {
 
     describe('When viewing microservice as serviceOwner', () => {
       it("Should navigate to new microservice 'Service' page", async () => {
-        await ServicesPage.open(`/${testRepositoryName}`)
+        await ServicesPage.open(testRepositoryName)
         await expect(browser).toHaveTitle(
           `${testRepositoryName} microservice | Core Delivery Platform - Portal`
         )
@@ -131,7 +131,7 @@ describe('Services page', () => {
 
       it("Should be able to see the expected non-admin tabs on 'Service' page", async () => {
         await expect(TabsComponent.activeTab()).toHaveText('About')
-        await expect(TabsComponent.tab('Automation')).toExist()
+        await expect(TabsComponent.tab('Automations')).toExist()
         await expect(TabsComponent.tab('Buckets')).toExist()
         await expect(TabsComponent.tab('Proxy')).toExist()
         await expect(TabsComponent.tab('Secrets')).toExist()
@@ -226,7 +226,7 @@ describe('Postgres service page', () => {
 
     it("Should be able to see the expected admin tabs on 'Service' page", async () => {
       await expect(TabsComponent.activeTab()).toHaveText('About')
-      await expect(TabsComponent.tab('Automation')).toExist()
+      await expect(TabsComponent.tab('Automations')).toExist()
       await expect(TabsComponent.tab('Buckets')).toExist()
       await expect(TabsComponent.tab('Proxy')).toExist()
       await expect(TabsComponent.tab('Secrets')).toExist()

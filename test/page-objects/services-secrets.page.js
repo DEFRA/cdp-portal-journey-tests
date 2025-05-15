@@ -1,6 +1,6 @@
 import { Page } from 'page-objects/page'
 
-class SecretsPage extends Page {
+class ServicesServicesSecretsPage extends Page {
   /**
    * Check if the services nav link is active
    * @returns {Promise<boolean>}
@@ -68,4 +68,4 @@ class SecretsPage extends Page {
   }
 }
 
-export default new SecretsPage()
+export default new ServicesServicesSecretsPage()
