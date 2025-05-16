@@ -29,6 +29,10 @@ class LoginStubPage extends Page {
 
     await nonAdminUserLink.click()
   }
+
+  logout() {
+    return super.logOut()
+  }
 }
 
 export default new LoginStubPage()

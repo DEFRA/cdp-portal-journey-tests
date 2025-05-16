@@ -13,6 +13,10 @@ class ServicesAutomationsPage extends Page {
     return super.open(`/services/${serviceName}/automations`)
   }
 
+  openTestRuns(serviceName) {
+    return super.open(`services/${serviceName}/automations/test-runs`)
+  }
+
   deploymentsHeading() {
     return $('[data-testid="automatic-deployments"]')
   }
@@ -31,6 +35,28 @@ class ServicesAutomationsPage extends Page {
 
   testRunsListRow(rowNumber) {
     return $(`[data-testid="app-entity-table-row-${rowNumber}"]`)
+  }
+
+  testSetupForEnvironment(rowNumber, environmentName) {
+    return $(
+      `[data-testid="app-entity-table-row-${rowNumber}"] [data-testid="check-${environmentName}"]`
+    )
+  }
+
+  updateTestRunPage() {
+    return $('[data-testid="update-test-run"]')
+  }
+
+  updateTestRunHeading() {
+    return $('[data-testid="update-test-run-heading"]')
+  }
+
+  removeTestRunPage() {
+    return $('[data-testid="remove-test-run"]')
+  }
+
+  removeTestRunHeading() {
+    return $('[data-testid="remove-test-run-heading"]')
   }
 }
 

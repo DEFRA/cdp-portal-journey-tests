@@ -20,6 +20,10 @@ class FormComponent {
     return $(`#${id}`)
   }
 
+  inputByValue(value) {
+    return $(`input[value="${value}"]`)
+  }
+
   submitButton(content) {
     return $('button*=' + content)
   }
