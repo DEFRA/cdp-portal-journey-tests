@@ -131,7 +131,7 @@ describe('Create perf tests', () => {
       await TestSuitesPage.link('new test suite page').click()
     })
 
-    it('Should be on "Test Suite" page with 2 tabs', async () => {
+    it('Should be on "Test Suite" page with 3 tabs', async () => {
       await expect(await TestSuitePage.navIsActive()).toBe(true)
       await expect(await PageHeadingComponent.caption('Test Suite')).toExist()
       await expect(

@@ -184,5 +184,13 @@ describe('Create microservice', () => {
         EntityTableComponent.entityLink(testRepositoryName)
       ).toExist()
     })
+
+    it('Clicking on new microservice on services list page should open service page', async () => {
+      await EntityTableComponent.entityLink(testRepositoryName).click()
+
+      await expect(browser).toHaveTitle(
+        `${testRepositoryName} microservice | Core Delivery Platform - Portal`
+      )
+    })
   })
 })
