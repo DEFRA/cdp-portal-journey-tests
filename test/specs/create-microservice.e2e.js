@@ -130,9 +130,10 @@ describe('Create microservice', () => {
       await expect(ServicesPage.overallProgress()).toHaveText('In-progress')
     })
 
-    it('Should be redirected to "success" create microservice page', async () => {
+    it('Should be updated to "success" create microservice page', async () => {
       await expect(browser).toHaveTitle(
-        `Created ${testRepositoryName} microservice | Core Delivery Platform - Portal`
+        `Created ${testRepositoryName} microservice | Core Delivery Platform - Portal`,
+        { wait: 45000 }
       )
 
       await expect(await ServicesPage.navIsActive()).toBe(true)
@@ -152,15 +153,14 @@ describe('Create microservice', () => {
         'dashboards',
         'infrastructure'
       ]) {
-        await $(
-          `[data-testid="${statusTag}-status-tag"]*=Success`
-        ).waitForExist()
+        await expect(
+          $(`[data-testid="${statusTag}-status-tag"]*=Success`)
+        ).toExist()
       }
-
-      await ServicesPage.link('new microservices page').click()
     })
 
-    it('Should be redirected to created microservice page', async () => {
+    it('Should navigate to created microservice page', async () => {
+      await ServicesPage.link('new microservices page').click()
       await expect(browser).toHaveTitle(
         `${testRepositoryName} microservice | Core Delivery Platform - Portal`
       )
@@ -183,6 +183,29 @@ describe('Create microservice', () => {
       await expect(
         EntityTableComponent.entityLink(testRepositoryName)
       ).toExist()
+
+      // Wait for Portal backend GitHub poll to run and apply Team to new service
+      await browser.waitUntil(
+        async function () {
+          const element = await EntityTableComponent.row(testRepositoryName)
+          const text = await element.getText()
+          const hasContent = text.includes('Today at')
+
+          if (hasContent) {
+            return true
+          }
+
+          await browser.refresh()
+          // eslint-disable-next-line wdio/no-pause
+          await browser.pause(2000) // Wait for page refresh to happen
+          return false
+        },
+        {
+          timeout: 60000,
+          timeoutMsg:
+            'Timeout waiting for new microservice to appear on services list page in Created status'
+        }
+      )
     })
 
     it('Clicking on new microservice on services list page should open service page', async () => {
