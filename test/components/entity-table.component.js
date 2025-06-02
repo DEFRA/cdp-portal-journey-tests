@@ -9,6 +9,10 @@ class EntityTableComponent {
   entityLink(content) {
     return $('[data-testid="app-entity-link"]*=' + content)
   }
+
+  row(content) {
+    return $('[class="app-entity-table__row"]*=' + content)
+  }
 }
 
 export default new EntityTableComponent()
