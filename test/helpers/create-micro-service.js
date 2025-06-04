@@ -1,7 +1,8 @@
-import { browser } from '@wdio/globals'
+import { browser, expect } from '@wdio/globals'
 
 import FormComponent from 'components/form.component'
 import ServicesPage from 'page-objects/services.page'
+import { waitForCreateMicroServiceStatus } from 'helpers/wait-for-create-microservice-status.js'
 
 /**
  * Helper to create a microservice. Contains no expectations
@@ -31,19 +32,27 @@ async function createMicroService(name, teamName) {
   await FormComponent.submitButton('Create').click()
 
   // Status page
-  for (const statusTag of [
-    'github-repository',
-    'config',
-    'networking',
-    'proxy',
-    'dashboards',
-    'infrastructure'
+  for (const resource of [
+    'Repository',
+    'TenantServices',
+    'SquidProxy',
+    'NginxUpstreams',
+    'AppConfig',
+    'GrafanaDashboard'
   ]) {
-    await $(`[data-testid="${statusTag}-status-tag"]*=Success`).waitForExist()
+    await $(`[data-testid="${resource}-created"]`).waitForExist({
+      timeout: 20000
+    })
   }
 
+  await waitForCreateMicroServiceStatus('Created')
+  await expect(ServicesPage.overallProgress()).toHaveText('Created')
+  await expect(browser).toHaveTitle(
+    `Created ${name} microservice | Core Delivery Platform - Portal`
+  )
+
   // Click link to new microservice page
-  await ServicesPage.link('new microservices page').click()
+  await ServicesPage.link('refresh page').click()
 
   // Wait for Portal backend GitHub poll to run and apply Team to new service
   await browser.waitUntil(
@@ -61,7 +70,7 @@ async function createMicroService(name, teamName) {
       return false
     },
     {
-      timeout: 11000,
+      timeout: 20000,
       timeoutMsg:
         'GitHub poll took too long, Team on new microservice not updated'
     }
