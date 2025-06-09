@@ -152,7 +152,7 @@ describe('Create microservice', () => {
         `Created ${testRepositoryName} microservice | Core Delivery Platform - Portal`
       )
 
-      await ServicesPage.link('refresh page').click()
+      await ServicesPage.link("go to your new service's home page").click()
     })
 
     it('Should be redirected to created microservice page', async () => {

@@ -52,7 +52,7 @@ async function createMicroService(name, teamName) {
   )
 
   // Click link to new microservice page
-  await ServicesPage.link('refresh page').click()
+  await ServicesPage.link("go to your new service's home page").click()
 
   // Wait for Portal backend GitHub poll to run and apply Team to new service
   await browser.waitUntil(
