@@ -2,7 +2,8 @@ import { browser, expect } from '@wdio/globals'
 
 import FormComponent from 'components/form.component'
 import ServicesPage from 'page-objects/services.page'
-import { waitForCreateMicroServiceStatus } from 'helpers/wait-for-create-microservice-status.js'
+import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
+import StatusPage from 'page-objects/status.page.js'
 
 /**
  * Helper to create a microservice. Contains no expectations
@@ -45,14 +46,14 @@ async function createMicroService(name, teamName) {
     })
   }
 
-  await waitForCreateMicroServiceStatus('Created')
-  await expect(ServicesPage.overallProgress()).toHaveText('Created')
+  await waitForCreateEntityStatus('Created')
+  await expect(StatusPage.overallProgress()).toHaveText('Created')
   await expect(browser).toHaveTitle(
     `Created ${name} microservice | Core Delivery Platform - Portal`
   )
 
   // Click link to new microservice page
-  await ServicesPage.link("go to your new service's home page").click()
+  await ServicesPage.link('Refresh').click()
 
   // Wait for Portal backend GitHub poll to run and apply Team to new service
   await browser.waitUntil(

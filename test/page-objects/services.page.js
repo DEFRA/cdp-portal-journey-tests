@@ -11,10 +11,6 @@ class ServicesPage extends Page {
     return super.navIsActive('services')
   }
 
-  overallProgress() {
-    return $('[data-testid="app-overall-progress"]')
-  }
-
   serviceSearchBox() {
     return $('[data-testid="app-autocomplete-input"]')
   }

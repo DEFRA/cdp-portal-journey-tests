@@ -1,4 +1,4 @@
-import { browser, expect } from '@wdio/globals'
+import { $, browser, expect } from '@wdio/globals'
 
 import CreatePage from 'page-objects/create.page'
 import ServicesPage from 'page-objects/services.page'
@@ -9,7 +9,8 @@ import EntityTableComponent from 'components/entity-table.component'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import GovukSummaryListComponent from 'components/govuk-summary-list.component.js'
-import { waitForCreateMicroServiceStatus } from 'helpers/wait-for-create-microservice-status.js'
+import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
+import StatusPage from 'page-objects/status.page.js'
 
 describe('Create microservice', () => {
   describe('When logged out', () => {
@@ -124,15 +125,15 @@ describe('Create microservice', () => {
       await expect(await ServicesPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Service')).toExist()
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
-      await expect(ServicesPage.overallProgress()).toHaveText('Creating')
+      await expect(StatusPage.overallProgress()).toHaveText('Creating')
     })
 
-    it('Should be redirected to "success" create microservice page', async () => {
+    it('Should see status page go to Created status', async () => {
       await expect(await ServicesPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Service')).toExist()
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
 
-      await waitForCreateMicroServiceStatus('Created')
+      await waitForCreateEntityStatus('Created')
 
       for (const resource of [
         'Repository',
@@ -142,20 +143,17 @@ describe('Create microservice', () => {
         'AppConfig',
         'GrafanaDashboard'
       ]) {
-        await $(`[data-testid="${resource}-created"]`).waitForExist({
-          timeout: 60000
-        })
+        await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
       }
 
-      await expect(ServicesPage.overallProgress()).toHaveText('Created')
       await expect(browser).toHaveTitle(
         `Created ${testRepositoryName} microservice | Core Delivery Platform - Portal`
       )
 
-      await ServicesPage.link("go to your new service's home page").click()
+      await ServicesPage.link('Refresh').click()
     })
 
-    it('Should be redirected to created microservice page', async () => {
+    it('Should see microservice About page', async () => {
       await expect(browser).toHaveTitle(
         `${testRepositoryName} microservice | Core Delivery Platform - Portal`
       )

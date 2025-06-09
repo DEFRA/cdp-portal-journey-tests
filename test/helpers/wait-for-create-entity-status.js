@@ -1,11 +1,11 @@
 import { browser } from '@wdio/globals'
-import ServicesPage from 'page-objects/services.page.js'
+import StatusPage from 'page-objects/status.page.js'
 
-export const waitForCreateMicroServiceStatus = (value, timeout = 20000) =>
+export const waitForCreateEntityStatus = (value, timeout = 20000) =>
   browser.waitUntil(
     async () => {
       const statusText =
-        (await ServicesPage.overallProgress().getText()) ?? 'no match'
+        (await StatusPage.overallProgress().getText()) ?? 'no match'
       return statusText.includes(value)
     },
     {

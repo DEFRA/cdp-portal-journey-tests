@@ -3,7 +3,6 @@ import { $, browser, expect } from '@wdio/globals'
 import CreatePage from 'page-objects/create.page'
 import FormComponent from 'components/form.component'
 import HeadingComponent from 'components/heading.component'
-import BannerComponent from 'components/banner.component'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import TestSuitesPage from 'page-objects/test-suites.page'
@@ -13,6 +12,9 @@ import TestSuitePage from 'page-objects/test-suite.page.js'
 import ServicesSecretsPage from 'page-objects/services-secrets.page.js'
 import SplitPaneComponent from 'components/split-pane.component.js'
 import EntityTableComponent from 'components/entity-table.component.js'
+import ServicesPage from 'page-objects/services.page.js'
+import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
+import StatusPage from 'page-objects/status.page.js'
 
 describe('Create journey tests', () => {
   describe('When logged out', () => {
@@ -106,52 +108,40 @@ describe('Create journey tests', () => {
       await FormComponent.submitButton('Create').click()
     })
 
-    it('Should be redirected to create journey test suite status page', async () => {
+    it('Should be redirected to test-suite status page', async () => {
       await expect(browser).toHaveTitle(
         `Creating ${testRepositoryName} test suite | Core Delivery Platform - Portal`
       )
-      await expect(
-        await BannerComponent.content('Journey test suite creation has started')
-      ).toExist()
       await expect(await TestSuitesPage.navIsActive()).toBe(true)
-      await expect(HeadingComponent.title(testRepositoryName)).toExist()
-      await expect(
-        HeadingComponent.caption(
-          `Creating the ${testRepositoryName} test suite.`
-        )
-      ).toExist()
-      await expect(TestSuitesPage.overallProgress()).toHaveText('In-progress')
+      await expect(PageHeadingComponent.caption('Test Suite')).toExist()
+      await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
+      await expect(StatusPage.overallProgress()).toHaveText('Creating')
     })
 
-    it('Should be redirected to "success" create journey test suite page', async () => {
+    it('Should see status page go to Created status', async () => {
+      await expect(await TestSuitesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Test Suite')).toExist()
+      await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
+
+      await waitForCreateEntityStatus('Created')
+
+      for (const resource of [
+        'Repository',
+        'TenantServices',
+        'SquidProxy',
+        'AppConfig'
+      ]) {
+        await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
+      }
+
       await expect(browser).toHaveTitle(
         `Created ${testRepositoryName} test suite | Core Delivery Platform - Portal`
       )
-      await expect(await TestSuitesPage.navIsActive()).toBe(true)
-      await expect(HeadingComponent.title(testRepositoryName)).toExist()
-      await expect(
-        HeadingComponent.caption(
-          `Created the ${testRepositoryName} test suite.`
-        )
-      ).toExist()
 
-      for (const statusTag of [
-        'github-repository',
-        'proxy',
-        'infrastructure'
-      ]) {
-        await $(
-          '[data-testid="' + statusTag + '-status-tag"]*=Success'
-        ).waitForExist()
-      }
-
-      // eslint-disable-next-line wdio/no-pause
-      await browser.pause(5000) // Wait for service to populate in PBE with teams info to validate service owner
-
-      await TestSuitesPage.link('new test suite page').click()
+      await ServicesPage.link('Refresh').click()
     })
 
-    it('Should be on "Test Suite" page with 2 tabs', async () => {
+    it('Should be on "Test Suite" About page with 2 tabs', async () => {
       await expect(await TestSuitePage.navIsActive()).toBe(true)
       await expect(await PageHeadingComponent.caption('Test Suite')).toExist()
       await expect(
@@ -216,6 +206,14 @@ describe('Create journey tests', () => {
       await expect(
         EntityTableComponent.entityLink(testRepositoryName)
       ).toExist()
+    })
+
+    it('Clicking on new test-suite on list page should open test-suite page', async () => {
+      await EntityTableComponent.entityLink(testRepositoryName).click()
+
+      await expect(browser).toHaveTitle(
+        `Test Suite - ${testRepositoryName} | Core Delivery Platform - Portal`
+      )
     })
   })
 })
