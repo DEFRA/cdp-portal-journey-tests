@@ -8,6 +8,7 @@ import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import PageHeadingComponent from 'components/page-heading.component.js'
 import AdminPage from 'page-objects/admin.page.js'
+import { ownerCanViewTab } from 'helpers/owner-can-view-tab.js'
 
 const adminOwnedService = 'cdp-portal-frontend'
 
@@ -25,13 +26,8 @@ describe('Services secrets page', () => {
       ).toExist()
     })
 
-    it('Should not be able to see tabs', async () => {
-      await expect(TabsComponent.tab('About')).not.toExist()
-      await expect(TabsComponent.tab('Automations')).not.toExist()
-      await expect(TabsComponent.tab('Buckets')).not.toExist()
-      await expect(TabsComponent.tab('Proxy')).not.toExist()
-      await expect(TabsComponent.tab('Secrets')).not.toExist()
-      await expect(TabsComponent.tab('Terminal')).not.toExist()
+    it('Should not be able to see owner tabs', async () => {
+      await ServicesPage.hasNoTabs()
     })
 
     it('Should not be able to browse to secrets page', async () => {
@@ -53,18 +49,7 @@ describe('Services secrets page', () => {
     })
 
     it('And viewing a service you own, Should see expected tabs', async () => {
-      await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.caption('Service')).toExist()
-      await expect(
-        await PageHeadingComponent.title(adminOwnedService)
-      ).toExist()
-
-      await expect(TabsComponent.activeTab()).toHaveText('About')
-      await expect(TabsComponent.tab('Automations')).toExist()
-      await expect(TabsComponent.tab('Buckets')).toExist()
-      await expect(TabsComponent.tab('Proxy')).toExist()
-      await expect(TabsComponent.tab('Secrets')).toExist()
-      await expect(TabsComponent.tab('Terminal')).toExist()
+      await ownerCanViewTab('Service', adminOwnedService, 'About')
     })
 
     describe('When navigating to Secrets overview page', () => {
@@ -219,6 +204,8 @@ describe('Services secrets page', () => {
       await expect(TabsComponent.tab('Buckets')).toExist()
       await expect(TabsComponent.tab('Proxy')).toExist()
 
+      await expect(TabsComponent.tab('Automations')).not.toExist()
+      await expect(TabsComponent.tab('Maintenance')).not.toExist()
       await expect(TabsComponent.tab('Secrets')).not.toExist()
       await expect(TabsComponent.tab('Terminal')).not.toExist()
     })

@@ -10,6 +10,7 @@ import PageHeadingComponent from 'components/page-heading.component.js'
 import FormComponent from 'components/form.component.js'
 import BannerComponent from 'components/banner.component.js'
 import LinkComponent from 'components/link.component.js'
+import { ownerCanViewTab } from 'helpers/owner-can-view-tab.js'
 
 const adminOwnedService = 'cdp-portal-frontend'
 const adminOwnedTestSuite = 'cdp-env-test-suite'
@@ -64,13 +65,8 @@ describe('Services automations page', () => {
       ).toExist()
     })
 
-    it('Should not be able to see tabs', async () => {
-      await expect(TabsComponent.tab('About')).not.toExist()
-      await expect(TabsComponent.tab('Automations')).not.toExist()
-      await expect(TabsComponent.tab('Buckets')).not.toExist()
-      await expect(TabsComponent.tab('Proxy')).not.toExist()
-      await expect(TabsComponent.tab('Secrets')).not.toExist()
-      await expect(TabsComponent.tab('Terminal')).not.toExist()
+    it('Should not be able to see owner tabs', async () => {
+      await ServicesPage.hasNoTabs()
     })
 
     it('Should not be able to browse to automations page', async () => {
@@ -94,18 +90,7 @@ describe('Services automations page', () => {
     })
 
     it('And viewing a service you own, should see expected tabs', async () => {
-      await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.caption('Service')).toExist()
-      await expect(
-        await PageHeadingComponent.title(adminOwnedService)
-      ).toExist()
-
-      await expect(TabsComponent.activeTab()).toHaveText('About')
-      await expect(TabsComponent.tab('Automations')).toExist()
-      await expect(TabsComponent.tab('Buckets')).toExist()
-      await expect(TabsComponent.tab('Proxy')).toExist()
-      await expect(TabsComponent.tab('Secrets')).toExist()
-      await expect(TabsComponent.tab('Terminal')).toExist()
+      await ownerCanViewTab('Service', adminOwnedService, 'About')
     })
 
     describe('When navigating to the Automations page', () => {
@@ -350,6 +335,8 @@ describe('Services automations page', () => {
       await expect(TabsComponent.tab('Buckets')).toExist()
       await expect(TabsComponent.tab('Proxy')).toExist()
 
+      await expect(TabsComponent.tab('Automations')).not.toExist()
+      await expect(TabsComponent.tab('Maintenance')).not.toExist()
       await expect(TabsComponent.tab('Secrets')).not.toExist()
       await expect(TabsComponent.tab('Terminal')).not.toExist()
     })
