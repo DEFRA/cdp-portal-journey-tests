@@ -73,7 +73,7 @@ describe('Services maintenance page', () => {
         )
 
         await checkShutterStatus({
-          firstShutterStatus: 'Active',
+          firstShutterStatus: 'Shuttered',
           secondShutterStatus: 'Active',
           thirdShutterStatus: 'Active'
         })
@@ -136,7 +136,7 @@ describe('Services maintenance page', () => {
         ).toExist()
 
         await checkShutterStatus({
-          firstShutterStatus: 'Active',
+          firstShutterStatus: 'Shuttered',
           secondShutterStatus: 'Pending',
           thirdShutterStatus: 'Active'
         })
