@@ -6,11 +6,11 @@ class Page {
   }
 
   navItem(navItemName) {
-    return $(`[data-testid="nav-${navItemName}"]`)
+    return $(`[data-testid="nav-${navItemName}"]`).parentElement()
   }
 
   /**
-   * Check if a navigation item is active
+   * Check if a navigation items li parent has the active class
    * @param navItemName
    * @returns {Promise<boolean>}
    */
@@ -18,7 +18,7 @@ class Page {
     const navItem = await this.navItem(navItemName)
     const className = await navItem.getAttribute('class')
 
-    return className.includes('app-navigation__link--active')
+    return className.includes('govuk-service-navigation__item--active')
   }
 
   logInLink(value = 'Sign in') {
