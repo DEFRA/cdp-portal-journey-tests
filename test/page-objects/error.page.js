@@ -1,15 +1,13 @@
-import { $ } from '@wdio/globals'
-
 import { Page } from 'page-objects/page'
-import HeadingComponent from 'components/heading.component'
+import PageHeadingComponent from 'components/page-heading.component.js'
 
 class ErrorPage extends Page {
   title(content) {
-    return HeadingComponent.title(content)
+    return PageHeadingComponent.title(content)
   }
 
   message() {
-    return $('[data-testid="error-message"]')
+    return PageHeadingComponent.intro()
   }
 }
 

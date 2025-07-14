@@ -3,7 +3,6 @@ import { $, browser, expect } from '@wdio/globals'
 import CreatePage from 'page-objects/create.page'
 import ServicesPage from 'page-objects/services.page'
 import FormComponent from 'components/form.component'
-import HeadingComponent from 'components/heading.component'
 import PageHeadingComponent from 'components/page-heading.component'
 import EntityTableComponent from 'components/entity-table.component'
 import ErrorPage from 'page-objects/error.page'
@@ -47,12 +46,17 @@ describe('Create microservice', () => {
         'Create | Core Delivery Platform - Portal'
       )
       await expect(await CreatePage.navIsActive()).toBe(true)
-      await expect(HeadingComponent.title('Create')).toExist()
+
+      await expect(PageHeadingComponent.title('Create')).toExist()
+      await expect(
+        PageHeadingComponent.intro('What would you like to create?')
+      ).toExist()
     })
 
     it('Should be able to choose a Microservice', async () => {
+      await expect(PageHeadingComponent.title('Create')).toExist()
       await expect(
-        HeadingComponent.caption('What would you like to create?')
+        PageHeadingComponent.intro('What would you like to create?')
       ).toExist()
 
       await FormComponent.inputLabel('Microservice').click()
@@ -64,12 +68,12 @@ describe('Create microservice', () => {
         'Create a new microservice | Core Delivery Platform - Portal'
       )
       await expect(await CreatePage.navIsActive()).toBe(true)
+
+      await expect(PageHeadingComponent.caption('Create')).toExist()
+      await expect(PageHeadingComponent.title('Microservice')).toExist()
       await expect(
-        HeadingComponent.title('Create a new microservice')
-      ).toExist()
-      await expect(
-        HeadingComponent.caption(
-          'With associated dashboards, proxy and infrastructure.'
+        PageHeadingComponent.intro(
+          'With associated dashboards, proxy and infrastructure'
         )
       ).toExist()
 
@@ -90,12 +94,14 @@ describe('Create microservice', () => {
         'Create microservice summary | Core Delivery Platform - Portal'
       )
       await expect(await CreatePage.navIsActive()).toBe(true)
+
       await expect(
-        HeadingComponent.title('Create microservice summary')
+        PageHeadingComponent.caption('Create microservice')
       ).toExist()
+      await expect(PageHeadingComponent.title('Summary')).toExist()
       await expect(
-        HeadingComponent.caption(
-          'Information about the new microservice you are going to create.'
+        PageHeadingComponent.intro(
+          'Information about the new microservice you are going to create'
         )
       ).toExist()
 

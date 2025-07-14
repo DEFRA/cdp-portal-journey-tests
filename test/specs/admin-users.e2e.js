@@ -1,6 +1,6 @@
 import { browser, expect } from '@wdio/globals'
 
-import HeadingComponent from 'components/heading.component'
+import BannerComponent from 'components/banner.component'
 import PageHeadingComponent from 'components/page-heading.component'
 import AdminPage from 'page-objects/admin.page'
 import UsersPage from 'page-objects/users.page'
@@ -253,7 +253,7 @@ describe('Admin Users', () => {
         await onTheAdminPlatformTeamPage()
 
         await expect(
-          HeadingComponent.banner('Member removed from team')
+          BannerComponent.content('Member removed from team')
         ).toExist()
 
         await expect(AdminTeamPage.teamMembers()).not.toHaveText(

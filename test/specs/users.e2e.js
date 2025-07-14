@@ -1,7 +1,7 @@
 import { browser, expect } from '@wdio/globals'
 
 import { createUser, deleteUser } from 'helpers/create-user'
-import HeadingComponent from 'components/heading.component'
+import BannerComponent from 'components/banner.component'
 import FormComponent from 'components/form.component'
 import LinkComponent from 'components/link.component'
 import LoginStubPage from 'page-objects/login-stub.page'
@@ -110,7 +110,7 @@ describe('Users', () => {
         await expect(await TeamPage.navIsActive()).toBe(true)
 
         await expect(
-          HeadingComponent.banner('Member removed from team')
+          BannerComponent.content('Member removed from team')
         ).toExist()
 
         await expect(TeamPage.teamDetails()).not.toHaveText(

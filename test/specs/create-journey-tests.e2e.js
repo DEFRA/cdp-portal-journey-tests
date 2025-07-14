@@ -2,7 +2,6 @@ import { $, browser, expect } from '@wdio/globals'
 
 import CreatePage from 'page-objects/create.page'
 import FormComponent from 'components/form.component'
-import HeadingComponent from 'components/heading.component'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import TestSuitesPage from 'page-objects/test-suites.page'
@@ -42,7 +41,10 @@ describe('Create journey tests', () => {
         'Create | Core Delivery Platform - Portal'
       )
       await expect(await CreatePage.navIsActive()).toBe(true)
-      await expect(HeadingComponent.title('Create')).toExist()
+      await expect(PageHeadingComponent.title('Create')).toExist()
+      await expect(
+        PageHeadingComponent.intro('What would you like to create?')
+      ).toExist()
     })
   })
 
@@ -59,12 +61,16 @@ describe('Create journey tests', () => {
         'Create | Core Delivery Platform - Portal'
       )
       await expect(await CreatePage.navIsActive()).toBe(true)
-      await expect(HeadingComponent.title('Create')).toExist()
+      await expect(PageHeadingComponent.title('Create')).toExist()
+      await expect(
+        PageHeadingComponent.intro('What would you like to create?')
+      ).toExist()
     })
 
     it('Should be able to choose journey tests', async () => {
+      await expect(PageHeadingComponent.title('Create')).toExist()
       await expect(
-        HeadingComponent.caption('What would you like to create?')
+        PageHeadingComponent.intro('What would you like to create?')
       ).toExist()
 
       await FormComponent.inputLabel('Journey Test Suite').click()
@@ -76,12 +82,14 @@ describe('Create journey tests', () => {
         'Create journey test suite | Core Delivery Platform - Portal'
       )
       await expect(await CreatePage.navIsActive()).toBe(true)
+
+      await expect(PageHeadingComponent.caption('Create')).toExist()
+      await expect(PageHeadingComponent.title('Journey Test Suite')).toExist()
       await expect(
-        HeadingComponent.title('Create journey test suite')
+        PageHeadingComponent.intro(
+          'Built using webdriver.io. Capable of running against a live environment or a docker compose setup as part of a GitHub workflow'
+        )
       ).toExist()
-      await expect(HeadingComponent.caption()).toHaveText(
-        'Built using webdriver.io. Capable of running against a live environment or a docker compose setup as part of a GitHub workflow.'
-      )
 
       await FormComponent.inputLabel('Name').click()
       await browser.keys(testRepositoryName)
@@ -94,14 +102,15 @@ describe('Create journey tests', () => {
 
     it('Should be able to view journey test summary', async () => {
       await expect(browser).toHaveTitle(
-        'Summary journey test suite | Core Delivery Platform - Portal'
+        'Create journey test suite summary | Core Delivery Platform - Portal'
       )
       await expect(
-        HeadingComponent.title('Summary journey test suite')
+        PageHeadingComponent.caption('Create journey test suite')
       ).toExist()
+      await expect(PageHeadingComponent.title('Summary')).toExist()
       await expect(
-        HeadingComponent.caption(
-          'Information about the new journey test suite you are going to create.'
+        PageHeadingComponent.intro(
+          'Information about the new journey test suite you are going to create'
         )
       ).toExist()
 
