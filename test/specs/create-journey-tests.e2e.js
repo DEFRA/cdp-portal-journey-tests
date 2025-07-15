@@ -85,11 +85,9 @@ describe('Create journey tests', () => {
 
       await expect(PageHeadingComponent.caption('Create')).toExist()
       await expect(PageHeadingComponent.title('Journey Test Suite')).toExist()
-      await expect(
-        PageHeadingComponent.intro(
-          'Built using webdriver.io. Capable of running against a live environment or a docker compose setup as part of a GitHub workflow'
-        )
-      ).toExist()
+      await expect(PageHeadingComponent.intro()).toHaveText(
+        'Built using webdriver.io. Capable of running against a live environment or a docker compose setup as part of a GitHub workflow'
+      )
 
       await FormComponent.inputLabel('Name').click()
       await browser.keys(testRepositoryName)

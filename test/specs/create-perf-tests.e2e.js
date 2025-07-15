@@ -68,11 +68,9 @@ describe('Create perf tests', () => {
       await expect(
         PageHeadingComponent.title('Performance Test Suite')
       ).toExist()
-      await expect(
-        PageHeadingComponent.intro(
-          'Built using Apache JMeter. Capable of running against a live environment'
-        )
-      ).toExist()
+      await expect(PageHeadingComponent.intro()).toHaveText(
+        'Built using Apache JMeter. Capable of running against a live environment'
+      )
 
       await FormComponent.inputLabel('Name').click()
       await browser.keys(testRepositoryName)
