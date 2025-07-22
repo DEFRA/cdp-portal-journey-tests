@@ -3,7 +3,6 @@ import { $, browser, expect } from '@wdio/globals'
 import CreatePage from 'page-objects/create.page.js'
 import DeployPage from 'page-objects/deploy.page.js'
 import DeploymentsPage from 'page-objects/deployments.page.js'
-import EntityTableComponent from 'components/entity-table.component.js'
 import FormComponent from 'components/form.component'
 import GovukSummaryListComponent from 'components/govuk-summary-list.component.js'
 import LinkComponent from 'components/link.component'
@@ -41,13 +40,15 @@ describe('Services page', () => {
       await ServicesPage.serviceSearchBox().click()
       await browser.keys(adminService)
 
-      const adminServiceLink =
-        await EntityTableComponent.entityLink(adminService)
+      const adminServiceLink = await LinkComponent.link(
+        'app-link',
+        adminService
+      )
       await adminServiceLink.waitForExist({ timeout: 5000 })
     })
 
     it("Should navigate to a 'Service' page via the result", async () => {
-      await EntityTableComponent.entityLink(adminService).click()
+      await LinkComponent.link('app-link', adminService).click()
 
       await expect(browser).toHaveTitle(
         `${adminService} microservice | Core Delivery Platform - Portal`
@@ -204,13 +205,15 @@ describe('Postgres service page', () => {
       await ServicesPage.serviceSearchBox().click()
       await browser.keys(postgresService)
 
-      const postgresServiceLink =
-        await EntityTableComponent.entityLink(postgresService)
+      const postgresServiceLink = await LinkComponent.link(
+        'app-link',
+        postgresService
+      )
       await postgresServiceLink.waitForExist({ timeout: 5000 })
     })
 
     it("Should be able to navigate to a 'Service' page via the list", async () => {
-      await EntityTableComponent.entityLink(postgresService).click()
+      await LinkComponent.link('app-link', postgresService).click()
 
       await expect(browser).toHaveTitle(
         `${postgresService} microservice | Core Delivery Platform - Portal`
@@ -392,7 +395,7 @@ describe('Postgres service page', () => {
         await expect(await ServicesPage.navIsActive()).toBe(true)
         await expect(await PageHeadingComponent.title('Services')).toExist()
 
-        await EntityTableComponent.entityLink(postgresService).click()
+        await LinkComponent.link('app-link', postgresService).click()
 
         await expect(browser).toHaveTitle(
           `${postgresService} microservice | Core Delivery Platform - Portal`

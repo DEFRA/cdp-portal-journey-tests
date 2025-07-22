@@ -4,7 +4,7 @@ import CreatePage from 'page-objects/create.page'
 import ServicesPage from 'page-objects/services.page'
 import FormComponent from 'components/form.component'
 import PageHeadingComponent from 'components/page-heading.component'
-import EntityTableComponent from 'components/entity-table.component'
+import LinkComponent from 'components/link.component'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import GovukSummaryListComponent from 'components/govuk-summary-list.component.js'
@@ -179,13 +179,11 @@ describe('Create microservice', () => {
       await expect(await ServicesPage.navIsActive()).toBe(true)
       await expect(await PageHeadingComponent.title('Services')).toExist()
 
-      await expect(
-        EntityTableComponent.entityLink(testRepositoryName)
-      ).toExist()
+      await expect(LinkComponent.link('app-link', testRepositoryName)).toExist()
     })
 
     it('Clicking on new microservice on services list page should open service page', async () => {
-      await EntityTableComponent.entityLink(testRepositoryName).click()
+      await LinkComponent.link('app-link', testRepositoryName).click()
 
       await expect(browser).toHaveTitle(
         `${testRepositoryName} microservice | Core Delivery Platform - Portal`
