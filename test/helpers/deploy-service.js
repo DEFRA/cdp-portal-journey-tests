@@ -25,7 +25,6 @@ const populateDeploymentDetails = async (options, submit = true) => {
   await FormComponent.inputLabel('Environment').click()
   await browser.keys(options.environment)
   await browser.keys('Down arrow')
-  await browser.keys('Enter')
 
   if (submit) await FormComponent.submitButton('Next').click()
 }

@@ -223,7 +223,7 @@ describe('Services maintenance - undeploy', () => {
     const options = {
       imageName: 'cdp-portal-frontend',
       version: '0.1.0',
-      environment: 'test',
+      environment: 'perf-test',
       instanceCount: '1',
       cpuFormValue: '1024',
       memoryFormValue: '2048',
@@ -231,7 +231,7 @@ describe('Services maintenance - undeploy', () => {
       memoryText: '2 GB'
     }
 
-    before(async () => {
+    it('Should deploy a service so that we can undeploy it', async () => {
       await LoginStubPage.loginAsAdmin()
       await expect(await ServicesPage.logOutLink()).toHaveText('Sign out')
       await deployService(options)
