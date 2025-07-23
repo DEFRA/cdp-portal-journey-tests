@@ -86,17 +86,11 @@ const deployService = async (options) => {
   await waitForDeploymentToFinish()
 }
 
-const getDeploymentIdFromUrl = (url) => {
-  const parts = url.split('/')
-  return parts[parts.length - 1]
-}
-
 export {
   waitUntilMemoryDataLoads,
   waitForDeploymentToFinish,
   populateDeploymentOptions,
   populateDeploymentDetails,
   confirmDeployment,
-  getDeploymentIdFromUrl,
   deployService
 }
