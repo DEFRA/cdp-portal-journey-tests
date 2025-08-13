@@ -33,6 +33,10 @@ WDIO tests against an environment, github workflow or locally.
 
 ## Local Development
 
+To run locally, use the compose.ci.yml file in this repository to run the tests against a local instance of the CDP Portal.
+
+e.g. `docker compose --profile portal -f compose.local.yml up`
+
 ## Requirements
 
 ### Node.js

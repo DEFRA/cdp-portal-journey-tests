@@ -1,0 +1,325 @@
+services:
+  ################################################################################
+  # All of the infrastructure services
+  ################################################################################
+  proxy:
+    image: nginxproxy/nginx-proxy:1.4
+    container_name: cdp-proxy
+    ports:
+      - "3333:80"
+    environment:
+      - ENABLE_IPV6=true
+      - DEFAULT_ROOT="418"
+      - DEFAULT_HOST=~^cdp\..*\.sslip\.io
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./local/cdp-proxy.conf:/etc/nginx/conf.d/cdp-proxy.conf:ro
+    networks:
+      - cdpnet
+
+  ################################################################################
+  mongodb:
+    image: mongo:6.0.13
+    container_name: cdp-infra-mongodb
+    networks:
+      - cdpnet
+    ports:
+      - 27017:27017
+    volumes:
+      - cdp-infra-mongodb-data:/data
+      - ./scripts/mongodb:/docker-entrypoint-initdb.d
+    restart: always
+
+  ################################################################################
+  localstack:
+    image: localstack/localstack:4.3.0
+    container_name: cdp-infra-localstack
+    networks:
+      - cdpnet
+    ports:
+      - 4566:4566
+      - 4510-4559:4510-4559
+    restart: always
+    environment:
+      - LOCALSTACK_HOST=127.0.0.1
+      - SERVICES=s3,sqs,sns,firehose,secretsmanager
+      - LS_LOG=WARN
+    env_file:
+      - local/defaults.env
+    volumes:
+      - ./scripts/localstack/assets:/opt/code/localstack/assets
+      - ./local/defaults.env:/etc/localstack/conf.d/defaults.env:ro
+      - ./scripts/localstack:/etc/localstack/init/ready.d
+    healthcheck:
+      test: ["CMD", "stat", "/tmp/READY"]
+      interval: 3s
+      start_period: 5s
+      retries: 20
+
+  ################################################################################
+  redis:
+    image: redis:7.2.3-alpine3.18
+    networks:
+      - cdpnet
+    container_name: cdp-infra-redis
+    ports:
+      - 6379:6379
+    restart: always
+
+  ################################################################################
+  selenium-chrome:
+    image: selenium/standalone-chrome:119.0
+    container_name: selenium-chrome
+    networks:
+      - cdpnet
+    ports:
+      - 4444:4444
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+
+  ################################################################################
+  squid:
+    image: ubuntu/squid:5.7-23.04_beta
+    container_name: squid
+    networks:
+      - cdpnet
+    ports:
+      - 3128:3128
+    volumes:
+      - ./local/squid.conf:/etc/squid/squid.conf:ro
+
+  ################################################################################
+  cdp-portal-frontend:
+    image: defradigital/cdp-portal-frontend:${CDP_PORTAL_FRONTEND:-latest}
+    container_name: cdp-portal-frontend
+    networks:
+      - cdpnet
+    ports:
+      - 3000:3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    env_file:
+      - local/defaults.env
+      - local/cdp-portal-frontend.env
+    environment:
+      - VIRTUAL_HOST=~^cdp\..*\.sslip\.io
+      - VIRTUAL_PATH=/
+      - VIRTUAL_PORT=3000
+      - PORT=3000
+      - NODE_ENV=development # This is required to ensure the login cookie is set as insecure, as we test over http
+    depends_on:
+      cdp-portal-backend:
+        condition: service_started
+      cdp-user-service-backend:
+        condition: service_healthy
+      cdp-self-service-ops:
+        condition: service_healthy
+      cdp-portal-stubs:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3000"]
+      interval: 3s
+      start_period: 2s
+      retries: 3
+    profiles:
+      - portal
+
+  ################################################################################
+  # Proxy in front of the frontend to allow for local development
+  # Cannot run at the same time as portal frontend above
+  ################################################################################
+  cdp-portal-frontend-proxy:
+    image: nginxproxy/nginx-proxy:1.4
+    container_name: cdp-portal-frontend-proxy
+    networks:
+      - cdpnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    environment:
+      - VIRTUAL_HOST=~^cdp\..*\.sslip\.io
+      - VIRTUAL_PATH=/
+      - VIRTUAL_PORT=3000
+      - PORT=3000
+      - NODE_ENV=development # This is required to ensure the login cookie is set as insecure, as we test over http
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./local/cdp-portal-frontend-proxy.conf:/etc/nginx/conf.d/cdp-portal-frontend-proxy.conf:ro
+    depends_on:
+      proxy:
+        condition: service_started
+    profiles:
+      - proxies
+
+  ################################################################################
+  cdp-user-service-backend:
+    image: defradigital/cdp-user-service-backend:${CDP_USER_SERVICE_BACKEND:-latest}
+    container_name: cdp-user-service-backend
+    networks:
+      - cdpnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    ports:
+      - 3001:3001
+    env_file:
+      - local/defaults.env
+      - local/cdp-user-service-backend.env
+    environment:
+      - PORT=3001
+      - ENABLE_SECURE_CONTEXT=false
+    depends_on:
+      cdp-portal-stubs:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3001"]
+      interval: 3s
+      start_period: 2s
+    profiles:
+      - portal
+
+  ################################################################################
+  cdp-portal-backend:
+    image: defradigital/cdp-portal-backend:${CDP_PORTAL_BACKEND:-latest}
+    container_name: cdp-portal-backend
+    networks:
+      - cdpnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    ports:
+      - 5094:5094
+    env_file:
+      - local/defaults.env
+      - local/cdp-portal-backend.env
+    environment:
+      - ASPNETCORE_URLS=http://+:5094
+    depends_on:
+      cdp-user-service-backend:
+        condition: service_healthy
+      cdp-self-service-ops:
+        condition: service_healthy
+    profiles:
+      - portal
+
+  ################################################################################
+  cdp-self-service-ops:
+    image: defradigital/cdp-self-service-ops:${CDP_SELF_SERVICE_OPS:-latest}
+    container_name: cdp-self-service-ops
+    networks:
+      - cdpnet
+    ports:
+      - 3009:3009
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    env_file:
+      - local/defaults.env
+      - local/cdp-self-service-ops.env
+    depends_on:
+      cdp-portal-stubs:
+        condition: service_healthy
+    environment:
+      - PORT=3009
+      - ENABLE_SECURE_CONTEXT=false
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3009"]
+      interval: 3s
+      start_period: 2s
+    profiles:
+      - portal
+
+  ################################################################################
+  cdp-webshell-proxy:
+    image: defradigital/cdp-webshell-proxy:${CDP_WEBSHELL_PROXY:-latest}
+    container_name: cdp-webshell-proxy
+    networks:
+      - cdpnet
+    ports:
+      - 8085:8085
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    profiles:
+      - terminal
+
+
+  ################################################################################
+  cdp-portal-stubs:
+    image: defradigital/cdp-portal-stubs:${CDP_PORTAL_STUBS:-latest}
+    container_name: cdp-portal-stubs
+    networks:
+      - cdpnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    env_file:
+      - local/defaults.env
+      - local/cdp-portal-stubs.env
+    ports:
+      - 3939:3939
+    environment:
+      - PORT=3939
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3939/health"]
+      interval: 3s
+      start_period: 2s
+    profiles:
+      - portal
+
+  ################################################################################
+  cdp-notify:
+    image: defradigital/cdp-notify:${CDP_NOTIFY:-latest}
+    container_name: cdp-notify
+    networks:
+      - cdpnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    env_file:
+      - local/defaults.env
+      - local/cdp-notify.env
+    ports:
+      - 3007:3007
+    environment:
+      - PORT=3007
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3007"]
+      interval: 3s
+      start_period: 2s
+    profiles:
+      - portal
+
+################################################################################
+
+volumes:
+  cdp-infra-mongodb-data:
+
+networks:
+  cdpnet:
+    driver: bridge
