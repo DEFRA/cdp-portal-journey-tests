@@ -129,8 +129,8 @@ describe('Services page', () => {
       it("Should be able to see the expected non-admin tabs on 'Service' page", async () => {
         await expect(TabsComponent.activeTab()).toHaveText('About')
         await expect(TabsComponent.tab('Automations')).toExist()
-        await expect(TabsComponent.tab('Buckets')).toExist()
         await expect(TabsComponent.tab('Proxy')).toExist()
+        await expect(TabsComponent.tab('Resources')).toExist()
         await expect(TabsComponent.tab('Secrets')).toExist()
         await expect(TabsComponent.tab('Terminal')).toExist()
       })

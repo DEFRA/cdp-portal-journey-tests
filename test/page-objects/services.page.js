@@ -28,9 +28,9 @@ class ServicesPage extends Page {
   async hasOwnerTabs() {
     await expect(TabsComponent.tab('About')).toExist()
     await expect(TabsComponent.tab('Automations')).toExist()
-    await expect(TabsComponent.tab('Buckets')).toExist()
     await expect(TabsComponent.tab('Maintenance')).toExist()
     await expect(TabsComponent.tab('Proxy')).toExist()
+    await expect(TabsComponent.tab('Resources')).toExist()
     await expect(TabsComponent.tab('Secrets')).toExist()
     await expect(TabsComponent.tab('Terminal')).toExist()
   }
@@ -38,9 +38,9 @@ class ServicesPage extends Page {
   async hasNoTabs() {
     await expect(TabsComponent.tab('About')).not.toExist()
     await expect(TabsComponent.tab('Automations')).not.toExist()
-    await expect(TabsComponent.tab('Buckets')).not.toExist()
     await expect(TabsComponent.tab('Maintenance')).not.toExist()
     await expect(TabsComponent.tab('Proxy')).not.toExist()
+    await expect(TabsComponent.tab('Resources')).not.toExist()
     await expect(TabsComponent.tab('Secrets')).not.toExist()
     await expect(TabsComponent.tab('Terminal')).not.toExist()
   }

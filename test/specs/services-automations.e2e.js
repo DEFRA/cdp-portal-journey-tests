@@ -332,8 +332,8 @@ describe('Services automations page', () => {
       ).toExist()
 
       await expect(TabsComponent.activeTab()).toHaveText('About')
-      await expect(TabsComponent.tab('Buckets')).toExist()
       await expect(TabsComponent.tab('Proxy')).toExist()
+      await expect(TabsComponent.tab('Resources')).toExist()
 
       await expect(TabsComponent.tab('Automations')).not.toExist()
       await expect(TabsComponent.tab('Maintenance')).not.toExist()
