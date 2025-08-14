@@ -1,0 +1,197 @@
+services:
+  ################################################################################
+  # infrastructure services
+  ################################################################################
+  mongodb:
+    image: mongo:6.0.13
+    container_name: cdp-infra-mongodb
+    volumes:
+      - cdp-infra-mongodb-data:/data
+      - ./scripts/mongodb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.hello().ok"]
+      interval: 2s
+      start_period: 5s
+      retries: 10
+
+  ################################################################################
+  localstack:
+    image: localstack/localstack:4.3.0
+    container_name: cdp-infra-localstack
+    environment:
+      - LOCALSTACK_HOST=127.0.0.1
+      - SERVICES=s3,sqs,sns,dynamodb,firehose,secretsmanager
+      - LS_LOG=WARN
+    healthcheck:
+      test: ["CMD", "stat", "/tmp/READY"]
+      interval: 3s
+      start_period: 5s
+      retries: 20
+
+  ################################################################################
+  redis:
+    image: redis:7.2.3-alpine3.18
+    container_name: cdp-infra-redis
+    healthcheck:
+      test: [ "CMD", "redis-cli", "PING" ]
+      interval: 5s
+      start_period: 2s
+      retries: 5
+    restart: always
+
+  ################################################################################
+  selenium-chrome:
+    image: selenium/standalone-chrome:119.0
+    container_name: selenium-chrome
+    ports:
+      - 4444:4444
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+
+  ################################################################################
+  cdp-portal-frontend:
+    image: defradigital/cdp-portal-frontend:${CDP_PORTAL_FRONTEND:-latest}
+    container_name: cdp-portal-frontend
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    depends_on:
+      cdp-portal-backend:
+        condition: service_started
+      cdp-self-service-ops:
+        condition: service_started
+      cdp-user-service-backend:
+        condition: service_started
+      redis:
+        condition: service_healthy
+      cdp-portal-stubs:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3000"]
+      interval: 3s
+      start_period: 2s
+      retries: 3
+
+  ################################################################################
+  cdp-portal-backend:
+    image: defradigital/cdp-portal-backend:${CDP_PORTAL_BACKEND:-latest}
+    container_name: cdp-portal-backend
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      cdp-self-service-ops:
+        condition: service_started
+      cdp-user-service-backend:
+        condition: service_started
+      cdp-portal-stubs:
+        condition: service_healthy
+
+  ################################################################################
+  cdp-user-service-backend:
+    image: defradigital/cdp-user-service-backend:${CDP_USER_SERVICE_BACKEND:-latest}
+    container_name: cdp-user-service-backend
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      cdp-portal-stubs:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "http://cdp-user-service-backend:3001/health"]
+      interval: 3s
+      start_period: 2s
+      retries: 3
+
+  ################################################################################
+  cdp-self-service-ops:
+    image: defradigital/cdp-self-service-ops:${CDP_SELF_SERVICE_OPS:-latest}
+    container_name: cdp-self-service-ops
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      cdp-portal-stubs:
+        condition: service_healthy
+    environment:
+      - PORT=3009
+      - ENABLE_SECURE_CONTEXT=false
+    healthcheck:
+      test: ["CMD", "curl", "http://cdp-self-service-ops:3009/health"]
+      interval: 3s
+      start_period: 2s
+      retries: 3
+
+  ################################################################################
+  cdp-portal-stubs:
+    image: defradigital/cdp-portal-stubs:${CDP_PORTAL_STUBS:-latest}
+    container_name: cdp-portal-stubs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    ports:
+      - 3939:3939
+    environment:
+      - PORT=3939
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3939/health"]
+      interval: 3s
+      start_period: 2s
+
+  ################################################################################
+  cdp-notify:
+    image: defradigital/cdp-notify:${CDP_NOTIFY:-latest}
+    container_name: cdp-notify
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "cdp.127.0.0.1.sslip.io:host-gateway"
+      - "cdp.--1.sslip.io:host-gateway"
+    environment:
+      - PORT=3007
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3007"]
+      interval: 3s
+      start_period: 2s
+
+
+  ################################################################################
+
+volumes:
+  cdp-infra-mongodb-data:
+
+networks:
+  cdpnet:
+    driver: bridge

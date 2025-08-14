@@ -38,7 +38,7 @@ runs:
           CDP_PORTAL_BACKEND=${{inputs.portal-backend}} \
           CDP_USER_SERVICE_BACKEND=${{inputs.user-service-backend}} \
           CDP_PORTAL_STUBS=${{inputs.portal-stubs}} \
-          docker compose -f compose.ci.yml up --wait-timeout 300 -d --quiet-pull
+          docker compose -f compose.common.yml -f compose.ci.yml up --wait-timeout 300 -d --quiet-pull
       shell: bash
     - name: Run the tests
       run: |
@@ -48,7 +48,7 @@ runs:
     - name: debug
       if: always()
       run: |
-        docker compose -f compose.ci.yml logs > logs.txt
+        docker compose -f compose.common.yml -f compose.ci.yml logs > logs.txt
         docker ps
       shell: bash
     - name: Upload allure report
