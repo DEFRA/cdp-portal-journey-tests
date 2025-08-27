@@ -181,6 +181,7 @@ describe('Services automations page', () => {
         await expect(FormComponent.inputLabel('Dev')).toExist()
         await expect(FormComponent.inputLabel('Test')).toExist()
         await expect(FormComponent.inputLabel('Ext-test')).toExist()
+        await expect(FormComponent.inputLabel('Prod')).toExist()
 
         await expect(FormComponent.submitButton('Add')).toExist()
       })
