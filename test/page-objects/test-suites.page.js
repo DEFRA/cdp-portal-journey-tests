@@ -12,6 +12,10 @@ class TestSuitesPage extends Page {
   open(value = '') {
     return super.open('/test-suites' + value)
   }
+
+  rowForTestSuite(testSuiteName) {
+    return $(`tr[class="app-entity-table__row"]*=` + testSuiteName)
+  }
 }
 
 export default new TestSuitesPage()

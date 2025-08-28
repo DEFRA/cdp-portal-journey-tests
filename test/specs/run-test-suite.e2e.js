@@ -3,22 +3,10 @@ import TestSuitePage from 'page-objects/test-suite.page.js'
 import LoginStubPage from 'page-objects/login-stub.page'
 import BannerComponent from 'components/banner.component.js'
 import TabsComponent from 'components/tabs.component.js'
+import { waitForTestStatus } from 'helpers/test-suites.js'
 
 describe('Run Test Suite', () => {
   const testSuiteName = 'cdp-env-test-suite'
-
-  const waitForTestStatus = (regex, timeout = 20000) =>
-    browser.waitUntil(
-      async () => {
-        const statusText =
-          (await TestSuitePage.latestTestRun().getText()) ?? 'no match'
-        return statusText.match(regex)
-      },
-      {
-        timeout,
-        timeoutMsg: `Did not get status ${regex} after ${timeout}ms`
-      }
-    )
 
   describe('When logged out', () => {
     before(async () => {

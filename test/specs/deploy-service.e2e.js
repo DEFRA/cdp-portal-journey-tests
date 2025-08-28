@@ -190,4 +190,166 @@ describe('Deploy service', () => {
       await expect(status).toHaveText('Running')
     })
   })
+
+  describe('When logged in as tenant user', () => {
+    const options = {
+      imageName: 'tenant-backend',
+      version: '0.1.0',
+      environment: 'dev',
+      instanceCount: '2',
+      cpuFormValue: '1024',
+      memoryFormValue: '2048',
+      cpuText: '1 vCPU',
+      memoryText: '2 GB'
+    }
+
+    before(async () => {
+      await LoginStubPage.loginAsNonAdmin()
+      await DeployPage.open()
+    })
+
+    it('Should be on the "Deploy details" page', async () => {
+      await expect(browser).toHaveTitle(
+        'Deploy service details | Core Delivery Platform - Portal'
+      )
+      await expect(await DeployPage.navIsActive()).toBe(true)
+      await expect(
+        await PageHeadingComponent.caption('Deploy service')
+      ).toExist()
+      await expect(await PageHeadingComponent.title('Details')).toExist()
+      await expect(
+        PageHeadingComponent.intro(
+          'Provide the microservice image name, version and environment to deploy to'
+        )
+      ).toExist()
+
+      await populateDeploymentDetails(options, true)
+    })
+
+    it('Should be on the "Deploy options" page', async () => {
+      await expect(browser).toHaveTitle(
+        'Deploy service options | Core Delivery Platform - Portal'
+      )
+      await expect(await DeployPage.navIsActive()).toBe(true)
+
+      await expect(
+        await PageHeadingComponent.caption('Deploy service')
+      ).toExist()
+      await expect(await PageHeadingComponent.title('Options')).toExist()
+      await expect(
+        PageHeadingComponent.intro(
+          'Choose microservice instance count, CPU and memory allocation'
+        )
+      ).toExist()
+
+      await populateDeploymentOptions(options, true)
+    })
+
+    const formattedEnvironment = upperFirst(kebabCase(options.environment))
+
+    it('Should be able to view deployment summary', async () => {
+      await expect(browser).toHaveTitle(
+        'Deploy service summary | Core Delivery Platform - Portal'
+      )
+      await expect(await DeployPage.navIsActive()).toBe(true)
+
+      await expect(
+        await PageHeadingComponent.caption('Deploy service')
+      ).toExist()
+      await expect(await PageHeadingComponent.title('Summary')).toExist()
+
+      const $pageHeadingIntro = PageHeadingComponent.intro()
+      await expect($pageHeadingIntro).toExist()
+      await expect($pageHeadingIntro).toHaveHTML(
+        expect.stringContaining(
+          'Information about the microservice you are going to deploy'
+        )
+      )
+
+      // Check deploy summary contents
+      const $summary = $('[data-testid="deploy-summary"]')
+      await expect($summary).toHaveHTML(
+        expect.stringContaining(options.imageName)
+      )
+      await expect($summary).toHaveHTML(
+        expect.stringContaining(options.version)
+      )
+      await expect($summary).toHaveHTML(
+        expect.stringContaining(options.environment)
+      )
+      await expect($summary).toHaveHTML(
+        expect.stringContaining(options.instanceCount)
+      )
+      await expect($summary).toHaveHTML(
+        expect.stringContaining(options.cpuText)
+      )
+      await expect($summary).toHaveHTML(
+        expect.stringContaining(options.memoryText)
+      )
+
+      await confirmDeployment()
+    })
+
+    it('Should be redirected to the deployment page', async () => {
+      await expect(browser).toHaveTitle(
+        `${options.imageName} ${options.version} deployment - ${formattedEnvironment} | Core Delivery Platform - Portal`
+      )
+      await expect(await DeploymentsPage.navIsActive()).toBe(true)
+
+      await expect(
+        PageHeadingComponent.caption('Microservice deployment')
+      ).toExist()
+      await expect(
+        await PageHeadingComponent.title(options.imageName)
+      ).toExist()
+
+      const pageHeadingIntro = PageHeadingComponent.intro(
+        'Microservice deployment for'
+      )
+      await expect(pageHeadingIntro).toExist()
+      await expect(pageHeadingIntro).toHaveText(
+        `Microservice deployment for ${options.imageName}, version ${options.version} in ${options.environment}`
+      )
+
+      // Check deployment summary contents
+      const deploymentSummary = $('[data-testid="deployment-summary"]')
+      await expect(deploymentSummary).toHaveHTML(
+        expect.stringContaining(options.imageName)
+      )
+      await expect(deploymentSummary).toHaveHTML(
+        expect.stringContaining(options.version)
+      )
+      await expect(deploymentSummary).toHaveHTML(
+        expect.stringContaining(options.environment)
+      )
+      await expect(deploymentSummary).toHaveHTML(
+        expect.stringContaining(options.instanceCount)
+      )
+      await expect(deploymentSummary).toHaveHTML(
+        expect.stringContaining(options.cpuText)
+      )
+      await expect(deploymentSummary).toHaveHTML(
+        expect.stringContaining(options.memoryText)
+      )
+    })
+
+    it('Should see the status change to running', async () => {
+      await expect(browser).toHaveTitle(
+        `${options.imageName} ${options.version} deployment - ${formattedEnvironment} | Core Delivery Platform - Portal`
+      )
+
+      const status = $('[data-testid="deployment-status"]')
+
+      await waitForDeploymentToFinish()
+      await expect(status).toHaveText('Running')
+    })
+
+    it('Should list the new deployment under', async () => {
+      await expect(browser).toHaveTitle(
+        `${options.imageName} ${options.version} deployment - ${formattedEnvironment} | Core Delivery Platform - Portal`
+      )
+      const status = $('[data-testid="deployment-status"]')
+      await expect(status).toHaveText('Running')
+    })
+  })
 })

@@ -10,6 +10,8 @@ import EntityTableComponent from 'components/entity-table.component'
 import GovukSummaryListComponent from 'components/govuk-summary-list.component'
 import LoginStubPage from 'page-objects/login-stub.page'
 import AdminTeamPage from 'page-objects/admin-team.page'
+import { createPermission, deletePermission } from 'helpers/add-permission.js'
+import TabsComponent from 'components/tabs.component.js'
 
 const mockUserName = 'A Stub'
 
@@ -30,12 +32,14 @@ async function onTheAdminPlatformTeamPage() {
   await expect(await PageHeadingComponent.caption('Team')).toExist()
 }
 
-async function onTheTestUsersPage() {
-  await expect(browser).toHaveTitle('A Stub | Core Delivery Platform - Portal')
+async function onTheUsersPage(userName = mockUserName) {
+  await expect(browser).toHaveTitle(
+    `${userName} | Core Delivery Platform - Portal`
+  )
   await expect(await AdminPage.navIsActive()).toBe(true)
   await expect(await UsersPage.subNavIsActive()).toBe(true)
   await expect(await PageHeadingComponent.caption('User')).toExist()
-  await expect(await PageHeadingComponent.title(mockUserName)).toExist()
+  await expect(await PageHeadingComponent.title(userName)).toExist()
 }
 
 async function searchAndSelectACdpUser() {
@@ -219,7 +223,7 @@ describe('Admin Users', () => {
 
       it('Clicking on the added user takes should go to user details page, showing the team', async () => {
         await LinkComponent.link('app-link', mockUserName).click()
-        await onTheTestUsersPage()
+        await onTheUsersPage()
         await expect(LinkComponent.link('app-link', 'Platform')).toExist()
       })
 
@@ -270,7 +274,7 @@ describe('Admin Users', () => {
 
       it('Should be able to go to the User page', async () => {
         await LinkComponent.link('app-entity-link', mockUserName).click()
-        await onTheTestUsersPage()
+        await onTheUsersPage()
       })
 
       it('Should be able to go to the Delete user flow', async () => {
@@ -303,6 +307,64 @@ describe('Admin Users', () => {
         await expect(
           EntityTableComponent.content('@cdp-test-441241')
         ).not.toExist()
+      })
+    })
+
+    describe('When using testAsTenant permission to temporarily drop admin permissions', () => {
+      it('Should be able to create the "testAsTenant" permission and assign to admin user', async () => {
+        await createPermission('testAsTenant', 'User')
+
+        // Add permission to team
+        await LinkComponent.link(
+          'add-permission',
+          'Add permission to a user'
+        ).click()
+
+        await FormComponent.inputLabel('Search for a User').click()
+        await browser.keys('Admin')
+        await FormComponent.inputLabel('Admin User').click()
+
+        await FormComponent.submitButton('Add permission').click()
+      })
+
+      it('Should be on the Forbidden 403 page', async () => {
+        await expect(PageHeadingComponent.title('403')).toExist()
+        await expect(PageHeadingComponent.caption('Error')).toExist()
+      })
+
+      it('Should be able to see "Exit Test as Tenant Mode" link in the nav bar and check that admin only tabs dont show on tenant service page', async () => {
+        await expect(
+          LinkComponent.link('nav-admin', 'Exit Test as Tenant Mode')
+        ).toExist()
+
+        await LinkComponent.link('nav-services', 'Services').click()
+        await LinkComponent.link('app-link', 'tenant-backend').click()
+        await expect(TabsComponent.activeTab()).toHaveText('About')
+        await expect(TabsComponent.tab('Automations')).not.toExist()
+        await expect(TabsComponent.tab('Proxy')).toExist()
+        await expect(TabsComponent.tab('Resources')).toExist()
+        await expect(TabsComponent.tab('Secrets')).not.toExist()
+        await expect(TabsComponent.tab('Terminal')).not.toExist()
+      })
+
+      it('Should be able to see "Exit Test as Tenant Mode" link in the nav bar', async () => {
+        await LinkComponent.link(
+          'nav-admin',
+          'Exit Test as Tenant Mode'
+        ).click()
+
+        await expect(LinkComponent.link('nav-admin', 'Admin')).toExist()
+      })
+
+      it('Remove permission and see not listed on users page', async () => {
+        await deletePermission('testAsTenant')
+        await LinkComponent.link('app-subnav-link-users', 'Users').click()
+        await onTheAdminUsersPage()
+        await LinkComponent.link('app-entity-link', 'Admin User').click()
+        await onTheUsersPage('Admin User')
+        await expect(LinkComponent.link('app-link', 'breakGlass')).toExist()
+        await expect(LinkComponent.link('app-link', 'externalTest')).toExist()
+        await expect(LinkComponent.link('app-link', 'admin')).toExist()
       })
     })
   })

@@ -7,7 +7,7 @@ import SplitPaneComponent from 'components/split-pane.component.js'
 import LinkComponent from 'components/link.component.js'
 import PageHeadingComponent from 'components/page-heading.component.js'
 
-async function addPermission(permissionName, teamName) {
+async function createPermission(permissionName, applicableTo = 'Team') {
   await LoginStubPage.loginAsAdmin()
 
   // Go to permissions create form
@@ -22,12 +22,16 @@ async function addPermission(permissionName, teamName) {
   await FormComponent.inputLabel('Value').click()
   await browser.keys(permissionName)
 
-  await FormComponent.inputLabel('Team').click()
+  await FormComponent.inputLabel(applicableTo).click()
 
   await FormComponent.inputLabel('Description').click()
-  await browser.keys('Postgres permission')
+  await browser.keys(permissionName + ' permission')
 
   await FormComponent.submitButton('Create').click()
+}
+
+async function addPermission(permissionName, teamName) {
+  await createPermission(permissionName)
 
   // Add permission to team
   await LinkComponent.link('add-permission', 'Add permission to a team').click()
@@ -45,13 +49,21 @@ async function addPermission(permissionName, teamName) {
 async function deletePermission(permissionName) {
   await LoginStubPage.loginAsAdmin()
 
-  // Go to permission page
   await AdminPage.open()
   await SplitPaneComponent.subNavItem('permissions').click()
   await LinkComponent.link('app-entity-link', permissionName).click()
 
-  // Go to delete permission page
+  await expect(PageHeadingComponent.title(permissionName)).toExist()
   await LinkComponent.link('delete-permission', 'Delete permission').click()
+
+  await expect(PageHeadingComponent.title(permissionName)).toExist()
+  await expect(PageHeadingComponent.caption('Delete Permission')).toExist()
+  await FormComponent.submitButton('Delete permission').click()
+
+  await expect(PageHeadingComponent.title('Permissions')).toExist()
+  await expect(
+    LinkComponent.link('app-entity-link', permissionName)
+  ).not.toExist()
 }
 
-export { addPermission, deletePermission }
+export { addPermission, createPermission, deletePermission }

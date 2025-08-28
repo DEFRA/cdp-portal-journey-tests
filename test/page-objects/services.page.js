@@ -25,6 +25,10 @@ class ServicesPage extends Page {
     return super.open(pathValue)
   }
 
+  row(testId, content) {
+    return $(`tr[data-testid="${testId}"]*=` + content)
+  }
+
   async hasOwnerTabs() {
     await expect(TabsComponent.tab('About')).toExist()
     await expect(TabsComponent.tab('Automations')).toExist()

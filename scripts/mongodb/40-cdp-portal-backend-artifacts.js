@@ -269,3 +269,33 @@ db.artifacts.updateOne(
   },
   { upsert: true }
 )
+
+db.artifacts.updateOne(
+  {
+    repo: 'tenant-backend',
+    tag: '0.1.0'
+  },
+  {
+    $setOnInsert: {
+      created: '2024-11-02T16:24:06.004Z',
+      repo: 'tenant-backend',
+      tag: '0.1.0',
+      sha256:
+        'sha256:f2b8d79f6d70fd88b6bfce2d1bd5572ced3a8f64b5cc9537223f845665c2405e',
+      githubUrl: 'https://github.com/DEFRA/tenant-backend',
+      serviceName: 'tenant-backend',
+      scannerVersion: 1,
+      teams: [
+        {
+          github: 'TenantTeam1',
+          teamId: '44c7fa74-40e7-470d-a18a-b78a60bbef8e',
+          name: 'TenantTeam1'
+        }
+      ],
+      files: [],
+      semVer: Long(6553600),
+      runMode: 'service'
+    }
+  },
+  { upsert: true }
+)

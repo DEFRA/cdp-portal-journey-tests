@@ -9,6 +9,7 @@ db.scopes.updateOne(
       _id: new ObjectId('674def9d30093e3a3aa49d35'),
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'externalTest',
+      kind: ['team'],
       teams: ['aabe63e7-87ef-4beb-a596-c810631fc474'],
       createdAt: '2024-12-02T17:34:21.295Z',
       updatedAt: '2024-12-02T17:34:21.295Z'
@@ -26,6 +27,7 @@ db.scopes.updateOne(
       _id: new ObjectId('6750708d454fcbbcc1568154'),
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'breakGlass',
+      kind: ['user'],
       teams: [],
       createdAt: '2024-12-02T17:34:21.295Z',
       updatedAt: '2024-12-02T17:34:21.295Z'

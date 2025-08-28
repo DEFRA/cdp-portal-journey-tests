@@ -14,6 +14,8 @@ import EntityTableComponent from 'components/entity-table.component.js'
 import ServicesPage from 'page-objects/services.page.js'
 import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
 import StatusPage from 'page-objects/status.page.js'
+import BannerComponent from 'components/banner.component.js'
+import { waitForTestStatus } from 'helpers/test-suites.js'
 
 describe('Create journey tests', () => {
   describe('When logged out', () => {
@@ -215,12 +217,33 @@ describe('Create journey tests', () => {
       ).toExist()
     })
 
+    it('Owned test-suite should have a star beside it', async () => {
+      const testSuiteRow =
+        await TestSuitesPage.rowForTestSuite(testRepositoryName)
+      await expect(testSuiteRow).toExist()
+      await expect(
+        await testSuiteRow.$(`svg[data-testid="app-star-icon"]`)
+      ).toExist()
+    })
+
     it('Clicking on new test-suite on list page should open test-suite page', async () => {
       await EntityTableComponent.entityLink(testRepositoryName).click()
 
       await expect(browser).toHaveTitle(
         `Test Suite - ${testRepositoryName} | Core Delivery Platform - Portal`
       )
+    })
+
+    it('should allow the test suite to be run in dev', async () => {
+      await expect(TestSuitePage.selectEnvironment()).toBeDisplayed()
+      await TestSuitePage.selectEnvironment().selectByVisibleText('dev')
+      await TestSuitePage.startButton().click()
+      await BannerComponent.content(
+        'Test run requested successfully'
+      ).isDisplayed()
+      // Depending on polling intervals the in-progress set can be missed
+      await waitForTestStatus('In-progress|Finished')
+      await waitForTestStatus('Finished')
     })
   })
 })

@@ -188,3 +188,30 @@ db.repositories.updateOne(
   },
   { upsert: true }
 )
+
+db.repositories.updateOne(
+  {
+    _id: 'tenant-backend'
+  },
+  {
+    $setOnInsert: {
+      _id: 'tenant-backend',
+      description: 'tenant-backend',
+      primaryLanguage: 'JavaScript',
+      url: 'https://github.com/DEFRA/tenant-backend',
+      isArchived: false,
+      isTemplate: false,
+      isPrivate: false,
+      createdAt: [63616533685000000, 0],
+      teams: [
+        {
+          github: 'TenantTeam1',
+          teamId: '44c7fa74-40e7-470d-a18a-b78a60bbef8e',
+          name: 'TenantTeam1'
+        }
+      ],
+      topics: ['cdp', 'service', 'backend', 'node']
+    }
+  },
+  { upsert: true }
+)

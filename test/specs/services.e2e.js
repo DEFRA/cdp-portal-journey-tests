@@ -19,6 +19,15 @@ const adminServiceVersion = '0.172.0'
 const postgresService = 'cdp-postgres-service'
 const postgresServiceVersion = '0.1.0'
 
+async function checkRowExistsWithStar(content = 'cdp-portal-backend', index) {
+  const backendRow = await ServicesPage.row(
+    'app-entity-table-row-' + index,
+    content
+  )
+  await expect(await backendRow).toExist()
+  await expect(await backendRow.$(`svg[data-testid="app-star-icon"]`)).toExist()
+}
+
 describe('Services page', () => {
   describe('When logged in as admin user', () => {
     before(async () => {
@@ -34,6 +43,20 @@ describe('Services page', () => {
 
       await expect(await ServicesPage.navIsActive()).toBe(true)
       await expect(await PageHeadingComponent.title('Services')).toExist()
+    })
+
+    it('Should be able to see a star beside Platform Services', async () => {
+      await checkRowExistsWithStar('cdp-portal-backend', 1)
+      await checkRowExistsWithStar('cdp-portal-frontend', 2)
+      await checkRowExistsWithStar('cdp-postgres-service', 3)
+      await checkRowExistsWithStar('cdp-self-service-ops', 4)
+      await checkRowExistsWithStar('cdp-service-prototype', 5)
+
+      const adminServiceLink = await LinkComponent.link(
+        'app-link',
+        adminService
+      )
+      await adminServiceLink.waitForExist({ timeout: 5000 })
     })
 
     it("Should be able to search for a service on the 'Service' page", async () => {
