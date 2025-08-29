@@ -35,8 +35,8 @@ describe('Admin', () => {
       await expect(browser).toHaveTitle(
         'Users | Core Delivery Platform - Portal'
       )
-      await expect(await AdminPage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.title('Users')).toExist()
+      await expect(AdminPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.title('Users')).toExist()
     })
 
     after(async () => {

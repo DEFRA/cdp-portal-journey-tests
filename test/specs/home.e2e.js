@@ -7,7 +7,7 @@ describe('Home page', () => {
     await HomePage.open()
 
     await expect(browser).toHaveTitle('Home | Core Delivery Platform - Portal')
-    await expect(await HomePage.navIsActive()).toBe(true)
+    await expect(HomePage.navIsActive()).toBe(true)
     await expect(HomePage.serviceName()).toHaveText(
       'Core Delivery Platform - Portal'
     )

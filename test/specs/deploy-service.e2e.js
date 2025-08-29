@@ -50,11 +50,11 @@ describe('Deploy service', () => {
       await expect(browser).toHaveTitle(
         'Deploy service details | Core Delivery Platform - Portal'
       )
-      await expect(await DeployPage.navIsActive()).toBe(true)
+      await expect(DeployPage.navIsActive()).toBe(true)
       await expect(
         await PageHeadingComponent.caption('Deploy service')
       ).toExist()
-      await expect(await PageHeadingComponent.title('Details')).toExist()
+      await expect(PageHeadingComponent.title('Details')).toExist()
       await expect(
         PageHeadingComponent.intro(
           'Provide the microservice image name, version and environment to deploy to'
@@ -68,12 +68,12 @@ describe('Deploy service', () => {
       await expect(browser).toHaveTitle(
         'Deploy service options | Core Delivery Platform - Portal'
       )
-      await expect(await DeployPage.navIsActive()).toBe(true)
+      await expect(DeployPage.navIsActive()).toBe(true)
 
       await expect(
         await PageHeadingComponent.caption('Deploy service')
       ).toExist()
-      await expect(await PageHeadingComponent.title('Options')).toExist()
+      await expect(PageHeadingComponent.title('Options')).toExist()
       await expect(
         PageHeadingComponent.intro(
           'Choose microservice instance count, CPU and memory allocation'
@@ -89,12 +89,12 @@ describe('Deploy service', () => {
       await expect(browser).toHaveTitle(
         'Deploy service summary | Core Delivery Platform - Portal'
       )
-      await expect(await DeployPage.navIsActive()).toBe(true)
+      await expect(DeployPage.navIsActive()).toBe(true)
 
       await expect(
         await PageHeadingComponent.caption('Deploy service')
       ).toExist()
-      await expect(await PageHeadingComponent.title('Summary')).toExist()
+      await expect(PageHeadingComponent.title('Summary')).toExist()
 
       const $pageHeadingIntro = PageHeadingComponent.intro()
       await expect($pageHeadingIntro).toExist()
@@ -132,7 +132,7 @@ describe('Deploy service', () => {
       await expect(browser).toHaveTitle(
         `${options.imageName} ${options.version} deployment - ${formattedEnvironment} | Core Delivery Platform - Portal`
       )
-      await expect(await DeploymentsPage.navIsActive()).toBe(true)
+      await expect(DeploymentsPage.navIsActive()).toBe(true)
 
       await expect(
         PageHeadingComponent.caption('Microservice deployment')
@@ -212,11 +212,11 @@ describe('Deploy service', () => {
       await expect(browser).toHaveTitle(
         'Deploy service details | Core Delivery Platform - Portal'
       )
-      await expect(await DeployPage.navIsActive()).toBe(true)
+      await expect(DeployPage.navIsActive()).toBe(true)
       await expect(
         await PageHeadingComponent.caption('Deploy service')
       ).toExist()
-      await expect(await PageHeadingComponent.title('Details')).toExist()
+      await expect(PageHeadingComponent.title('Details')).toExist()
       await expect(
         PageHeadingComponent.intro(
           'Provide the microservice image name, version and environment to deploy to'
@@ -230,12 +230,12 @@ describe('Deploy service', () => {
       await expect(browser).toHaveTitle(
         'Deploy service options | Core Delivery Platform - Portal'
       )
-      await expect(await DeployPage.navIsActive()).toBe(true)
+      await expect(DeployPage.navIsActive()).toBe(true)
 
       await expect(
         await PageHeadingComponent.caption('Deploy service')
       ).toExist()
-      await expect(await PageHeadingComponent.title('Options')).toExist()
+      await expect(PageHeadingComponent.title('Options')).toExist()
       await expect(
         PageHeadingComponent.intro(
           'Choose microservice instance count, CPU and memory allocation'
@@ -251,12 +251,12 @@ describe('Deploy service', () => {
       await expect(browser).toHaveTitle(
         'Deploy service summary | Core Delivery Platform - Portal'
       )
-      await expect(await DeployPage.navIsActive()).toBe(true)
+      await expect(DeployPage.navIsActive()).toBe(true)
 
       await expect(
         await PageHeadingComponent.caption('Deploy service')
       ).toExist()
-      await expect(await PageHeadingComponent.title('Summary')).toExist()
+      await expect(PageHeadingComponent.title('Summary')).toExist()
 
       const $pageHeadingIntro = PageHeadingComponent.intro()
       await expect($pageHeadingIntro).toExist()
@@ -294,7 +294,7 @@ describe('Deploy service', () => {
       await expect(browser).toHaveTitle(
         `${options.imageName} ${options.version} deployment - ${formattedEnvironment} | Core Delivery Platform - Portal`
       )
-      await expect(await DeploymentsPage.navIsActive()).toBe(true)
+      await expect(DeploymentsPage.navIsActive()).toBe(true)
 
       await expect(
         PageHeadingComponent.caption('Microservice deployment')

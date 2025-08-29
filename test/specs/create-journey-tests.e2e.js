@@ -42,7 +42,7 @@ describe('Create journey tests', () => {
       await expect(browser).toHaveTitle(
         'Create | Core Delivery Platform - Portal'
       )
-      await expect(await CreatePage.navIsActive()).toBe(true)
+      await expect(CreatePage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.title('Create')).toExist()
       await expect(
         PageHeadingComponent.intro('What would you like to create?')
@@ -62,7 +62,7 @@ describe('Create journey tests', () => {
       await expect(browser).toHaveTitle(
         'Create | Core Delivery Platform - Portal'
       )
-      await expect(await CreatePage.navIsActive()).toBe(true)
+      await expect(CreatePage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.title('Create')).toExist()
       await expect(
         PageHeadingComponent.intro('What would you like to create?')
@@ -83,7 +83,7 @@ describe('Create journey tests', () => {
       await expect(browser).toHaveTitle(
         'Create journey test suite | Core Delivery Platform - Portal'
       )
-      await expect(await CreatePage.navIsActive()).toBe(true)
+      await expect(CreatePage.navIsActive()).toBe(true)
 
       await expect(PageHeadingComponent.caption('Create')).toExist()
       await expect(PageHeadingComponent.title('Journey Test Suite')).toExist()
@@ -121,14 +121,14 @@ describe('Create journey tests', () => {
       await expect(browser).toHaveTitle(
         `Creating ${testRepositoryName} test suite | Core Delivery Platform - Portal`
       )
-      await expect(await TestSuitesPage.navIsActive()).toBe(true)
+      await expect(TestSuitesPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Test Suite')).toExist()
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
       await expect(StatusPage.overallProgress()).toHaveText('Creating')
     })
 
     it('Should see status page go to Created status', async () => {
-      await expect(await TestSuitesPage.navIsActive()).toBe(true)
+      await expect(TestSuitesPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Test Suite')).toExist()
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
 
@@ -140,7 +140,7 @@ describe('Create journey tests', () => {
         'SquidProxy',
         'AppConfig'
       ]) {
-        await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
+        await expect($(`[data-testid="${resource}-created"]`)).toExist()
       }
 
       await expect(browser).toHaveTitle(
@@ -151,8 +151,8 @@ describe('Create journey tests', () => {
     })
 
     it('Should be on "Test Suite" About page with 2 tabs', async () => {
-      await expect(await TestSuitePage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.caption('Test Suite')).toExist()
+      await expect(TestSuitePage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Test Suite')).toExist()
       await expect(
         await PageHeadingComponent.title(testRepositoryName)
       ).toExist()
@@ -165,17 +165,17 @@ describe('Create journey tests', () => {
     it('Should be able to go to the "Secrets" overview', async () => {
       await TabsComponent.tab('Secrets').click()
 
-      await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+      await expect(PageHeadingComponent.caption('Secrets')).toExist()
       await expect(
         await PageHeadingComponent.title(testRepositoryName)
       ).toExist()
 
       await expect(TabsComponent.activeTab()).toHaveText('Secrets')
-      await expect(await SplitPaneComponent.subNavIsActive('all')).toBe(true)
-      await expect(await SplitPaneComponent.subNavItem('dev')).toExist()
-      await expect(await SplitPaneComponent.subNavItem('test')).toExist()
-      await expect(await SplitPaneComponent.subNavItem('perf-test')).toExist()
-      await expect(await SplitPaneComponent.subNavItem('prod')).toExist()
+      await expect(SplitPaneComponent.subNavIsActive('all')).toBe(true)
+      await expect(SplitPaneComponent.subNavItem('dev')).toExist()
+      await expect(SplitPaneComponent.subNavItem('test')).toExist()
+      await expect(SplitPaneComponent.subNavItem('perf-test')).toExist()
+      await expect(SplitPaneComponent.subNavItem('prod')).toExist()
       await expect(
         await SplitPaneComponent.subNavItem('infra-dev')
       ).not.toExist()
@@ -198,7 +198,7 @@ describe('Create journey tests', () => {
 
       await ServicesSecretsPage.createSecretButton().click()
 
-      await expect(await ServicesSecretsPage.secretCell(keyName)).toExist()
+      await expect(ServicesSecretsPage.secretCell(keyName)).toExist()
     })
 
     it('Should be able to view list of test-suites with new test-suite listed', async () => {
@@ -209,8 +209,8 @@ describe('Create journey tests', () => {
       await expect(browser).toHaveTitle(
         'Test Suites | Core Delivery Platform - Portal'
       )
-      await expect(await TestSuitesPage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.title('Test Suites')).toExist()
+      await expect(TestSuitesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.title('Test Suites')).toExist()
 
       await expect(
         EntityTableComponent.entityLink(testRepositoryName)
