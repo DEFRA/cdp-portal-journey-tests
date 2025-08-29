@@ -38,7 +38,7 @@ describe('Create prototype', () => {
       await expect(browser).toHaveTitle(
         'Create | Core Delivery Platform - Portal'
       )
-      await expect(await CreatePage.navIsActive()).toBe(true)
+      await expect(CreatePage.navIsActive()).toBe(true)
 
       await expect(PageHeadingComponent.title('Create')).toExist()
       await expect(
@@ -60,7 +60,7 @@ describe('Create prototype', () => {
       await expect(browser).toHaveTitle(
         'Create prototype | Core Delivery Platform - Portal'
       )
-      await expect(await CreatePage.navIsActive()).toBe(true)
+      await expect(CreatePage.navIsActive()).toBe(true)
 
       await expect(PageHeadingComponent.caption('Create')).toExist()
       await expect(PageHeadingComponent.title('Prototype')).toExist()
@@ -81,7 +81,7 @@ describe('Create prototype', () => {
       await expect(browser).toHaveTitle(
         'Create prototype summary | Core Delivery Platform - Portal'
       )
-      await expect(await CreatePage.navIsActive()).toBe(true)
+      await expect(CreatePage.navIsActive()).toBe(true)
 
       await expect(PageHeadingComponent.caption('Create prototype')).toExist()
       await expect(PageHeadingComponent.title('Summary')).toExist()
@@ -91,10 +91,10 @@ describe('Create prototype', () => {
         )
       ).toExist()
 
-      await expect(await GovukSummaryListComponent.row('row-Kind')).toHaveText(
+      await expect(GovukSummaryListComponent.row('row-Kind')).toHaveText(
         'Prototype'
       )
-      await expect(await GovukSummaryListComponent.row('row-Name')).toHaveText(
+      await expect(GovukSummaryListComponent.row('row-Name')).toHaveText(
         testRepositoryName
       )
       await expect(
@@ -111,14 +111,14 @@ describe('Create prototype', () => {
       await expect(browser).toHaveTitle(
         `Creating ${testRepositoryName} microservice | Core Delivery Platform - Portal`
       )
-      await expect(await ServicesPage.navIsActive()).toBe(true)
+      await expect(ServicesPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Service')).toExist()
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
       await expect(StatusPage.overallProgress()).toHaveText('Creating')
     })
 
     it('Should see status page go to Created status', async () => {
-      await expect(await ServicesPage.navIsActive()).toBe(true)
+      await expect(ServicesPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Service')).toExist()
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
 
@@ -132,7 +132,7 @@ describe('Create prototype', () => {
         'AppConfig',
         'GrafanaDashboard'
       ]) {
-        await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
+        await expect($(`[data-testid="${resource}-created"]`)).toExist()
       }
 
       await expect(browser).toHaveTitle(
@@ -146,8 +146,8 @@ describe('Create prototype', () => {
       await expect(browser).toHaveTitle(
         `${testRepositoryName} microservice | Core Delivery Platform - Portal`
       )
-      await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.caption('Service')).toExist()
+      await expect(ServicesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Service')).toExist()
       await expect(
         await PageHeadingComponent.title(testRepositoryName)
       ).toExist()
@@ -159,8 +159,8 @@ describe('Create prototype', () => {
       await expect(browser).toHaveTitle(
         'Services | Core Delivery Platform - Portal'
       )
-      await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.title('Services')).toExist()
+      await expect(ServicesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.title('Services')).toExist()
 
       await expect(LinkComponent.link('app-link', testRepositoryName)).toExist()
     })

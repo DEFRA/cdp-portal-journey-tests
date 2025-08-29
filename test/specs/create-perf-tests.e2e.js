@@ -40,7 +40,7 @@ describe('Create perf tests', () => {
       await expect(browser).toHaveTitle(
         'Create | Core Delivery Platform - Portal'
       )
-      await expect(await CreatePage.navIsActive()).toBe(true)
+      await expect(CreatePage.navIsActive()).toBe(true)
 
       await expect(PageHeadingComponent.title('Create')).toExist()
       await expect(
@@ -62,7 +62,7 @@ describe('Create perf tests', () => {
       await expect(browser).toHaveTitle(
         'Create performance test suite | Core Delivery Platform - Portal'
       )
-      await expect(await CreatePage.navIsActive()).toBe(true)
+      await expect(CreatePage.navIsActive()).toBe(true)
 
       await expect(PageHeadingComponent.caption('Create')).toExist()
       await expect(
@@ -102,14 +102,14 @@ describe('Create perf tests', () => {
       await expect(browser).toHaveTitle(
         `Creating ${testRepositoryName} test suite | Core Delivery Platform - Portal`
       )
-      await expect(await TestSuitesPage.navIsActive()).toBe(true)
+      await expect(TestSuitesPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Test Suite')).toExist()
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
       await expect(StatusPage.overallProgress()).toHaveText('Creating')
     })
 
     it('Should see status page go to Created status', async () => {
-      await expect(await TestSuitesPage.navIsActive()).toBe(true)
+      await expect(TestSuitesPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Test Suite')).toExist()
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
 
@@ -121,7 +121,7 @@ describe('Create perf tests', () => {
         'SquidProxy',
         'AppConfig'
       ]) {
-        await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
+        await expect($(`[data-testid="${resource}-created"]`)).toExist()
       }
 
       await expect(browser).toHaveTitle(
@@ -132,8 +132,8 @@ describe('Create perf tests', () => {
     })
 
     it('Should be on "Test Suite" About page with 3 tabs', async () => {
-      await expect(await TestSuitePage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.caption('Test Suite')).toExist()
+      await expect(TestSuitePage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Test Suite')).toExist()
       await expect(
         await PageHeadingComponent.title(testRepositoryName)
       ).toExist()
@@ -149,8 +149,8 @@ describe('Create perf tests', () => {
       await expect(browser).toHaveTitle(
         'Test Suites | Core Delivery Platform - Portal'
       )
-      await expect(await TestSuitesPage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.title('Test Suites')).toExist()
+      await expect(TestSuitesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.title('Test Suites')).toExist()
 
       await expect(
         EntityTableComponent.entityLink(testRepositoryName)

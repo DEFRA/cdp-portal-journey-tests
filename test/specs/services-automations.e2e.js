@@ -58,8 +58,8 @@ describe('Services automations page', () => {
     })
 
     it('Should be able to view service page', async () => {
-      await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.caption('Service')).toExist()
+      await expect(ServicesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Service')).toExist()
       await expect(
         await PageHeadingComponent.title(adminOwnedService)
       ).toExist()
@@ -85,7 +85,7 @@ describe('Services automations page', () => {
       await resetAutomationsForms()
 
       await LoginStubPage.loginAsAdmin()
-      await expect(await ServicesPage.logOutLink()).toHaveText('Sign out')
+      await expect(ServicesPage.logOutLink()).toHaveText('Sign out')
       await ServicesPage.open(adminOwnedService)
     })
 
@@ -146,7 +146,7 @@ describe('Services automations page', () => {
       })
 
       it('Automatic deploys should now be turned on in the test environment', async () => {
-        await expect(await FormComponent.inputByValue('test')).toBeSelected()
+        await expect(FormComponent.inputByValue('test')).toBeSelected()
       })
     })
 
@@ -161,9 +161,7 @@ describe('Services automations page', () => {
       })
 
       it('sidebar should have deployments highlighted', async () => {
-        await expect(await SplitPaneComponent.subNavIsActive('test-runs')).toBe(
-          true
-        )
+        await expect(SplitPaneComponent.subNavIsActive('test-runs')).toBe(true)
       })
 
       it('Should see add test run form', async () => {
@@ -243,7 +241,7 @@ describe('Services automations page', () => {
           expect.stringContaining('Test-suite')
         )
 
-        await expect(await FormComponent.inputByValue('dev')).toBeSelected()
+        await expect(FormComponent.inputByValue('dev')).toBeSelected()
         await expect(
           await FormComponent.inputByValue('test')
         ).not.toBeSelected()
@@ -322,12 +320,12 @@ describe('Services automations page', () => {
     before(async () => {
       await LoginStubPage.loginAsNonAdmin()
       await ServicesPage.open(adminOwnedService)
-      await expect(await ServicesPage.logOutLink()).toHaveText('Sign out')
+      await expect(ServicesPage.logOutLink()).toHaveText('Sign out')
     })
 
     it('And viewing a service you do not own, Should see expected tabs', async () => {
-      await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.caption('Service')).toExist()
+      await expect(ServicesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Service')).toExist()
       await expect(
         await PageHeadingComponent.title(adminOwnedService)
       ).toExist()

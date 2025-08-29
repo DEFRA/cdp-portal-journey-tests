@@ -50,7 +50,7 @@ describe('Services maintenance - shuttering', () => {
   describe('When shuttering as admin user', () => {
     before(async () => {
       await LoginStubPage.loginAsAdmin()
-      await expect(await ServicesPage.logOutLink()).toHaveText('Sign out')
+      await expect(ServicesPage.logOutLink()).toHaveText('Sign out')
       await ServicesMaintenancePage.open(adminOwnedService)
       // Ensure the service is in the correct shuttered state
       await unshutterService(adminOwnedService, 2)
@@ -99,7 +99,7 @@ describe('Services maintenance - shuttering', () => {
       })
 
       it('Should be on the shutter confirm page', async () => {
-        await expect(await ServicesMaintenancePage.navIsActive()).toBe(true)
+        await expect(ServicesMaintenancePage.navIsActive()).toBe(true)
         await expect(
           await PageHeadingComponent.caption('Confirm shutter')
         ).toExist()
@@ -233,7 +233,7 @@ describe('Services maintenance - undeploy', () => {
 
     it('Should deploy a service so that we can undeploy it', async () => {
       await LoginStubPage.loginAsAdmin()
-      await expect(await ServicesPage.logOutLink()).toHaveText('Sign out')
+      await expect(ServicesPage.logOutLink()).toHaveText('Sign out')
       await deployService(options)
       await ServicesMaintenancePage.open(options.imageName)
     })
@@ -287,12 +287,12 @@ describe('Services maintenance - undeploy', () => {
     before(async () => {
       await LoginStubPage.loginAsNonAdmin()
       await ServicesPage.open(adminOwnedService)
-      await expect(await ServicesPage.logOutLink()).toHaveText('Sign out')
+      await expect(ServicesPage.logOutLink()).toHaveText('Sign out')
     })
 
     it('And viewing a service you do not own, Should see expected tabs', async () => {
-      await expect(await ServicesPage.navIsActive()).toBe(true)
-      await expect(await PageHeadingComponent.caption('Service')).toExist()
+      await expect(ServicesPage.navIsActive()).toBe(true)
+      await expect(PageHeadingComponent.caption('Service')).toExist()
       await expect(
         await PageHeadingComponent.title(adminOwnedService)
       ).toExist()
