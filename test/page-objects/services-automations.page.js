@@ -14,7 +14,7 @@ class ServicesAutomationsPage extends Page {
   }
 
   openTestRuns(serviceName) {
-    return super.open(`services/${serviceName}/automations/test-runs`)
+    return super.open(`/services/${serviceName}/automations/test-runs`)
   }
 
   deploymentsHeading() {

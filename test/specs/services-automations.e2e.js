@@ -37,6 +37,12 @@ async function resetAutomationsForms() {
 
   await FormComponent.submitButton('Save').click()
 
+  await expect(
+    await BannerComponent.content(
+      'Auto deployment details updated successfully'
+    )
+  ).toExist()
+
   // Reset auto test runs form
   await ServicesAutomationsPage.openTestRuns(adminOwnedService)
   const $noResultsMessage =
@@ -81,7 +87,9 @@ describe('Services automations page', () => {
   })
 
   describe('When logged in as admin user', () => {
-    before(async () => {
+    // before(async () => {
+
+    it('Before stuff...', async () => {
       await resetAutomationsForms()
 
       await LoginStubPage.loginAsAdmin()

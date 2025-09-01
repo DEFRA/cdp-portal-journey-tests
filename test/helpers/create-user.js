@@ -27,9 +27,6 @@ async function createUser(searchTerm) {
   await FormComponent.inputLabel(searchTerm).click()
   await FormComponent.submitButton('Next').click()
 
-  // Skip user details
-  await FormComponent.submitButton('Skip').click()
-
   // Create
   await FormComponent.submitButton('Create').click()
 

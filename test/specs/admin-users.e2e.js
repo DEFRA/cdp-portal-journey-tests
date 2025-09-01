@@ -42,19 +42,6 @@ async function onTheUsersPage(userName = mockUserName) {
   await expect(await PageHeadingComponent.title(userName)).toExist()
 }
 
-async function searchAndSelectACdpUser() {
-  await FormComponent.inputLabel('CDP users name or email').click()
-  await browser.keys('test')
-
-  const aadUserSearchResult = FormComponent.inputLabel(
-    'A Stub - a.stub@test.co'
-  )
-  await expect(aadUserSearchResult).toExist()
-  await aadUserSearchResult.click()
-
-  await FormComponent.submitButton('Add').click()
-}
-
 describe('Admin Users', () => {
   describe('When logged in as admin', () => {
     before(async () => {
@@ -118,20 +105,6 @@ describe('Admin Users', () => {
         await expect(githubSearchResult).toExist()
         await githubSearchResult.click()
         await FormComponent.submitButton('Next').click()
-      })
-
-      it('Should be on the User Details page', async () => {
-        await expect(browser).toHaveTitle(
-          'Add User Details | Core Delivery Platform - Portal'
-        )
-        await expect(await AdminPage.navIsActive()).toBe(true)
-        await expect(await UsersPage.subNavIsActive()).toBe(true)
-        await expect(await PageHeadingComponent.title('User Details')).toExist()
-        await expect(await PageHeadingComponent.caption('Add')).toExist()
-      })
-
-      it('Should be able to Skip to summary', async () => {
-        await FormComponent.submitButton('Skip').click()
       })
 
       it('Should be on the User Summary page', async () => {
@@ -210,7 +183,15 @@ describe('Admin Users', () => {
       })
 
       it('Should be able to find CDP user', async () => {
-        await searchAndSelectACdpUser()
+        await FormComponent.inputLabel('CDP users name or email').click()
+        await browser.keys('test')
+
+        const aadUserSearchResult = FormComponent.inputLabel(
+          'A Stub - a.stub@test.co'
+        )
+        await expect(aadUserSearchResult).toExist()
+        await aadUserSearchResult.click()
+        await FormComponent.submitButton('Add').click()
       })
 
       it('Should be able to see the added user', async () => {

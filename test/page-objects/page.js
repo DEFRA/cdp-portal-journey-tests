@@ -40,8 +40,19 @@ class Page {
     await this.logOutLink().click()
   }
 
-  open(path) {
-    return browser.url(path)
+  async open(path) {
+    await browser.url(path)
+    await browser.waitUntil(
+      async () => {
+        const state = await browser.execute(() => document.readyState)
+        return state === 'complete'
+      },
+      {
+        timeout: 15000,
+        interval: 200,
+        timeoutMsg: `Page did not reach readyState=complete: ${path}`
+      }
+    )
   }
 
   link(value) {

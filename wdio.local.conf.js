@@ -14,6 +14,7 @@ if (debug) {
 }
 
 export const config = {
+  automationProtocol: 'webdriver',
   //
   // ====================
   // Runner Configuration
@@ -52,6 +53,7 @@ export const config = {
         {
           maxInstances: 1,
           browserName: 'chrome',
+          'wdio:enforceWebDriverClassic': true,
           'goog:chromeOptions': {
             args: [
               '--no-sandbox',
