@@ -74,7 +74,7 @@ export const config = {
   },
 
   // Number of failures before the test suite bails.
-  bail: 1,
+  bail: 0,
   waitforTimeout: tenSeconds,
   waitforInterval: twoSeconds,
   connectionRetryTimeout: oneMinute,
@@ -236,20 +236,24 @@ export const config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  onComplete: function (exitCode, config, capabilities, results) {
-    const reportError = new Error('Could not generate Allure report')
-    const generation = allure(['generate', 'allure-results', '--clean'])
-
+  onComplete() {
+    const gen = allure(['generate', 'allure-results', '--clean'])
     return new Promise((resolve, reject) => {
-      const generationTimeout = setTimeout(() => reject(reportError), oneMinute)
+      gen.on('exit', (code) => {
+        if (code !== 0) return reject(new Error('Allure generate failed'))
 
-      generation.on('exit', function (exitCode) {
-        clearTimeout(generationTimeout)
-
-        if (exitCode !== 0) {
-          return reject(reportError)
+        const child = allure(['open', 'allure-report'])
+        const cleanup = () => {
+          try {
+            child.kill('SIGTERM')
+          } catch {}
         }
-        resolve()
+
+        process.on('SIGINT', cleanup)
+        process.on('SIGTERM', cleanup)
+        process.on('exit', cleanup)
+
+        child.on('exit', resolve)
       })
     })
   }

@@ -13,7 +13,7 @@ db.entities.updateOne(
       status: 'Created',
       teams: [
         {
-          teamId: 'aabe63e7-87ef-4beb-a596-c810631fc474',
+          teamId: 'platform',
           name: 'Platform'
         }
       ]
@@ -35,7 +35,7 @@ db.entities.updateOne(
       status: 'Created',
       teams: [
         {
-          teamId: 'aabe63e7-87ef-4beb-a596-c810631fc474',
+          teamId: 'platform',
           name: 'Platform'
         }
       ]
@@ -57,7 +57,7 @@ db.entities.updateOne(
       status: 'Created',
       teams: [
         {
-          teamId: 'aabe63e7-87ef-4beb-a596-c810631fc474',
+          teamId: 'platform',
           name: 'Platform'
         }
       ]
@@ -79,7 +79,7 @@ db.entities.updateOne(
       status: 'Created',
       teams: [
         {
-          teamId: 'aabe63e7-87ef-4beb-a596-c810631fc474',
+          teamId: 'platform',
           name: 'Platform'
         }
       ]
@@ -101,7 +101,7 @@ db.entities.updateOne(
       status: 'Created',
       teams: [
         {
-          teamId: 'aabe63e7-87ef-4beb-a596-c810631fc474',
+          teamId: 'platform',
           name: 'Platform'
         }
       ]
@@ -123,7 +123,7 @@ db.entities.updateOne(
       status: 'Created',
       teams: [
         {
-          teamId: '44c7fa74-40e7-470d-a18a-b78a60bbef8e',
+          teamId: 'tenantteam1',
           name: 'TenantTeam1'
         }
       ]
@@ -144,7 +144,7 @@ db.entities.updateOne(
       status: 'Created',
       teams: [
         {
-          teamId: 'aabe63e7-87ef-4beb-a596-c810631fc474',
+          teamId: 'platform',
           name: 'Platform'
         }
       ]

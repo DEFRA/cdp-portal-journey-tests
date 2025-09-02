@@ -10,7 +10,7 @@ db.scopes.updateOne(
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'externalTest',
       kind: ['team'],
-      teams: ['aabe63e7-87ef-4beb-a596-c810631fc474'],
+      teams: ['platform'],
       createdAt: '2024-12-02T17:34:21.295Z',
       updatedAt: '2024-12-02T17:34:21.295Z'
     }
@@ -46,7 +46,7 @@ db.scopes.updateOne(
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'admin',
       kind: ['team'],
-      teams: ['aabe63e7-87ef-4beb-a596-c810631fc474'],
+      teams: ['platform'],
       createdAt: '2024-12-02T17:34:21.295Z',
       updatedAt: '2024-12-02T17:34:21.295Z'
     }
@@ -60,7 +60,7 @@ db.teams.updateOne(
   },
   {
     $setOnInsert: {
-      _id: 'aabe63e7-87ef-4beb-a596-c810631fc474',
+      _id: 'platform',
       name: 'Platform',
       description: 'The team that runs the platform',
       github: 'cdp-platform',
@@ -83,7 +83,7 @@ db.teams.updateOne(
   },
   {
     $setOnInsert: {
-      _id: '44c7fa74-40e7-470d-a18a-b78a60bbef8e',
+      _id: 'tenantteam1',
       name: 'TenantTeam1',
       description: 'A test team',
       github: 'cdp-tenant-1',

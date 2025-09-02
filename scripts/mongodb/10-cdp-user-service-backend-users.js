@@ -14,7 +14,7 @@ db.users.updateOne(
       github: 'adminuser',
       createdAt: '2023-10-26T12:51:00.028Z',
       updatedAt: '2023-10-26T12:51:00.028Z',
-      teams: ['aabe63e7-87ef-4beb-a596-c810631fc474'],
+      teams: ['platform'],
       scopes: [
         {
           scopeId: new ObjectId('6750708d454fcbbcc1568154'),
@@ -23,7 +23,7 @@ db.users.updateOne(
         },
         {
           scopeId: new ObjectId('6750708d454fcbbcc1568154'),
-          teamId: 'aabe63e7-87ef-4beb-a596-c810631fc474'
+          teamId: 'platform'
         }
       ]
     }
@@ -45,7 +45,7 @@ db.users.updateOne(
       github: 'nonadminuser',
       createdAt: '2024-11-11T13:51:00.028Z',
       updatedAt: '2024-11-12T13:24:00.028Z',
-      teams: ['44c7fa74-40e7-470d-a18a-b78a60bbef8e'],
+      teams: ['tenantteam1'],
       scopes: []
     }
   },
