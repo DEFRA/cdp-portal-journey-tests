@@ -343,6 +343,7 @@ describe('Admin Users', () => {
         await onTheAdminUsersPage()
         await LinkComponent.link('app-entity-link', 'Admin User').click()
         await onTheUsersPage('Admin User')
+        await expect(LinkComponent.link('app-link', 'canBreakGlass')).toExist()
         await expect(LinkComponent.link('app-link', 'breakGlass')).toExist()
         await expect(LinkComponent.link('app-link', 'externalTest')).toExist()
         await expect(LinkComponent.link('app-link', 'admin')).toExist()

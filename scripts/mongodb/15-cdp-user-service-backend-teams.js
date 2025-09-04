@@ -10,7 +10,14 @@ db.scopes.updateOne(
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'externalTest',
       kind: ['team'],
-      teams: ['platform'],
+      teams: [
+        {
+          teamId: 'platform',
+          teamName: 'Platform'
+        }
+      ],
+      users: [],
+      members: [],
       createdAt: '2024-12-02T17:34:21.295Z',
       updatedAt: '2024-12-02T17:34:21.295Z'
     }
@@ -29,6 +36,17 @@ db.scopes.updateOne(
       value: 'breakGlass',
       kind: ['user'],
       teams: [],
+      users: [],
+      members: [
+        {
+          userId: '90552794-0613-4023-819a-512aa9d40023',
+          userName: 'Admin User',
+          teamId: 'platform',
+          teamName: 'Platform',
+          startDate: '2023-10-26T12:51:00.028Z',
+          endDate: '2023-11-26T12:51:00.028Z'
+        }
+      ],
       createdAt: '2024-12-02T17:34:21.295Z',
       updatedAt: '2024-12-02T17:34:21.295Z'
     }
@@ -46,7 +64,41 @@ db.scopes.updateOne(
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'admin',
       kind: ['team'],
-      teams: ['platform'],
+      teams: [
+        {
+          teamId: 'platform',
+          teamName: 'Platform'
+        }
+      ],
+      createdAt: '2024-12-02T17:34:21.295Z',
+      updatedAt: '2024-12-02T17:34:21.295Z'
+    }
+  },
+  { upsert: true }
+)
+
+db.scopes.updateOne(
+  {
+    value: 'canBreakGlass'
+  },
+  {
+    $setOnInsert: {
+      _id: new ObjectId('68b5c553a9d77b9d2ef90aa9'),
+      userId: '90552794-0613-4023-819a-512aa9d40023',
+      value: 'canBreakGlass',
+      kind: ['user', 'member'],
+      description:
+        'Allow a Member of a team to grant the breakGlass permission to team members',
+      teams: [],
+      users: [],
+      members: [
+        {
+          userId: '90552794-0613-4023-819a-512aa9d40023',
+          userName: 'Admin User',
+          teamId: 'platform',
+          teamName: 'Platform'
+        }
+      ],
       createdAt: '2024-12-02T17:34:21.295Z',
       updatedAt: '2024-12-02T17:34:21.295Z'
     }
@@ -66,8 +118,14 @@ db.teams.updateOne(
       github: 'cdp-platform',
       users: ['90552794-0613-4023-819a-512aa9d40023'],
       scopes: [
-        new ObjectId('674def9d30093e3a3aa49d35'),
-        new ObjectId('6824a65285c4bfd4d458ab74')
+        {
+          scopeId: new ObjectId('674def9d30093e3a3aa49d35'),
+          scopeName: 'externalTest'
+        },
+        {
+          scopeId: new ObjectId('6824a65285c4bfd4d458ab74'),
+          scopeName: 'admin'
+        }
       ],
       alertEmailAddresses: ['platform@cdp.local'],
       createdAt: '2023-10-26T12:51:00.028Z',

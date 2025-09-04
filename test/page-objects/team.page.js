@@ -10,16 +10,20 @@ class TeamPage extends Page {
     return $('[data-testid="team-details"]')
   }
 
+  memberDetails() {
+    return $('[data-testid="user-details"]')
+  }
+
   removeButton(name) {
-    const rowItem = $$(
-      '[data-testid="team-details"] .govuk-summary-list__row'
-    ).find(async (row) => {
-      const textContent = await row.getText()
+    const rowItem = $$('[data-testid="user-details"] .govuk-table__row').find(
+      async (row) => {
+        const textContent = await row.getText()
 
-      return textContent.includes(name)
-    })
+        return textContent.includes(name)
+      }
+    )
 
-    return rowItem.$('a[data-testid="remove-link"]')
+    return rowItem.$('a[data-testid="app-link"]')
   }
 
   open(value) {

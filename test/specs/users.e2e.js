@@ -78,13 +78,13 @@ describe('Users', () => {
         )
         await expect(await TeamPage.navIsActive()).toBe(true)
 
-        await expect(TeamPage.teamDetails()).toHaveText(
+        await expect(TeamPage.memberDetails()).toHaveText(
           new RegExp(mockUserName, 'g')
         )
       })
 
       it('Should be able to remove the user from the team', async () => {
-        await expect(TeamPage.teamDetails()).toHaveText(
+        await expect(TeamPage.memberDetails()).toHaveText(
           new RegExp(mockUserName, 'g')
         )
         await TeamPage.removeButton(mockUserName).click()
@@ -113,7 +113,7 @@ describe('Users', () => {
           BannerComponent.content('Member removed from team')
         ).toExist()
 
-        await expect(TeamPage.teamDetails()).not.toHaveText(
+        await expect(TeamPage.memberDetails()).not.toHaveText(
           new RegExp(mockUserName, 'g')
         )
       })
