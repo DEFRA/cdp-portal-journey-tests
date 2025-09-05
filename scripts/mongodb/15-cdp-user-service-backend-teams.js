@@ -79,13 +79,13 @@ db.scopes.updateOne(
 
 db.scopes.updateOne(
   {
-    value: 'canBreakGlass'
+    value: 'canGrantBreakGlass'
   },
   {
     $setOnInsert: {
       _id: new ObjectId('68b5c553a9d77b9d2ef90aa9'),
       userId: '90552794-0613-4023-819a-512aa9d40023',
-      value: 'canBreakGlass',
+      value: 'canGrantBreakGlass',
       kind: ['user', 'member'],
       description:
         'Allow a Member of a team to grant the breakGlass permission to team members',

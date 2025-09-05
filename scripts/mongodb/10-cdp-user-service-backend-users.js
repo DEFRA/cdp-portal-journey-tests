@@ -18,7 +18,7 @@ db.users.updateOne(
       scopes: [
         {
           scopeId: new ObjectId('68b5c553a9d77b9d2ef90aa9'),
-          scopeName: 'canBreakGlass',
+          scopeName: 'canGrantBreakGlass',
           teamId: 'platform',
           teamName: 'Platform'
         },
