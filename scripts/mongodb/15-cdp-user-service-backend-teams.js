@@ -27,14 +27,14 @@ db.scopes.updateOne(
 
 db.scopes.updateOne(
   {
-    value: 'breakglass'
+    value: 'breakGlass'
   },
   {
     $setOnInsert: {
       _id: new ObjectId('6750708d454fcbbcc1568154'),
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'breakGlass',
-      kind: ['user'],
+      kind: ['user', 'member'],
       teams: [],
       users: [],
       members: [
