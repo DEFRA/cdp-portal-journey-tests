@@ -10,6 +10,8 @@ db.scopes.updateOne(
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'externalTest',
       kind: ['team'],
+      description:
+        'Allow teams to view and deploy to the external test environment',
       teams: [
         {
           teamId: 'platform',
@@ -35,6 +37,8 @@ db.scopes.updateOne(
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'breakGlass',
       kind: ['user', 'member'],
+      description:
+        'Allow users access to the production environment via the CDP Terminal',
       teams: [],
       users: [],
       members: [
@@ -63,13 +67,16 @@ db.scopes.updateOne(
       _id: new ObjectId('6824a65285c4bfd4d458ab74'),
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'admin',
-      kind: ['team'],
+      kind: ['team', 'user'],
+      description: 'CDP Portal Admin addPermissionToTeam',
       teams: [
         {
           teamId: 'platform',
           teamName: 'Platform'
         }
       ],
+      users: [],
+      members: [],
       createdAt: '2024-12-02T17:34:21.295Z',
       updatedAt: '2024-12-02T17:34:21.295Z'
     }
@@ -145,7 +152,7 @@ db.teams.updateOne(
       name: 'TenantTeam1',
       description: 'A test team',
       github: 'cdp-tenant-1',
-      users: [],
+      users: ['dfa791eb-76b2-434c-ad1f-bb9dc1dd8b48'],
       scopes: [],
       createdAt: '2024-10-26T12:51:00.028Z',
       updatedAt: '2024-10-26T12:55:00.028Z'
