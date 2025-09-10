@@ -27,6 +27,11 @@ WDIO tests against an environment, github workflow or locally.
   - [Running a local version of self-service-ops](#running-a-local-version-of-self-service-ops)
   - [Running a local version of user-service-backend](#running-a-local-version-of-user-service-backend)
   - [Running a local version of the stubs](#running-a-local-version-of-the-stubs)
+- [Diagnosing issues](#diagnosing-issues)
+  - [Docker container logs](#docker-container-logs)
+  - [Docker container information](#docker-container-information)
+  - [Connect to Redis container](#connect-to-redis-container)
+  - [Connect to Mongo Docker](#connect-to-mongo-docker)
 - [Debugging](#debugging)
   - [WebdriverIO Plugin](#webdriverio-plugin)
   - [Setup in IntelliJ/Webstorm](#setup-in-intellijwebstorm)
@@ -187,7 +192,8 @@ When writing tests it's handy to be able to change things in the `cdp-portal-fro
 1. Stop the `cdp-portal-frontend` docker compose service
 
 ```bash
-docker compose stop cdp-portal-frontend
+docker ps # to get the container name
+docker stop <container-id>
 ```
 
 1. Start the Portal Frontend in development mode
@@ -209,7 +215,8 @@ NODE_ENV=development APP_BASE_URL=http://cdp.127.0.0.1.sslip.io:3000 USE_SINGLE_
 1. Stop `cdp-self-service-ops` docker compose service
 
 ```bash
-docker compose stop cdp-self-service-ops
+docker ps # to get the container name
+docker stop <container-id>
 ```
 
 1. Start Self Service Ops in development mode
@@ -230,7 +237,8 @@ GITHUB_BASE_URL=http://cdp.127.0.0.1.sslip.io:3939 SQS_GITHUB_QUEUE=http://local
 1. Stop `cdp-user-service-backend` docker compose service
 
 ```bash
-docker compose stop cdp-user-service-backend
+docker ps # to get the container name
+docker stop <container-id>
 ```
 
 1. Start User Service Backend in development mode
@@ -253,7 +261,8 @@ When writing tests it's handy to be able to change things in the `cdp-portal-stu
 1. Stop the `cdp-portal-stubs` docker compose service
 
 ```bash
-docker compose stop cdp-portal-stubs
+docker ps # to get the container name
+docker stop <container-id>
 ```
 
 1. Make sure any services you are testing that point to the stub have their envs updated to point to
@@ -270,6 +279,47 @@ OIDC_BASE_PATH=/6f504113-6b64-43f2-ade9-242e05780007/v2.0 OIDC_SHOW_LOGIN=true O
 1. Stubs are now running on [http://host.docker.internal:3939](http://host.docker.internal:3939)
 1. You can now develop the Portal stubs and run the tests against this and the rest of the services served via
    `cdp-local-environment`
+
+## Diagnosing issues
+
+### Docker container logs
+
+To see logs for a running container:
+
+```bash
+docker ps
+docker logs <image-name>
+```
+
+To tail logs use:
+
+```bash
+docker logs <image-name> --follow
+```
+
+### Docker container information
+
+To see detailed information about a running container:
+
+```bash
+docker inspect <image-name>
+```
+
+### Connect to Redis container
+
+To have a look at the Redis data:
+
+```bash
+docker exec -it cdp-infra-redis redis-cli
+```
+
+### Connect to Mongo Docker
+
+To have a look at the Mongo data:
+
+```bash
+mongosh cdp-infra-mongodb
+```
 
 ## Debugging
 
