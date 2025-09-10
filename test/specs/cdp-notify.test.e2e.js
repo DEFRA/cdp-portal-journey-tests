@@ -1,14 +1,16 @@
 import { expect } from '@wdio/globals'
-import granfanaTriggerByStatus from '../messages/grafana/grafana-trigger-by-status.json'
-import granfanaTriggerByEnvironment from '../messages/grafana/grafana-trigger-by-environment.json'
-import granfanaTriggerByPagerDutyFlag from '../messages/grafana/grafana-trigger-by-pagerduty-flag.json'
-import granfanaTriggerRequiresService from '../messages/grafana/grafana-trigger-requires-service.json'
-import githubCreateWorkflowSuccess from '../messages/github/create-workflow-success.json'
-import githubCreateWorkflowFailed from '../messages/github/create-workflow-failed.json'
-import githubJourneyTestFailed from '../messages/github/journey-test-failed.json'
-import githubJourneyTestSuccess from '../messages/github/journey-test-success.json'
-import githubInfraFailed from '../messages/github/infra-test-failed.json'
-import githubInfraSuccess from '../messages/github/infra-test-success.json'
+
+import grafanaTriggerByStatus from '../messages/grafana/grafana-trigger-by-status.json' with { type: 'json' }
+import grafanaTriggerByEnvironment from '../messages/grafana/grafana-trigger-by-environment.json' with { type: 'json' }
+import grafanaTriggerByPagerDutyFlag from '../messages/grafana/grafana-trigger-by-pagerduty-flag.json' with { type: 'json' }
+import grafanaTriggerRequiresService from '../messages/grafana/grafana-trigger-requires-service.json' with { type: 'json' }
+
+import githubCreateWorkflowSuccess from '../messages/github/create-workflow-success.json' with { type: 'json' }
+import githubCreateWorkflowFailed from '../messages/github/create-workflow-failed.json' with { type: 'json' }
+import githubJourneyTestFailed from '../messages/github/journey-test-failed.json' with { type: 'json' }
+import githubJourneyTestSuccess from '../messages/github/journey-test-success.json' with { type: 'json' }
+import githubInfraFailed from '../messages/github/infra-test-failed.json' with { type: 'json' }
+import githubInfraSuccess from '../messages/github/infra-test-success.json' with { type: 'json' }
 
 describe('#cdp-notify', () => {
   beforeEach(async () => {
@@ -109,7 +111,7 @@ describe('#cdp-notify', () => {
 
   describe('email handler', () => {
     it('should ignore the pager duty flag', async () => {
-      const payload = granfanaTriggerByPagerDutyFlag
+      const payload = grafanaTriggerByPagerDutyFlag
 
       // expect both alerts to be sent
       await sendAlerts(payload)
@@ -122,7 +124,7 @@ describe('#cdp-notify', () => {
 
   describe('pagerduty handler', () => {
     it('should only trigger if pagerDuty field is set to true', async () => {
-      const payload = granfanaTriggerByPagerDutyFlag
+      const payload = grafanaTriggerByPagerDutyFlag
 
       await sendAlerts(payload)
 
@@ -146,7 +148,7 @@ describe('#cdp-notify', () => {
     })
 
     it('should only trigger if the environment is production', async () => {
-      const payload = granfanaTriggerByEnvironment
+      const payload = grafanaTriggerByEnvironment
 
       await sendAlerts(payload)
 
@@ -170,7 +172,7 @@ describe('#cdp-notify', () => {
     })
 
     it('should only trigger if the service field is set', async () => {
-      const payload = granfanaTriggerRequiresService
+      const payload = grafanaTriggerRequiresService
 
       await sendAlerts(payload)
 
@@ -194,7 +196,7 @@ describe('#cdp-notify', () => {
     })
 
     it('should only trigger the status is firing or resolved', async () => {
-      const payload = granfanaTriggerByStatus
+      const payload = grafanaTriggerByStatus
 
       await sendAlerts(payload)
 
