@@ -1,6 +1,6 @@
 import { browser, expect } from '@wdio/globals'
 
-import { createUser, deleteUser } from 'helpers/create-user'
+import { createUser, deleteUser } from 'helpers/user'
 import BannerComponent from 'components/banner.component'
 import FormComponent from 'components/form.component'
 import LinkComponent from 'components/link.component'

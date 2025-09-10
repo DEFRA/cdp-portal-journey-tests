@@ -11,8 +11,12 @@ import PageHeadingComponent from 'components/page-heading.component'
 import ServicesPage from 'page-objects/services.page'
 import TabsComponent from 'components/tabs.component.js'
 import ApplyChangelog from 'page-objects/apply-changelog.page.js'
-import { addPermission, deletePermission } from 'helpers/add-permission.js'
 import { createMicroService } from 'helpers/create-micro-service.js'
+import {
+  addPermissionToTeam,
+  createPermission,
+  deletePermission
+} from 'helpers/permissions.js'
 
 const adminService = 'cdp-portal-frontend'
 const adminServiceVersion = '0.172.0'
@@ -206,10 +210,15 @@ describe('Postgres service page', () => {
 
   describe('Logged in as "admin" with "restrictedTechPostgres" permission', () => {
     before(async () => {
-      await addPermission('restrictedTechPostgres', 'Platform')
+      const permissionName = 'restrictedTechPostgres'
+
+      await LoginStubPage.loginAsAdmin()
+      await createPermission(permissionName, 'Team')
+      await addPermissionToTeam(permissionName, 'Platform')
     })
 
     after(async () => {
+      await LoginStubPage.loginAsAdmin()
       await deletePermission('restrictedTechPostgres')
     })
 

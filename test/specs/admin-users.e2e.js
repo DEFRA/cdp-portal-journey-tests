@@ -10,7 +10,7 @@ import EntityTableComponent from 'components/entity-table.component'
 import GovukSummaryListComponent from 'components/govuk-summary-list.component'
 import LoginStubPage from 'page-objects/login-stub.page'
 import AdminTeamPage from 'page-objects/admin-team.page'
-import { createPermission, deletePermission } from 'helpers/add-permission.js'
+import { createPermission, deletePermission } from 'helpers/permissions.js'
 import TabsComponent from 'components/tabs.component.js'
 
 const mockUserName = 'A Stub'
@@ -291,8 +291,9 @@ describe('Admin Users', () => {
       })
     })
 
-    describe('When using testAsTenant permission to temporarily drop admin permissions', () => {
+    describe('When using testAsTenant permission to temporarily drop admin addPermissionToTeam', () => {
       it('Should be able to create the "testAsTenant" permission and assign to admin user', async () => {
+        await LoginStubPage.loginAsAdmin()
         await createPermission('testAsTenant', 'User')
 
         // Add permission to team
@@ -338,6 +339,7 @@ describe('Admin Users', () => {
       })
 
       it('Remove permission and see not listed on users page', async () => {
+        await LoginStubPage.loginAsAdmin()
         await deletePermission('testAsTenant')
         await LinkComponent.link('app-subnav-link-users', 'Users').click()
         await onTheAdminUsersPage()

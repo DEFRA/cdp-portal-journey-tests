@@ -10,7 +10,7 @@ class LinkComponent {
    * @returns {*}
    */
   link(testId, content) {
-    return $(`a[data-testid="${testId}"]*=` + content)
+    return $(`a[data-testid="${testId}"].*=` + content)
   }
 }
 
