@@ -13,7 +13,7 @@ services:
       - DEFAULT_HOST=~^cdp\..*\.sslip\.io
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./local/cdp-proxy.conf:/etc/nginx/conf.d/cdp-proxy.conf:ro
+      - ./config/cdp-proxy.conf:/etc/nginx/conf.d/cdp-proxy.conf:ro
     networks:
       - cdpnet
 
@@ -34,10 +34,10 @@ services:
       - 4510-4559:4510-4559
     restart: always
     env_file:
-      - local/defaults.env
+      - config/local-defaults.env
     volumes:
       - ./scripts/localstack/assets:/opt/code/localstack/assets
-      - ./local/defaults.env:/etc/localstack/conf.d/defaults.env:ro
+      - ./config/local-defaults.env:/etc/localstack/conf.d/defaults.env:ro
       - ./scripts/localstack:/etc/localstack/init/ready.d
 
   ################################################################################
@@ -61,7 +61,7 @@ services:
     ports:
       - 3128:3128
     volumes:
-      - ./local/squid.conf:/etc/squid/squid.conf:ro
+      - ./config/squid.conf:/etc/squid/squid.conf:ro
 
   ################################################################################
   cdp-portal-frontend:
@@ -70,14 +70,12 @@ services:
     ports:
       - 3000:3000
     env_file:
-      - local/defaults.env
-      - local/cdp-portal-frontend.env
+      - config/local-defaults.env
+      - config/cdp-portal-frontend.env
     environment:
       - VIRTUAL_HOST=~^cdp\..*\.sslip\.io
       - VIRTUAL_PATH=/
       - VIRTUAL_PORT=3000
-      - PORT=3000
-      - NODE_ENV=development # This is required to ensure the login cookie is set as insecure, as we test over http
     profiles:
       - portal
 
@@ -102,7 +100,7 @@ services:
       - NODE_ENV=development # This is required to ensure the login cookie is set as insecure, as we test over http
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./local/cdp-portal-frontend-proxy.conf:/etc/nginx/conf.d/cdp-portal-frontend-proxy.conf:ro
+      - ./config/cdp-portal-frontend-proxy.conf:/etc/nginx/conf.d/cdp-portal-frontend-proxy.conf:ro
     depends_on:
       proxy:
         condition: service_started
@@ -116,10 +114,8 @@ services:
     ports:
       - 5094:5094
     env_file:
-      - local/defaults.env
-      - local/cdp-portal-backend.env
-    environment:
-      - ASPNETCORE_URLS=http://+:5094
+      - config/local-defaults.env
+      - config/cdp-portal-backend.env
     profiles:
       - portal
 
@@ -130,8 +126,8 @@ services:
     ports:
       - 3001:3001
     env_file:
-      - local/defaults.env
-      - local/cdp-user-service-backend.env
+      - config/local-defaults.env
+      - config/cdp-user-service-backend.env
     environment:
       - PORT=3001
       - ENABLE_SECURE_CONTEXT=false
@@ -145,10 +141,9 @@ services:
     ports:
       - 3009:3009
     env_file:
-      - local/defaults.env
-      - local/cdp-self-service-ops.env
+      - config/local-defaults.env
+      - config/cdp-self-service-ops.env
     environment:
-      - PORT=3009
       - ENABLE_SECURE_CONTEXT=false
     profiles:
       - portal
@@ -159,16 +154,16 @@ services:
     networks:
       - cdpnet
     env_file:
-      - local/defaults.env
-      - local/cdp-portal-stubs.env
+      - config/local-defaults.env
+      - config/cdp-portal-stubs.env
 
   ################################################################################
   cdp-notify:
     networks:
       - cdpnet
     env_file:
-      - local/defaults.env
-      - local/cdp-notify.env
+      - config/local-defaults.env
+      - config/cdp-notify.env
     ports:
       - 3007:3007
     profiles:

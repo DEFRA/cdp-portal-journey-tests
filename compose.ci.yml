@@ -6,13 +6,13 @@
 #   - localstack (s3, sqs, sns)
 #
 # Both mongo and localstack have init scripts included for setting up resources
-# on startup. These scripts are in docker/scripts.
+# on startup. These scripts are in scripts/.
 #
 # It also includes a selenium-chrome container for running the browser headless.
 #
 # The services being tested can either be started up here using the latest
 # builds from dockerhub.
-# In the example each service has a .env config file in docker/config/
+# In the example each service has a .env config file in config/
 # Services can reference each other by their container names.
 # e.g. http://cdp-example-node-backend:3001/
 #
@@ -24,10 +24,10 @@ services:
 ################################################################################
   localstack:
     env_file:
-      - ./docker/defaults.env
+      - ./config/docker-defaults.env
     volumes:
       - ./scripts/localstack/assets:/opt/code/localstack/assets
-      - ./docker/defaults.env:/etc/localstack/conf.d/defaults.env:ro
+      - ./config/docker-defaults.env:/etc/localstack/conf.d/defaults.env:ro
       - ./scripts/localstack:/etc/localstack/init/ready.d
 
   ################################################################################
@@ -44,47 +44,42 @@ services:
 ################################################################################
   cdp-portal-frontend:
     env_file:
-      - ./docker/defaults.env
-      - ./docker/cdp-portal-frontend.env
-    environment:
-      - PORT=3000
-      - NODE_ENV=development # This is required to ensure the login cookie is set as insecure, as we test over http
+      - ./config/docker-defaults.env
+      - ./config/cdp-portal-frontend.env
 
 ################################################################################
   cdp-portal-backend:
     env_file:
-      - ./docker/defaults.env
-      - ./docker/cdp-portal-backend.env
+      - ./config/docker-defaults.env
+      - ./config/cdp-portal-backend.env
     environment:
       - PORT=5094
 
 ################################################################################
   cdp-user-service-backend:
     env_file:
-      - ./docker/defaults.env
-      - ./docker/cdp-user-service-backend.env
+      - ./config/docker-defaults.env
+      - ./config/cdp-user-service-backend.env
     environment:
       - PORT=3001
 
 ################################################################################
   cdp-self-service-ops:
     env_file:
-      - ./docker/defaults.env
-      - ./docker/cdp-self-service-ops.env
-    environment:
-      - PORT=3009
+      - ./config/docker-defaults.env
+      - ./config/cdp-self-service-ops.env
 
 ################################################################################
   cdp-portal-stubs:
     env_file:
-      - ./docker/defaults.env
-      - ./docker/cdp-portal-stubs.env
+      - ./config/docker-defaults.env
+      - ./config/cdp-portal-stubs.env
 
 ################################################################################
   cdp-notify:
     env_file:
-      - ./docker/defaults.env
-      - ./docker/cdp-notify.env
+      - ./config/docker-defaults.env
+      - ./config/cdp-notify.env
     environment:
       - PORT=3007
 

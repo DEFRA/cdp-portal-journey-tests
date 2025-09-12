@@ -406,7 +406,7 @@ infrastructure (localstack) pre-setup.
 Steps:
 
 1. Edit the compose.yml to include your services.
-2. Modify the scripts in docker/scripts to pre-populate the database, if required and create any localstack resources.
+2. Modify the scripts in `scripts` to pre-populate the database, if required and create any localstack resources.
 3. Test the setup locally with `docker compose up` and `npm run test:github`
 4. Set up the workflow trigger in `.github/workflows/journey-tests`.
 
