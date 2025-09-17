@@ -22,6 +22,7 @@ export default [
     noStyle: true
   }),
   {
+    files: ['**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
       globals: {

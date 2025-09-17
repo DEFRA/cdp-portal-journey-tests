@@ -3,16 +3,19 @@ services:
   # infrastructure services
   ################################################################################
   mongodb:
-    image: mongo:6.0.13
+    image: mongo:7.0
     container_name: cdp-infra-mongodb
     volumes:
       - cdp-infra-mongodb-data:/data
       - ./scripts/mongodb:/docker-entrypoint-initdb.d
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - 27017:27017
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.hello().ok"]
-      interval: 2s
-      start_period: 5s
-      retries: 10
+      # Setup replicaSet
+      test: test $$(mongosh --port 27017 --quiet --eval "try {rs.initiate({_id:'rs0',members:[{_id:0,host:'127.0.0.1:27017'}]})} catch(e) {rs.status().ok}") -eq 1
+      interval: 10s
+      start_period: 30s
 
   ################################################################################
   localstack:
@@ -162,7 +165,7 @@ services:
     healthcheck:
       test: ["CMD", "curl", "http://localhost:3939/health"]
       interval: 3s
-      start_period: 2s
+      timeout: 2s
 
   ################################################################################
   cdp-notify:
@@ -182,10 +185,9 @@ services:
       redis:
         condition: service_started
     healthcheck:
-      test: ["CMD", "curl", "http://localhost:3007"]
+      test: ["CMD", "curl", "http://localhost:3007/health"]
       interval: 3s
       start_period: 2s
-
 
   ################################################################################
 
