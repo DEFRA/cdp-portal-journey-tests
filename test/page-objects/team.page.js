@@ -23,7 +23,7 @@ class TeamPage extends Page {
       }
     )
 
-    return rowItem.$('a[data-testid="app-link"]')
+    return rowItem.$('a[data-testid="remove-user"]')
   }
 
   open(value) {

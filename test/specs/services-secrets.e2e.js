@@ -117,27 +117,11 @@ describe('Services secrets page', () => {
       })
     })
 
-    describe('When creating a new secret', () => {
-      before(async () => {
-        await ServicesSecretsPage.open(adminOwnedService, 'management')
-      })
-      const suffix = (Math.random() + 1).toString(36).substring(7).toUpperCase()
-      const keyName = `TEST_${suffix}`
-
-      it('Should be listed as available secret', async () => {
-        await ServicesSecretsPage.createSecretName().setValue(keyName)
-        await ServicesSecretsPage.createSecretValue().setValue('test-value')
-        await ServicesSecretsPage.createSecretButton().click()
-
-        await expect(await ServicesSecretsPage.secretCell(keyName)).toExist()
-      })
-    })
-
-    describe('When updating a secret', () => {
+    describe('When creating, updating and removing a secret', () => {
       const suffix = (Math.random() + 1).toString(36).substring(7).toUpperCase()
       let keyName
 
-      before(async () => {
+      it('Should be able to create a new secret', async () => {
         keyName = `TEST_${suffix}`
 
         // Create a secret to test against
@@ -156,7 +140,7 @@ describe('Services secrets page', () => {
       })
 
       it('Should be listed as updated secrets', async () => {
-        await ServicesSecretsPage.secretAction(keyName).click()
+        await ServicesSecretsPage.secretUpdate(keyName).click()
 
         await expect(
           await PageHeadingComponent.caption('Update Secret')
@@ -178,6 +162,28 @@ describe('Services secrets page', () => {
         await expect(
           await ServicesSecretsPage.secretStatus(keyName, 'Secret available')
         ).toExist()
+      })
+
+      it('Should be able to remove secret', async () => {
+        await ServicesSecretsPage.secretRemove(keyName).click()
+
+        await expect(
+          await PageHeadingComponent.caption('Remove Secret')
+        ).toExist()
+        await expect(
+          await PageHeadingComponent.title(adminOwnedService)
+        ).toExist()
+
+        await ServicesSecretsPage.removeSecretButton().click()
+
+        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+        await expect(
+          await PageHeadingComponent.title(adminOwnedService)
+        ).toExist()
+
+        await expect(
+          await ServicesSecretsPage.secretCell(keyName)
+        ).not.toExist()
       })
     })
 

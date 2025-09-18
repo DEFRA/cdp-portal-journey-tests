@@ -21,13 +21,13 @@ db.tenantsecrets.updateOne(
   {
     environment: 'management',
     service: 'cdp-portal-frontend',
-    keys: ['SOME_KEY']
+    keys: ['SOME_KEY', 'SQUID_USERNAME']
   },
   {
     $setOnInsert: {
       environment: 'management',
       service: 'cdp-portal-frontend',
-      keys: ['SOME_KEY'],
+      keys: ['SOME_KEY', 'SQUID_USERNAME'],
       lastChangedDate: '2024-10-15T16:03:38.3139986Z'
     }
   },

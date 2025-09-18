@@ -37,6 +37,10 @@ class ServicesServicesSecretsPage extends Page {
     return this.createSecretButton()
   }
 
+  removeSecretButton() {
+    return $('[data-testid="app-remove-button"]')
+  }
+
   createSecretName() {
     return $('#secret-key')
   }
@@ -53,8 +57,12 @@ class ServicesServicesSecretsPage extends Page {
     return $(`[data-testid="app-secret-cell-${key.toLowerCase()}"]`)
   }
 
-  secretAction(key) {
-    return $(`[data-testid="app-secret-action-${key.toLowerCase()}"]`)
+  secretUpdate(key) {
+    return $(`[data-testid="app-secret-update-${key.toLowerCase()}"]`)
+  }
+
+  secretRemove(key) {
+    return $(`[data-testid="app-secret-remove-${key.toLowerCase()}"]`)
   }
 
   secretActionCell(key) {

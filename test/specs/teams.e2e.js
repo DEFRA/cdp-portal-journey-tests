@@ -96,7 +96,8 @@ describe('Teams', () => {
         await GovukTableComponent.linkInRow({
           testId: 'user-details',
           rowContent: nonAdminUser,
-          linkText: 'Grant break glass'
+          linkText: 'Grant break glass',
+          dataTestId: 'grant-break-glass'
         }).click()
       })
 
@@ -165,7 +166,8 @@ describe('Teams', () => {
         await GovukTableComponent.linkInRow({
           testId: 'user-details',
           rowContent: nonAdminUser,
-          linkText: 'Remove break glass'
+          linkText: 'Remove break glass',
+          dataTestId: 'remove-break-glass'
         }).click()
 
         await expect(browser).toHaveTitle(

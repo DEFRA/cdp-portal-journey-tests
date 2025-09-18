@@ -8,10 +8,10 @@ class GovukTableComponent {
     return $('[data-testid="govuk-table"]')
   }
 
-  linkInRow({ testId, rowContent, linkText }) {
+  linkInRow({ testId, rowContent, linkText, dataTestId = 'app-link' }) {
     return $(`[data-testid="${testId}"]`)
       .$(`tr.*=${rowContent}`)
-      .$(`a[data-testid="app-link"].*=${linkText}`)
+      .$(`a[data-testid="${dataTestId}"].*=${linkText}`)
   }
 }
 
