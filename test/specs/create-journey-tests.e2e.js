@@ -184,7 +184,7 @@ describe('Create journey tests', () => {
       ).not.toExist()
     })
 
-    it('Should be able to create a new secret', async () => {
+    it('Should be able to create and remove a new secret', async () => {
       const keyName = 'TEST_SECRET'
 
       await SplitPaneComponent.subNavItem('dev').click()
@@ -199,6 +199,24 @@ describe('Create journey tests', () => {
       await ServicesSecretsPage.createSecretButton().click()
 
       await expect(await ServicesSecretsPage.secretCell(keyName)).toExist()
+
+      await ServicesSecretsPage.secretRemove(keyName).click()
+
+      await expect(
+        await PageHeadingComponent.caption('Remove Secret')
+      ).toExist()
+      await expect(
+        await PageHeadingComponent.title(testRepositoryName)
+      ).toExist()
+
+      await ServicesSecretsPage.removeSecretButton().click()
+
+      await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+      await expect(
+        await PageHeadingComponent.title(testRepositoryName)
+      ).toExist()
+
+      await expect(await ServicesSecretsPage.secretCell(keyName)).not.toExist()
     })
 
     it('Should be able to view list of test-suites with new test-suite listed', async () => {
