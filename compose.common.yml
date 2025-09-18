@@ -4,23 +4,61 @@ services:
   ################################################################################
   mongodb:
     image: mongo:7.0
-    container_name: cdp-infra-mongodb
+    container_name: mongodb
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
     volumes:
       - cdp-infra-mongodb-data:/data
-      - ./scripts/mongodb:/docker-entrypoint-initdb.d
-#    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
-    ports:
-      - 27017:27017
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     healthcheck:
-#      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
-      test: ["CMD", "mongosh", "--eval", "db.hello().ok"]
-      interval: 5s
-      timeout: 30s
-      start_period: 0s
-      start_interval: 1s
-      retries: 30
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks:
+      - cdpnet
+
+  # Step 1: Initialize replica set
+  mongodb-replica-init:
+    image: mongo:7.0
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./scripts/init-replica-set.js:/init-replica-set.js
+    command: mongosh --host mongodb --file /init-replica-set.js
+    networks:
+      - cdpnet
+    restart: "no"
+
+  # Step 2: Run data initialization scripts (after replica set is ready)
+  mongodb-data-init:
+    image: mongo:7.0
+    depends_on:
+      mongodb-replica-init:
+        condition: service_completed_successfully
+    volumes:
+      - ./scripts/mongodb:/scripts
+    command: >
+      bash -c "
+        echo 'Waiting for replica set to be ready...'
+        until mongosh --host mongodb --eval 'rs.status().ok' --quiet; do
+          echo 'Waiting for primary...'
+          sleep 2
+        done
+        echo 'Running data initialization scripts...'
+        for script in /scripts/*.js; do
+          if [ -f \"$$script\" ]; then
+            echo 'Running:' $$script
+            mongosh --host mongodb --file $$script
+          fi
+        done
+        echo 'Data initialization complete'
+      "
+    networks:
+      - cdpnet
+    restart: "no"
 
   ################################################################################
   localstack:
