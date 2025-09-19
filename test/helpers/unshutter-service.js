@@ -1,6 +1,7 @@
 import FormComponent from 'components/form.component.js'
 import LinkComponent from 'components/link.component.js'
 import ServicesMaintenancePage from 'page-objects/services-maintenance.page.js'
+import { oneMinute } from 'helpers/timeout.js'
 
 const unshutterService = async (serviceName, shutterId) => {
   await ServicesMaintenancePage.open(serviceName)
@@ -21,7 +22,7 @@ const unshutterService = async (serviceName, shutterId) => {
     await $(
       `[data-testid="shuttered-status-${shutterId}"]*=Active`
     ).waitForExist({
-      timeout: 20000 // Wait for the shuttered status to change in stubs
+      timeout: oneMinute // Wait for the shuttered status to change in stubs
     })
   }
 }

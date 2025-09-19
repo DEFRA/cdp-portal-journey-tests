@@ -4,6 +4,7 @@ import FormComponent from 'components/form.component'
 import ServicesPage from 'page-objects/services.page'
 import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
 import StatusPage from 'page-objects/status.page.js'
+import { oneMinute } from 'helpers/timeout.js'
 
 /**
  * Helper to create a microservice. Contains no expectations
@@ -42,7 +43,7 @@ async function createMicroService(name, teamName) {
     'GrafanaDashboard'
   ]) {
     await $(`[data-testid="${resource}-created"]`).waitForExist({
-      timeout: 20000
+      timeout: oneMinute
     })
   }
 
@@ -71,7 +72,7 @@ async function createMicroService(name, teamName) {
       return false
     },
     {
-      timeout: 20000,
+      timeout: oneMinute,
       timeoutMsg:
         'GitHub poll took too long, Team on new microservice not updated'
     }

@@ -1,6 +1,7 @@
 import FormComponent from 'components/form.component'
 import { browser } from '@wdio/globals'
 import DeployPage from 'page-objects/deploy.page.js'
+import { oneMinute } from 'helpers/timeout.js'
 
 const populateDeploymentDetails = async (options, submit = true) => {
   if (!(await DeployPage.navIsActive())) {
@@ -58,7 +59,7 @@ const waitForDeploymentToFinish = async (desiredStatus = 'Running') => {
       return actualStatus === desiredStatus
     },
     {
-      timeout: 20000,
+      timeout: oneMinute,
       interval: 500,
       timeoutMsg: `Status did not reach ${desiredStatus}`
     }

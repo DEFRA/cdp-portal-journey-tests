@@ -1,5 +1,6 @@
 import { browser, expect } from '@wdio/globals'
 
+import { oneMinute } from 'helpers/timeout.js'
 import FormComponent from 'components/form.component'
 import AdminPage from 'page-objects/admin.page.js'
 import SplitPaneComponent from 'components/split-pane.component.js'
@@ -63,7 +64,11 @@ async function addPermissionToMember({ permissionName, memberName, teamName }) {
   // Find CDP user
   await FormComponent.inputLabel('Find CDP user').click()
   await browser.keys(memberName)
-  await FormComponent.inputLabel(memberName).click()
+
+  const memberNameResult = await FormComponent.inputLabel(memberName)
+  await memberNameResult.waitForExist({ timeout: oneMinute })
+  await memberNameResult.click()
+
   await FormComponent.submitButton('Next').click()
 
   // Scope to team

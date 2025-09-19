@@ -16,6 +16,7 @@ import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status
 import StatusPage from 'page-objects/status.page.js'
 import BannerComponent from 'components/banner.component.js'
 import { waitForTestStatus } from 'helpers/test-suites.js'
+import { oneMinute } from 'helpers/timeout.js'
 
 describe('Create journey tests', () => {
   describe('When logged out', () => {
@@ -199,7 +200,7 @@ describe('Create journey tests', () => {
       await ServicesSecretsPage.createSecretButton().click()
 
       const removeLink = await ServicesSecretsPage.secretCell(keyName)
-      await removeLink.waitForExist({ timeout: 20000 })
+      await removeLink.waitForExist({ timeout: oneMinute })
       await expect(removeLink).toExist()
 
       await ServicesSecretsPage.secretRemove(keyName).click()

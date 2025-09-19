@@ -17,6 +17,7 @@ import {
 import upperFirst from 'lodash/upperFirst.js'
 import kebabCase from 'lodash/kebabCase.js'
 import { unshutterService } from 'helpers/unshutter-service.js'
+import { oneMinute } from 'helpers/timeout.js'
 
 const adminOwnedService = 'cdp-portal-frontend'
 
@@ -151,7 +152,7 @@ describe('Services maintenance - shuttering', () => {
         })
 
         await $('[data-testid="shuttered-status-2"]*=Shuttered').waitForExist({
-          timeout: 20000 // Wait for the shuttered status to change in stubs
+          timeout: oneMinute // Wait for the shuttered status to change in stubs
         })
       })
 
@@ -211,7 +212,7 @@ describe('Services maintenance - shuttering', () => {
         })
 
         await $('[data-testid="shuttered-status-2"]*=Active').waitForExist({
-          timeout: 20000 // Wait for the shuttered status to change in stubs
+          timeout: oneMinute // Wait for the shuttered status to change in stubs
         })
       })
     })

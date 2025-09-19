@@ -4,7 +4,6 @@ const debug = process.env.DEBUG
 const baseUrl = process.env.BASE_URL ?? 'cdp.127.0.0.1.sslip.io:3000'
 const twoSeconds = 2 * 1000
 const tenSeconds = 10 * 1000
-const thirtySeconds = 30 * 1000
 const oneMinute = 60 * 1000
 
 const execArgv = ['--loader', 'esm-module-alias/loader']
@@ -96,7 +95,7 @@ export const config = {
   // See the full list at http://mochajs.org/
   mochaOpts: {
     ui: 'bdd',
-    timeout: debug ? oneMinute : thirtySeconds
+    timeout: oneMinute
   },
   //
   // =====

@@ -1,7 +1,8 @@
 import { browser } from '@wdio/globals'
 import TestSuitePage from 'page-objects/test-suite.page.js'
+import { oneMinute } from 'helpers/timeout.js'
 
-export const waitForTestStatus = (regex, timeout = 20000) =>
+export const waitForTestStatus = (regex, timeout = oneMinute) =>
   browser.waitUntil(
     async () => {
       const statusText =
