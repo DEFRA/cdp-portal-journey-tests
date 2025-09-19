@@ -95,6 +95,8 @@ services:
       - "host.docker.internal:host-gateway"
       - "cdp.127.0.0.1.sslip.io:host-gateway"
       - "cdp.--1.sslip.io:host-gateway"
+    networks:
+      - cdpnet
 
   ################################################################################
   cdp-portal-frontend:
@@ -120,6 +122,8 @@ services:
       interval: 3s
       start_period: 2s
       retries: 3
+    networks:
+      - cdpnet
 
   ################################################################################
   cdp-portal-backend:
@@ -142,6 +146,8 @@ services:
         condition: service_started
       cdp-portal-stubs:
         condition: service_healthy
+    networks:
+      - cdpnet
 
   ################################################################################
   cdp-user-service-backend:
@@ -166,6 +172,8 @@ services:
       timeout: 2s
       start_period: 60s
       retries: 30
+    networks:
+      - cdpnet
 
   ################################################################################
   cdp-self-service-ops:
@@ -193,6 +201,8 @@ services:
       timeout: 2s
       start_period: 60s
       retries: 30
+    networks:
+      - cdpnet
 
   ################################################################################
   cdp-portal-stubs:
