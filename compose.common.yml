@@ -217,8 +217,8 @@ services:
       test: ["CMD", "curl", "http://cdp-portal-stubs:3939/health"]
       interval: 5s
       timeout: 2s
-      start_period: 60s
-      retries: 30
+      start_period: 20s
+      retries: 10
     networks:
       - cdpnet
 
@@ -245,8 +245,8 @@ services:
       test: ["CMD", "curl", "http://cdp-notify:3007/health"]
       interval: 5s
       timeout: 2s
-      start_period: 60s
-      retries: 30
+      start_period: 20s
+      retries: 10
     networks:
       - cdpnet
 
