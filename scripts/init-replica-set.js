@@ -1,84 +1,78 @@
-// Replica Set Initialization Script
-// This script safely initializes the replica set
+// MongoDb replica set init
+;(function () {
+  const RS_NAME = 'rs0'
+  const RS_PRIMARY = 'mongodb:27017'
+  const WAIT_SEC = 30
 
-print('MongoDB Replica Set Initialization')
-print('==================================')
-
-try {
-  // Check if replica set already exists
-  const status = rs.status()
-  print('Replica set already initialized:')
-  print('  Set:', status.set)
-  print('  Members:', status.members.length)
-
-  const primaryMember = status.members.find((m) => m.stateStr === 'PRIMARY')
-  if (primaryMember) {
-    print('  Primary:', primaryMember.name)
-    print('Replica set is ready!')
-  } else {
-    print('Warning: No primary found, replica set may still be initializing')
+  function notYetInitialized(err) {
+    return /no replset config|not yet initialized|NotYetInitialized/i.test(
+      err && err.message
+    )
   }
 
-  quit(0)
-} catch (error) {
-  if (error.message.includes('no replset config has been received')) {
-    print('Initializing new replica set...')
-
-    const config = {
-      _id: 'rs0',
-      members: [
-        {
-          _id: 0,
-          host: 'mongodb:27017'
-        }
-      ]
-    }
-
-    print('Configuration:')
-    printjson(config)
-
-    const result = rs.initiate(config)
-
-    if (result.ok === 1) {
-      print('Replica set initiation successful!')
-
-      // Wait for primary election
-      print('Waiting for primary election...')
-      let attempts = 0
-      const maxAttempts = 30
-
-      while (attempts < maxAttempts) {
-        try {
-          const currentStatus = rs.status()
-          const primary = currentStatus.members.find(
+  function waitForPrimary(maxSec) {
+    for (let i = 0; i < maxSec; i++) {
+      try {
+        const s = rs.status()
+        if (s.ok === 1) {
+          const primary = (s.members || []).find(
             (m) => m.stateStr === 'PRIMARY'
           )
-
-          if (primary) {
-            print('Primary elected:', primary.name)
-            print('Replica set ready!')
-            quit(0)
-          }
-        } catch (statusError) {
-          // Still initializing
+          if (primary) return { ok: 1, primary: primary.name }
         }
-
-        attempts++
-        print('  Waiting... (' + attempts + '/' + maxAttempts + ')')
-        sleep(1000)
+      } catch (e) {
+        if (!notYetInitialized(e)) throw e
       }
+      sleep(1000)
+    }
+    return { ok: 0, error: 'timeout waiting for PRIMARY' }
+  }
 
-      print(
-        'Replica set initialized but primary election taking longer than expected'
-      )
-      print('This may be normal - check rs.status() manually')
-    } else {
-      print('Failed to initialize replica set:')
-      printjson(result)
+  // If already a replSet, just ensure PRIMARY becomes available
+  try {
+    const s = rs.status()
+    // If set name mismatches desired, warn but do nothing destructive
+    if (s.set && s.set !== RS_NAME) {
+      print(`Replica set already initialized with different name: ${s.set}`)
+    }
+    const result = waitForPrimary(WAIT_SEC)
+    if (result.ok) {
+      print(`Replica set ready. PRIMARY: ${result.primary}`)
+      quit(0)
+    }
+    print(result.error)
+    quit(2)
+  } catch (e) {
+    if (!notYetInitialized(e)) {
+      print(`Unexpected error while checking rs.status(): ${e.message}`)
       quit(1)
     }
-  } else {
-    print('Unexpected error:', error.message)
-    quit(1)
   }
-}
+
+  // Not initialized -> initiate with a simple single-node config
+  const config = { _id: RS_NAME, members: [{ _id: 0, host: RS_PRIMARY }] }
+
+  try {
+    const res = rs.initiate(config)
+    if (!(res && res.ok === 1)) {
+      print('rs.initiate returned non-ok response:')
+      printjson(res)
+      quit(1)
+    }
+  } catch (e) {
+    // If another init raced us, tolerate AlreadyInitialized
+    if (!/already initialized|AlreadyInitialized/i.test(e.message)) {
+      print(`rs.initiate failed: ${e.message}`)
+      quit(1)
+    }
+  }
+
+  const result = waitForPrimary(WAIT_SEC)
+  if (result.ok) {
+    print(`Replica set initialized. PRIMARY: ${result.primary}`)
+    quit(0)
+  }
+
+  print(result.error)
+  quit(2)
+})()
