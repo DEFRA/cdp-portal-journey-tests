@@ -84,6 +84,8 @@ services:
       start_period: 2s
       retries: 5
     restart: always
+    networks:
+      - cdpnet
 
   ################################################################################
   selenium-chrome:
