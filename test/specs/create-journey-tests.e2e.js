@@ -198,7 +198,9 @@ describe('Create journey tests', () => {
 
       await ServicesSecretsPage.createSecretButton().click()
 
-      await expect(await ServicesSecretsPage.secretCell(keyName)).toExist()
+      const removeLink = await ServicesSecretsPage.secretCell(keyName)
+      await removeLink.waitForExist({ timeout: 20000 })
+      await expect(removeLink).toExist()
 
       await ServicesSecretsPage.secretRemove(keyName).click()
 
