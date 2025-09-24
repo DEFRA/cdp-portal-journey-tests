@@ -1,6 +1,5 @@
-import { $, browser, expect } from '@wdio/globals'
+import { browser, expect } from '@wdio/globals'
 
-import { oneMinute } from 'helpers/timeout.js'
 import AnnouncementComponent from 'components/announcement.component'
 import BannerComponent from 'components/banner.component'
 import FormComponent from 'components/form.component'
@@ -120,11 +119,6 @@ describe('Teams', () => {
         await browser.keys(
           'Because I would like to test the functionality of the break glass feature in journey tests'
         )
-        await FormComponent.inputLabel('Yes').click()
-
-        await $('[data-testid="i-agree-checkbox"]').waitForExist({
-          timeout: oneMinute // Wait for the agree checkbox to show itself
-        })
 
         await FormComponent.inputLabel('I agree with the above').click()
         await FormComponent.submitButton('Grant access').click()
