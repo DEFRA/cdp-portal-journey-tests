@@ -120,7 +120,9 @@ describe('Teams', () => {
           'Because I would like to test the functionality of the break glass feature in journey tests'
         )
 
-        await FormComponent.inputLabel('I agree with the above').click()
+        await FormComponent.inputLabel(
+          'I confirm that I have read and understood the above conditions and I authorise break glass access'
+        ).click()
         await FormComponent.submitButton('Grant access').click()
       })
 
