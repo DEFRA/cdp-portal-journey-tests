@@ -138,7 +138,8 @@ db.entities.updateOne(
   },
   {
     $setOnInsert: {
-      type: 'Prototype',
+      type: 'Microservice',
+      subType: 'Prototype',
       name: 'cdp-service-prototype',
       created: '2024-12-05T11:21:25.000Z',
       status: 'Created',
