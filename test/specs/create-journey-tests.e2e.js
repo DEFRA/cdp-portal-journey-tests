@@ -258,6 +258,7 @@ describe('Create journey tests', () => {
     it('should allow the test suite to be run in dev', async () => {
       await expect(TestSuitePage.selectEnvironment()).toBeDisplayed()
       await TestSuitePage.selectEnvironment().selectByVisibleText('dev')
+      await FormComponent.inputLabel('No').click()
       await TestSuitePage.startButton().click()
       await BannerComponent.content(
         'Test run requested successfully'

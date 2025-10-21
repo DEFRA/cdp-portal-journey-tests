@@ -87,8 +87,6 @@ describe('Services automations page', () => {
   })
 
   describe('When logged in as admin user', () => {
-    // before(async () => {
-
     it('Before stuff...', async () => {
       await resetAutomationsForms()
 
@@ -191,6 +189,9 @@ describe('Services automations page', () => {
         await expect(FormComponent.inputLabel('Ext-test')).toExist()
         await expect(FormComponent.inputLabel('Prod')).toExist()
 
+        await expect(FormComponent.inputLabel('Yes')).toExist()
+        await expect(FormComponent.inputLabel('No')).toExist()
+
         await expect(FormComponent.submitButton('Add')).toExist()
       })
 
@@ -203,6 +204,10 @@ describe('Services automations page', () => {
         await browser.keys(adminOwnedTestSuite) // Typing the exact name of the test suite will automatically choose it. No need to press enter or click the result
 
         await FormComponent.inputLabel('Dev').click()
+        await FormComponent.inputLabel('Yes').click()
+        await FormComponent.input('newProfile').click()
+        await browser.keys('Smoke')
+
         await FormComponent.submitButton('Add').click()
 
         await expect(
@@ -248,7 +253,10 @@ describe('Services automations page', () => {
           expect.stringContaining(adminOwnedTestSuite)
         )
         await expect(updateTestRunPage).toHaveHTML(
-          expect.stringContaining('Test-suite')
+          expect.stringContaining('Journey')
+        )
+        await expect(updateTestRunPage).toHaveHTML(
+          expect.stringContaining('Smoke')
         )
 
         await expect(await FormComponent.inputByValue('dev')).toBeSelected()
@@ -308,6 +316,12 @@ describe('Services automations page', () => {
 
         await expect(removeTestRunPage).toHaveHTML(
           expect.stringContaining(adminOwnedTestSuite)
+        )
+        await expect(removeTestRunPage).toHaveHTML(
+          expect.stringContaining('Journey')
+        )
+        await expect(removeTestRunPage).toHaveHTML(
+          expect.stringContaining('Smoke')
         )
         await expect(removeTestRunPage).toHaveHTML(
           expect.stringContaining('Dev')
