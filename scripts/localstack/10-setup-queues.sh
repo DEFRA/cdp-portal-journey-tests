@@ -61,6 +61,9 @@ aws --endpoint $LOCALSTACK_URL sqs create-queue --region $AWS_REGION --queue-nam
 aws --endpoint $LOCALSTACK_URL sns create-topic --region $AWS_REGION --name run-migrations-topic
 aws --endpoint $LOCALSTACK_URL sns subscribe --region $AWS_REGION --topic-arn arn:aws:sns:$AWS_REGION:000000000000:run-migrations-topic --protocol sqs --notification-endpoint  arn:aws:sqs:$AWS_REGION:000000000000:run-migrations-from-portal
 
+echo setting up mono lambda topic
+aws --endpoint $LOCALSTACK_URL sns create-topic --region $AWS_REGION --name mono-lambda-trigger-topic
+
 echo Done!
 
 aws --endpoint $LOCALSTACK_URL sqs --region $AWS_REGION list-queues
