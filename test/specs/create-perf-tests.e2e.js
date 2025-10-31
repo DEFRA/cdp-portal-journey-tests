@@ -12,9 +12,10 @@ import EntityTableComponent from 'components/entity-table.component.js'
 import ServicesPage from 'page-objects/services.page.js'
 import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
 import StatusPage from 'page-objects/status.page.js'
+import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 describe('Create perf tests', () => {
-  describe('When logged out', () => {
+  describeWithAnnotations('When logged out', [], () => {
     before(async () => {
       await CreatePage.open()
     })
@@ -28,7 +29,7 @@ describe('Create perf tests', () => {
     })
   })
 
-  describe('When logged in as admin user', () => {
+  describeWithAnnotations('When logged in as admin user', [], () => {
     const testRepositoryName = `perf-test-suite-${new Date().getTime()}`
 
     before(async () => {

@@ -11,6 +11,7 @@ import FormComponent from 'components/form.component.js'
 import BannerComponent from 'components/banner.component.js'
 import LinkComponent from 'components/link.component.js'
 import { ownerCanViewTab } from 'helpers/owner-can-view-tab.js'
+import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 const adminOwnedService = 'cdp-portal-frontend'
 const adminOwnedTestSuite = 'cdp-env-test-suite'
@@ -58,7 +59,7 @@ async function resetAutomationsForms() {
 }
 
 describe('Services automations page', () => {
-  describe('When logged out', () => {
+  describeWithAnnotations('When logged out', ['@smoke'], () => {
     before(async () => {
       await ServicesPage.open(adminOwnedService)
     })
@@ -86,7 +87,7 @@ describe('Services automations page', () => {
     })
   })
 
-  describe('When logged in as admin user', () => {
+  describeWithAnnotations('When logged in as admin user', [], () => {
     it('Before stuff...', async () => {
       await resetAutomationsForms()
 
@@ -99,248 +100,269 @@ describe('Services automations page', () => {
       await ownerCanViewTab('Service', adminOwnedService, 'About')
     })
 
-    describe('When navigating to the Automations page', () => {
-      it('Should default to the automatic deployments section', async () => {
-        await TabsComponent.tab('Automations').click()
+    describeWithAnnotations(
+      'When navigating to the Automations page',
+      [],
+      () => {
+        it('Should default to the automatic deployments section', async () => {
+          await TabsComponent.tab('Automations').click()
 
-        const automaticDeploymentsTabHeader =
-          await ServicesAutomationsPage.deploymentsHeading()
+          const automaticDeploymentsTabHeader =
+            await ServicesAutomationsPage.deploymentsHeading()
 
-        await expect(automaticDeploymentsTabHeader).toExist()
-        await expect(automaticDeploymentsTabHeader).toHaveText(
-          'Automatic Deployments'
-        )
-      })
-
-      it('Sidebar should have deployments highlighted', async () => {
-        await expect(
-          await SplitPaneComponent.subNavIsActive('deployments')
-        ).toBe(true)
-      })
-
-      it('Should see automatic deployments form', async () => {
-        await expect(FormComponent.legend('Environments')).toExist()
-
-        await expect(FormComponent.inputLabel('Infra-dev')).toExist()
-        await expect(FormComponent.inputLabel('Management')).toExist()
-        await expect(FormComponent.inputLabel('Dev')).toExist()
-        await expect(FormComponent.inputLabel('Test')).toExist()
-        await expect(FormComponent.inputLabel('Ext-test')).toExist()
-
-        await expect(FormComponent.inputLabel('Prod')).not.toExist()
-
-        await expect(FormComponent.submitButton('Save')).toExist()
-      })
-
-      it('automatic deployments should not be turned on in an environment', async () => {
-        await expect(FormComponent.inputLabel('Infra-dev')).not.toBeSelected()
-        await expect(FormComponent.inputLabel('Management')).not.toBeSelected()
-        await expect(FormComponent.inputLabel('Dev')).not.toBeSelected()
-        await expect(FormComponent.inputLabel('Test')).not.toBeSelected()
-        await expect(FormComponent.inputLabel('Ext-test')).not.toBeSelected()
-      })
-
-      it('Should be able to turn on automatic deployments', async () => {
-        await FormComponent.inputLabel('Test').click()
-        await FormComponent.submitButton('Save').click()
-
-        await expect(
-          await BannerComponent.content(
-            'Auto deployment details updated successfully'
+          await expect(automaticDeploymentsTabHeader).toExist()
+          await expect(automaticDeploymentsTabHeader).toHaveText(
+            'Automatic Deployments'
           )
-        ).toExist()
-      })
+        })
 
-      it('Automatic deploys should now be turned on in the test environment', async () => {
-        await expect(await FormComponent.inputByValue('test')).toBeSelected()
-      })
-    })
+        it('Sidebar should have deployments highlighted', async () => {
+          await expect(
+            await SplitPaneComponent.subNavIsActive('deployments')
+          ).toBe(true)
+        })
 
-    describe('When navigating to the automatic test runs', () => {
-      it('Should see automatic test runs heading', async () => {
-        await SplitPaneComponent.subNavItemLink('test-runs').click()
+        it('Should see automatic deployments form', async () => {
+          await expect(FormComponent.legend('Environments')).toExist()
 
-        const automaticTestRunsHeader =
-          await ServicesAutomationsPage.testRunsHeading()
-        await expect(automaticTestRunsHeader).toExist()
-        await expect(automaticTestRunsHeader).toHaveText('Automatic Test Runs')
-      })
+          await expect(FormComponent.inputLabel('Infra-dev')).toExist()
+          await expect(FormComponent.inputLabel('Management')).toExist()
+          await expect(FormComponent.inputLabel('Dev')).toExist()
+          await expect(FormComponent.inputLabel('Test')).toExist()
+          await expect(FormComponent.inputLabel('Ext-test')).toExist()
 
-      it('sidebar should have deployments highlighted', async () => {
-        await expect(await SplitPaneComponent.subNavIsActive('test-runs')).toBe(
-          true
-        )
-      })
+          await expect(FormComponent.inputLabel('Prod')).not.toExist()
 
-      it('Should see add test run form', async () => {
-        const addTestRunFormHeading =
-          await ServicesAutomationsPage.addTestRunFormHeading()
-        await expect(addTestRunFormHeading).toExist()
-        await expect(addTestRunFormHeading).toHaveText('Add Test Run')
+          await expect(FormComponent.submitButton('Save')).toExist()
+        })
 
-        await expect(FormComponent.inputLabel('Test Suite')).toExist()
+        it('automatic deployments should not be turned on in an environment', async () => {
+          await expect(FormComponent.inputLabel('Infra-dev')).not.toBeSelected()
+          await expect(
+            FormComponent.inputLabel('Management')
+          ).not.toBeSelected()
+          await expect(FormComponent.inputLabel('Dev')).not.toBeSelected()
+          await expect(FormComponent.inputLabel('Test')).not.toBeSelected()
+          await expect(FormComponent.inputLabel('Ext-test')).not.toBeSelected()
+        })
 
-        await expect(FormComponent.legend('Environments')).toExist()
+        it('Should be able to turn on automatic deployments', async () => {
+          await FormComponent.inputLabel('Test').click()
+          await FormComponent.submitButton('Save').click()
 
-        await expect(FormComponent.inputLabel('Infra-dev')).toExist()
-        await expect(FormComponent.inputLabel('Management')).toExist()
-        await expect(FormComponent.inputLabel('Dev')).toExist()
-        await expect(FormComponent.inputLabel('Test')).toExist()
-        await expect(FormComponent.inputLabel('Ext-test')).toExist()
-        await expect(FormComponent.inputLabel('Prod')).toExist()
+          await expect(
+            await BannerComponent.content(
+              'Auto deployment details updated successfully'
+            )
+          ).toExist()
+        })
 
-        await expect(FormComponent.inputLabel('Yes')).toExist()
-        await expect(FormComponent.inputLabel('No')).toExist()
+        it('Automatic deploys should now be turned on in the test environment', async () => {
+          await expect(await FormComponent.inputByValue('test')).toBeSelected()
+        })
+      }
+    )
 
-        await expect(FormComponent.submitButton('Add')).toExist()
-      })
+    describeWithAnnotations(
+      'When navigating to the automatic test runs',
+      [],
+      () => {
+        it('Should see automatic test runs heading', async () => {
+          await SplitPaneComponent.subNavItemLink('test-runs').click()
 
-      it('Should not see any pre-existing automatic test runs', async () => {
-        await expect(ServicesAutomationsPage.testRunsListNoResults()).toExist()
-      })
+          const automaticTestRunsHeader =
+            await ServicesAutomationsPage.testRunsHeading()
+          await expect(automaticTestRunsHeader).toExist()
+          await expect(automaticTestRunsHeader).toHaveText(
+            'Automatic Test Runs'
+          )
+        })
 
-      it('Should be able to add an automatic test run', async () => {
-        await FormComponent.inputLabel('Test Suite').click()
-        await browser.keys(adminOwnedTestSuite) // Typing the exact name of the test suite will automatically choose it. No need to press enter or click the result
+        it('sidebar should have deployments highlighted', async () => {
+          await expect(
+            await SplitPaneComponent.subNavIsActive('test-runs')
+          ).toBe(true)
+        })
 
-        await FormComponent.inputLabel('Dev').click()
-        await FormComponent.inputLabel('Yes').click()
-        await FormComponent.input('newProfile').click()
-        await browser.keys('Smoke')
+        it('Should see add test run form', async () => {
+          const addTestRunFormHeading =
+            await ServicesAutomationsPage.addTestRunFormHeading()
+          await expect(addTestRunFormHeading).toExist()
+          await expect(addTestRunFormHeading).toHaveText('Add Test Run')
 
-        await FormComponent.submitButton('Add').click()
+          await expect(FormComponent.inputLabel('Test Suite')).toExist()
 
-        await expect(
-          await BannerComponent.content('Auto test runs updated successfully')
-        ).toExist()
-      })
+          await expect(FormComponent.legend('Environments')).toExist()
 
-      it('Should have expected auto test run set up', async () => {
-        const $testRunsFirsRow =
-          await ServicesAutomationsPage.testRunsListRow(1)
+          await expect(FormComponent.inputLabel('Infra-dev')).toExist()
+          await expect(FormComponent.inputLabel('Management')).toExist()
+          await expect(FormComponent.inputLabel('Dev')).toExist()
+          await expect(FormComponent.inputLabel('Test')).toExist()
+          await expect(FormComponent.inputLabel('Ext-test')).toExist()
+          await expect(FormComponent.inputLabel('Prod')).toExist()
 
-        await expect($testRunsFirsRow).toHaveHTML(
-          expect.stringContaining(adminOwnedTestSuite)
-        )
-        await expect($testRunsFirsRow).toHaveHTML(
-          expect.stringContaining('Test-suite')
-        )
+          await expect(FormComponent.inputLabel('Yes')).toExist()
+          await expect(FormComponent.inputLabel('No')).toExist()
 
-        await expect(
-          await ServicesAutomationsPage.testSetupForEnvironment(1, 'dev')
-        ).toExist()
+          await expect(FormComponent.submitButton('Add')).toExist()
+        })
 
-        await expect($testRunsFirsRow).toHaveHTML(
-          expect.stringContaining('Update')
-        )
-        await expect($testRunsFirsRow).toHaveHTML(
-          expect.stringContaining('Remove')
-        )
-      })
+        it('Should not see any pre-existing automatic test runs', async () => {
+          await expect(
+            ServicesAutomationsPage.testRunsListNoResults()
+          ).toExist()
+        })
 
-      it('Should be able to updated automated test suite', async () => {
-        await LinkComponent.link('app-link', 'Update').click()
+        it('Should be able to add an automatic test run', async () => {
+          await FormComponent.inputLabel('Test Suite').click()
+          await browser.keys(adminOwnedTestSuite) // Typing the exact name of the test suite will automatically choose it. No need to press enter or click the result
 
-        const updateTestRunHeading =
-          await ServicesAutomationsPage.updateTestRunHeading()
-        await expect(updateTestRunHeading).toExist()
-        await expect(updateTestRunHeading).toHaveText('Update Test Run')
+          await FormComponent.inputLabel('Dev').click()
+          await FormComponent.inputLabel('Yes').click()
+          await FormComponent.input('newProfile').click()
+          await browser.keys('Smoke')
 
-        const updateTestRunPage =
-          await ServicesAutomationsPage.updateTestRunPage()
+          await FormComponent.submitButton('Add').click()
 
-        await expect(updateTestRunPage).toHaveHTML(
-          expect.stringContaining(adminOwnedTestSuite)
-        )
-        await expect(updateTestRunPage).toHaveHTML(
-          expect.stringContaining('Journey')
-        )
-        await expect(updateTestRunPage).toHaveHTML(
-          expect.stringContaining('Smoke')
-        )
+          await expect(
+            await BannerComponent.content('Auto test runs updated successfully')
+          ).toExist()
+        })
 
-        await expect(await FormComponent.inputByValue('dev')).toBeSelected()
-        await expect(
-          await FormComponent.inputByValue('test')
-        ).not.toBeSelected()
+        it('Should have expected auto test run set up', async () => {
+          const $testRunsFirsRow =
+            await ServicesAutomationsPage.testRunsListRow(1)
 
-        await FormComponent.inputLabel('Infra-dev').click()
-        await FormComponent.submitButton('Update').click()
+          await expect($testRunsFirsRow).toHaveHTML(
+            expect.stringContaining(adminOwnedTestSuite)
+          )
+          await expect($testRunsFirsRow).toHaveHTML(
+            expect.stringContaining('Test-suite')
+          )
 
-        await expect(
-          await BannerComponent.content('Test run updated')
-        ).toExist()
-      })
+          await expect(
+            await ServicesAutomationsPage.testSetupForEnvironment(1, 'dev')
+          ).toExist()
 
-      it('Should have expected updated auto test run set up', async () => {
-        const automaticTestRunsHeader =
-          await ServicesAutomationsPage.testRunsHeading()
-        await expect(automaticTestRunsHeader).toExist()
-        await expect(automaticTestRunsHeader).toHaveText('Automatic Test Runs')
+          await expect($testRunsFirsRow).toHaveHTML(
+            expect.stringContaining('Update')
+          )
+          await expect($testRunsFirsRow).toHaveHTML(
+            expect.stringContaining('Remove')
+          )
+        })
 
-        const $testRunsFirstRow =
-          await ServicesAutomationsPage.testRunsListRow(1)
+        it('Should be able to updated automated test suite', async () => {
+          await LinkComponent.link('app-link', 'Update').click()
 
-        await expect($testRunsFirstRow).toHaveHTML(
-          expect.stringContaining(adminOwnedTestSuite)
-        )
-        await expect($testRunsFirstRow).toHaveHTML(
-          expect.stringContaining('Test-suite')
-        )
+          const updateTestRunHeading =
+            await ServicesAutomationsPage.updateTestRunHeading()
+          await expect(updateTestRunHeading).toExist()
+          await expect(updateTestRunHeading).toHaveText('Update Test Run')
 
-        await expect(
-          await ServicesAutomationsPage.testSetupForEnvironment(1, 'dev')
-        ).toExist()
-        await expect(
-          await ServicesAutomationsPage.testSetupForEnvironment(1, 'infra-dev')
-        ).toExist()
+          const updateTestRunPage =
+            await ServicesAutomationsPage.updateTestRunPage()
 
-        await expect($testRunsFirstRow).toHaveHTML(
-          expect.stringContaining('Update')
-        )
-        await expect($testRunsFirstRow).toHaveHTML(
-          expect.stringContaining('Remove')
-        )
-      })
+          await expect(updateTestRunPage).toHaveHTML(
+            expect.stringContaining(adminOwnedTestSuite)
+          )
+          await expect(updateTestRunPage).toHaveHTML(
+            expect.stringContaining('Journey')
+          )
+          await expect(updateTestRunPage).toHaveHTML(
+            expect.stringContaining('Smoke')
+          )
 
-      it('Should be able to remove automated test suite', async () => {
-        await LinkComponent.link('app-link', 'Remove').click()
+          await expect(await FormComponent.inputByValue('dev')).toBeSelected()
+          await expect(
+            await FormComponent.inputByValue('test')
+          ).not.toBeSelected()
 
-        const removeTestRunHeading =
-          await ServicesAutomationsPage.removeTestRunHeading()
-        await expect(removeTestRunHeading).toExist()
-        await expect(removeTestRunHeading).toHaveText('Remove Test Run')
+          await FormComponent.inputLabel('Infra-dev').click()
+          await FormComponent.submitButton('Update').click()
 
-        const removeTestRunPage =
-          await ServicesAutomationsPage.removeTestRunPage()
+          await expect(
+            await BannerComponent.content('Test run updated')
+          ).toExist()
+        })
 
-        await expect(removeTestRunPage).toHaveHTML(
-          expect.stringContaining(adminOwnedTestSuite)
-        )
-        await expect(removeTestRunPage).toHaveHTML(
-          expect.stringContaining('Journey')
-        )
-        await expect(removeTestRunPage).toHaveHTML(
-          expect.stringContaining('Smoke')
-        )
-        await expect(removeTestRunPage).toHaveHTML(
-          expect.stringContaining('Dev')
-        )
+        it('Should have expected updated auto test run set up', async () => {
+          const automaticTestRunsHeader =
+            await ServicesAutomationsPage.testRunsHeading()
+          await expect(automaticTestRunsHeader).toExist()
+          await expect(automaticTestRunsHeader).toHaveText(
+            'Automatic Test Runs'
+          )
 
-        await FormComponent.submitButton('Remove test run').click()
+          const $testRunsFirstRow =
+            await ServicesAutomationsPage.testRunsListRow(1)
 
-        await expect(
-          await BannerComponent.content('Test run removed from service')
-        ).toExist()
-      })
+          await expect($testRunsFirstRow).toHaveHTML(
+            expect.stringContaining(adminOwnedTestSuite)
+          )
+          await expect($testRunsFirstRow).toHaveHTML(
+            expect.stringContaining('Test-suite')
+          )
 
-      it('Automatic test run should be removed', async () => {
-        await expect(ServicesAutomationsPage.testRunsListNoResults()).toExist()
-      })
-    })
+          await expect(
+            await ServicesAutomationsPage.testSetupForEnvironment(1, 'dev')
+          ).toExist()
+          await expect(
+            await ServicesAutomationsPage.testSetupForEnvironment(
+              1,
+              'infra-dev'
+            )
+          ).toExist()
+
+          await expect($testRunsFirstRow).toHaveHTML(
+            expect.stringContaining('Update')
+          )
+          await expect($testRunsFirstRow).toHaveHTML(
+            expect.stringContaining('Remove')
+          )
+        })
+
+        it('Should be able to remove automated test suite', async () => {
+          await LinkComponent.link('app-link', 'Remove').click()
+
+          const removeTestRunHeading =
+            await ServicesAutomationsPage.removeTestRunHeading()
+          await expect(removeTestRunHeading).toExist()
+          await expect(removeTestRunHeading).toHaveText('Remove Test Run')
+
+          const removeTestRunPage =
+            await ServicesAutomationsPage.removeTestRunPage()
+
+          await expect(removeTestRunPage).toHaveHTML(
+            expect.stringContaining(adminOwnedTestSuite)
+          )
+          await expect(removeTestRunPage).toHaveHTML(
+            expect.stringContaining('Journey')
+          )
+          await expect(removeTestRunPage).toHaveHTML(
+            expect.stringContaining('Smoke')
+          )
+          await expect(removeTestRunPage).toHaveHTML(
+            expect.stringContaining('Dev')
+          )
+
+          await FormComponent.submitButton('Remove test run').click()
+
+          await expect(
+            await BannerComponent.content('Test run removed from service')
+          ).toExist()
+        })
+
+        it('Automatic test run should be removed', async () => {
+          await expect(
+            ServicesAutomationsPage.testRunsListNoResults()
+          ).toExist()
+        })
+      }
+    )
   })
 
-  describe('When logged in as a tenant user', () => {
+  describeWithAnnotations('When logged in as a tenant user', [], () => {
     before(async () => {
       await LoginStubPage.loginAsNonAdmin()
       await ServicesPage.open(adminOwnedService)

@@ -1,7 +1,13 @@
 #!/bin/sh
 
 echo "run_id: $RUN_ID"
-npm test
+if [ -n "$PROFILE" ]; then
+  echo "Running npm test:$PROFILE..."
+  npm run "test:$PROFILE"
+else
+  echo "Running default npm test..."
+  npm test
+fi
 
 npm run report:publish
 publish_exit_code=$?

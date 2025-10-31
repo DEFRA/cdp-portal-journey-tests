@@ -9,11 +9,12 @@ import LoginStubPage from 'page-objects/login-stub.page'
 import PageHeadingComponent from 'components/page-heading.component.js'
 import AdminPage from 'page-objects/admin.page.js'
 import { ownerCanViewTab } from 'helpers/owner-can-view-tab.js'
+import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 const adminOwnedService = 'cdp-portal-frontend'
 
 describe('Services secrets page', () => {
-  describe('When logged out', () => {
+  describeWithAnnotations('When logged out', ['@smoke'], () => {
     before(async () => {
       await ServicesPage.open(adminOwnedService)
     })
@@ -41,7 +42,7 @@ describe('Services secrets page', () => {
     })
   })
 
-  describe('When logged in as admin user', () => {
+  describeWithAnnotations('When logged in as admin user', [], () => {
     before(async () => {
       await LoginStubPage.loginAsAdmin()
       await ServicesPage.open(adminOwnedService)
@@ -52,147 +53,164 @@ describe('Services secrets page', () => {
       await ownerCanViewTab('Service', adminOwnedService, 'About')
     })
 
-    describe('When navigating to Secrets overview page', () => {
-      it('Should be able to go direct to secrets overview', async () => {
-        await ServicesSecretsPage.open(adminOwnedService)
+    describeWithAnnotations(
+      'When navigating to Secrets overview page',
+      [],
+      () => {
+        it('Should be able to go direct to secrets overview', async () => {
+          await ServicesSecretsPage.open(adminOwnedService)
 
-        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(
-          await PageHeadingComponent.title(adminOwnedService)
-        ).toExist()
+          await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+          await expect(
+            await PageHeadingComponent.title(adminOwnedService)
+          ).toExist()
 
-        await expect(TabsComponent.activeTab()).toHaveText('Secrets')
-      })
+          await expect(TabsComponent.activeTab()).toHaveText('Secrets')
+        })
 
-      it('Should be an overview page of all secrets page', async () => {
-        await ServicesPage.open(adminOwnedService)
+        it('Should be an overview page of all secrets page', async () => {
+          await ServicesPage.open(adminOwnedService)
 
-        const secretsTab = await TabsComponent.tab('Secrets')
-        await expect(secretsTab).toExist()
-        await secretsTab.click()
+          const secretsTab = await TabsComponent.tab('Secrets')
+          await expect(secretsTab).toExist()
+          await secretsTab.click()
 
-        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(
-          await PageHeadingComponent.title(adminOwnedService)
-        ).toExist()
+          await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+          await expect(
+            await PageHeadingComponent.title(adminOwnedService)
+          ).toExist()
 
-        await expect(TabsComponent.activeTab()).toHaveText('Secrets')
-      })
-    })
+          await expect(TabsComponent.activeTab()).toHaveText('Secrets')
+        })
+      }
+    )
 
-    describe('When going to an Environment Secrets page', () => {
-      it('Should be a page of that environments secrets', async () => {
-        await ServicesSecretsPage.open(adminOwnedService, 'management')
+    describeWithAnnotations(
+      'When going to an Environment Secrets page',
+      [],
+      () => {
+        it('Should be a page of that environments secrets', async () => {
+          await ServicesSecretsPage.open(adminOwnedService, 'management')
 
-        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(
-          await PageHeadingComponent.title(adminOwnedService)
-        ).toExist()
+          await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+          await expect(
+            await PageHeadingComponent.title(adminOwnedService)
+          ).toExist()
 
-        await expect(ServicesSecretsPage.environmentHeader()).toHaveText(
-          'Management secrets'
-        )
-        await expect(
-          await SplitPaneComponent.subNavIsActive('management')
-        ).toBe(true)
-      })
+          await expect(ServicesSecretsPage.environmentHeader()).toHaveText(
+            'Management secrets'
+          )
+          await expect(
+            await SplitPaneComponent.subNavIsActive('management')
+          ).toBe(true)
+        })
 
-      it('Should be navigable via sidebar to environment secrets', async () => {
-        await ServicesSecretsPage.open(adminOwnedService)
-        await expect(await ServicesPage.navIsActive()).toBe(true)
-        await expect(await SplitPaneComponent.subNavIsActive('all')).toBe(true)
-        await SplitPaneComponent.subNavItemLink('management').click()
+        it('Should be navigable via sidebar to environment secrets', async () => {
+          await ServicesSecretsPage.open(adminOwnedService)
+          await expect(await ServicesPage.navIsActive()).toBe(true)
+          await expect(await SplitPaneComponent.subNavIsActive('all')).toBe(
+            true
+          )
+          await SplitPaneComponent.subNavItemLink('management').click()
 
-        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(
-          await PageHeadingComponent.title(adminOwnedService)
-        ).toExist()
+          await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+          await expect(
+            await PageHeadingComponent.title(adminOwnedService)
+          ).toExist()
 
-        await expect(ServicesSecretsPage.environmentHeader()).toHaveText(
-          'Management secrets'
-        )
-        await expect(
-          await SplitPaneComponent.subNavIsActive('management')
-        ).toBe(true)
-      })
-    })
+          await expect(ServicesSecretsPage.environmentHeader()).toHaveText(
+            'Management secrets'
+          )
+          await expect(
+            await SplitPaneComponent.subNavIsActive('management')
+          ).toBe(true)
+        })
+      }
+    )
 
-    describe('When creating, updating and removing a secret', () => {
-      const suffix = (Math.random() + 1).toString(36).substring(7).toUpperCase()
-      let keyName
+    describeWithAnnotations(
+      'When creating, updating and removing a secret',
+      [],
+      () => {
+        const suffix = (Math.random() + 1)
+          .toString(36)
+          .substring(7)
+          .toUpperCase()
+        let keyName
 
-      it('Should be able to create a new secret', async () => {
-        keyName = `TEST_${suffix}`
+        it('Should be able to create a new secret', async () => {
+          keyName = `TEST_${suffix}`
 
-        // Create a secret to test against
-        await ServicesSecretsPage.open(adminOwnedService, 'management')
+          // Create a secret to test against
+          await ServicesSecretsPage.open(adminOwnedService, 'management')
 
-        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(
-          await PageHeadingComponent.title(adminOwnedService)
-        ).toExist()
+          await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+          await expect(
+            await PageHeadingComponent.title(adminOwnedService)
+          ).toExist()
 
-        await ServicesSecretsPage.createSecretName().setValue(keyName)
-        await ServicesSecretsPage.createSecretValue().setValue('test-value')
-        await ServicesSecretsPage.createSecretButton().click()
+          await ServicesSecretsPage.createSecretName().setValue(keyName)
+          await ServicesSecretsPage.createSecretValue().setValue('test-value')
+          await ServicesSecretsPage.createSecretButton().click()
 
-        await expect(ServicesSecretsPage.secretCell(keyName)).toExist()
-      })
+          await expect(ServicesSecretsPage.secretCell(keyName)).toExist()
+        })
 
-      it('Should be listed as updated secrets', async () => {
-        await ServicesSecretsPage.secretUpdate(keyName).click()
+        it('Should be listed as updated secrets', async () => {
+          await ServicesSecretsPage.secretUpdate(keyName).click()
 
-        await expect(
-          await PageHeadingComponent.caption('Update Secret')
-        ).toExist()
-        await expect(
-          await PageHeadingComponent.title(adminOwnedService)
-        ).toExist()
+          await expect(
+            await PageHeadingComponent.caption('Update Secret')
+          ).toExist()
+          await expect(
+            await PageHeadingComponent.title(adminOwnedService)
+          ).toExist()
 
-        await ServicesSecretsPage.updateHeader().waitForExist()
-        await ServicesSecretsPage.updateSecretValue().setValue(
-          'test-updated-value'
-        )
-        await ServicesSecretsPage.updateSecretButton().click()
+          await ServicesSecretsPage.updateHeader().waitForExist()
+          await ServicesSecretsPage.updateSecretValue().setValue(
+            'test-updated-value'
+          )
+          await ServicesSecretsPage.updateSecretButton().click()
 
-        await expect(await ServicesSecretsPage.secretCell(keyName)).toExist()
-        await expect(
-          await ServicesSecretsPage.secretActionCell(keyName)
-        ).toExist()
-        await expect(
-          await ServicesSecretsPage.secretStatus(keyName, 'Secret available')
-        ).toExist()
-      })
+          await expect(await ServicesSecretsPage.secretCell(keyName)).toExist()
+          await expect(
+            await ServicesSecretsPage.secretActionCell(keyName)
+          ).toExist()
+          await expect(
+            await ServicesSecretsPage.secretStatus(keyName, 'Secret available')
+          ).toExist()
+        })
 
-      it('Should be able to remove secret', async () => {
-        await ServicesSecretsPage.secretRemove(keyName).click()
+        it('Should be able to remove secret', async () => {
+          await ServicesSecretsPage.secretRemove(keyName).click()
 
-        await expect(
-          await PageHeadingComponent.caption('Remove Secret')
-        ).toExist()
-        await expect(
-          await PageHeadingComponent.title(adminOwnedService)
-        ).toExist()
+          await expect(
+            await PageHeadingComponent.caption('Remove Secret')
+          ).toExist()
+          await expect(
+            await PageHeadingComponent.title(adminOwnedService)
+          ).toExist()
 
-        await ServicesSecretsPage.removeSecretButton().click()
+          await ServicesSecretsPage.removeSecretButton().click()
 
-        await expect(await PageHeadingComponent.caption('Secrets')).toExist()
-        await expect(
-          await PageHeadingComponent.title(adminOwnedService)
-        ).toExist()
+          await expect(await PageHeadingComponent.caption('Secrets')).toExist()
+          await expect(
+            await PageHeadingComponent.title(adminOwnedService)
+          ).toExist()
 
-        await expect(
-          await ServicesSecretsPage.secretCell(keyName)
-        ).not.toExist()
-      })
-    })
+          await expect(
+            await ServicesSecretsPage.secretCell(keyName)
+          ).not.toExist()
+        })
+      }
+    )
 
     after(async () => {
       await AdminPage.logOut()
     })
   })
 
-  describe('When logged in as a tenant user', () => {
+  describeWithAnnotations('When logged in as a tenant user', [], () => {
     before(async () => {
       await LoginStubPage.loginAsNonAdmin()
       await ServicesPage.open(adminOwnedService)

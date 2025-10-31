@@ -2,8 +2,9 @@ import { browser, expect } from '@wdio/globals'
 
 import AdminPage from 'page-objects/admin.page'
 import ErrorPage from 'page-objects/error.page'
+import { describeWithAnnotations } from 'helpers/test-filters.js'
 
-describe('Error pages', () => {
+describeWithAnnotations('Error pages', [], () => {
   it('Should show the "404" error page', async () => {
     await ErrorPage.open('/random-url-that-does-not-exist')
 

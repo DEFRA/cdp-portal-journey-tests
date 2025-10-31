@@ -18,6 +18,7 @@ import upperFirst from 'lodash/upperFirst.js'
 import kebabCase from 'lodash/kebabCase.js'
 import { unshutterService } from 'helpers/unshutter-service.js'
 import { oneMinute } from 'helpers/timeout.js'
+import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 const adminOwnedService = 'cdp-portal-frontend'
 
@@ -37,7 +38,7 @@ const checkShutterStatus = async ({
 }
 
 describe('Services maintenance - shuttering', () => {
-  describe('When logged out', () => {
+  describeWithAnnotations('When logged out', [], () => {
     it('Should not be able to browse to maintenance page', async () => {
       await ServicesMaintenancePage.open(adminOwnedService)
       await expect(browser).toHaveTitle(
@@ -48,7 +49,7 @@ describe('Services maintenance - shuttering', () => {
     })
   })
 
-  describe('When shuttering as admin user', () => {
+  describeWithAnnotations('When shuttering as admin user', [], () => {
     before(async () => {
       await LoginStubPage.loginAsAdmin()
       await expect(await ServicesPage.logOutLink()).toHaveText('Sign out')
@@ -61,166 +62,173 @@ describe('Services maintenance - shuttering', () => {
       await ownerCanViewTab('Shuttering', adminOwnedService, 'Maintenance')
     })
 
-    describe('When navigating to the Maintenance page', () => {
-      it('Should see shuttering and undeployments sections', async () => {
-        await expect(ServicesMaintenancePage.shutteringHeading()).toExist()
-        await expect(ServicesMaintenancePage.shutteringPanel()).toExist()
-        await expect(ServicesMaintenancePage.undeployHeading()).toExist()
-        await expect(ServicesMaintenancePage.undeployPanel()).toExist()
-      })
-
-      it('Shuttering panel should contain expected detail', async () => {
-        const $shutteringPanel = await ServicesMaintenancePage.shutteringPanel()
-
-        await expect($shutteringPanel).toHaveHTML(
-          expect.stringContaining('https://portal-test.cdp-int.defra.cloud')
-        )
-        await expect($shutteringPanel).toHaveHTML(
-          expect.stringContaining('https://portal.cdp-int.defra.cloud')
-        )
-        await expect($shutteringPanel).toHaveHTML(
-          expect.stringContaining('https://portal.defra.gov')
-        )
-
-        await checkShutterStatus({
-          firstShutterStatus: 'Shuttered',
-          secondShutterStatus: 'Active',
-          thirdShutterStatus: 'Active'
+    describeWithAnnotations(
+      'When navigating to the Maintenance page',
+      [],
+      () => {
+        it('Should see shuttering and undeployments sections', async () => {
+          await expect(ServicesMaintenancePage.shutteringHeading()).toExist()
+          await expect(ServicesMaintenancePage.shutteringPanel()).toExist()
+          await expect(ServicesMaintenancePage.undeployHeading()).toExist()
+          await expect(ServicesMaintenancePage.undeployPanel()).toExist()
         })
-      })
 
-      it('Should be able to shutter a service url', async () => {
-        const $shutterLink = await LinkComponent.link(
-          'shutter-link-2',
-          'Shutter'
-        )
-        await expect($shutterLink).toExist()
+        it('Shuttering panel should contain expected detail', async () => {
+          const $shutteringPanel =
+            await ServicesMaintenancePage.shutteringPanel()
 
-        $shutterLink.click()
-      })
-
-      it('Should be on the shutter confirm page', async () => {
-        await expect(await ServicesMaintenancePage.navIsActive()).toBe(true)
-        await expect(
-          await PageHeadingComponent.caption('Confirm shutter')
-        ).toExist()
-        await expect(
-          await PageHeadingComponent.title(adminOwnedService)
-        ).toExist()
-
-        await expect(TabsComponent.activeTab()).toHaveText('Maintenance')
-      })
-
-      it('Confirm shutter panel should contain expected detail', async () => {
-        const $confirmShutterPanel =
-          await ServicesMaintenancePage.confirmShutterPanel()
-
-        await expect($confirmShutterPanel).toHaveHTML(
-          expect.stringContaining('Shutter the following service url')
-        )
-        await expect($confirmShutterPanel).toHaveHTML(
-          expect.stringContaining('https://portal.cdp-int.defra.cloud')
-        )
-        await expect($confirmShutterPanel).toHaveHTML(
-          expect.stringContaining('Management')
-        )
-        await expect($confirmShutterPanel).toHaveHTML(
-          expect.stringContaining('Active')
-        )
-        await expect($confirmShutterPanel).toHaveHTML(
-          expect.stringContaining('Admin User')
-        )
-
-        await expect(FormComponent.submitButton('Shutter url')).toExist()
-      })
-
-      it('Should be able to shutter the service', async () => {
-        await FormComponent.submitButton('Shutter url').click()
-
-        await ownerCanViewTab('Shuttering', adminOwnedService, 'Maintenance')
-
-        await expect(
-          await BannerComponent.content(
-            'Shutter requested for https://portal.cdp-int.defra.cloud'
+          await expect($shutteringPanel).toHaveHTML(
+            expect.stringContaining('https://portal-test.cdp-int.defra.cloud')
           )
-        ).toExist()
+          await expect($shutteringPanel).toHaveHTML(
+            expect.stringContaining('https://portal.cdp-int.defra.cloud')
+          )
+          await expect($shutteringPanel).toHaveHTML(
+            expect.stringContaining('https://portal.defra.gov')
+          )
 
-        await checkShutterStatus({
-          firstShutterStatus: 'Shuttered',
-          secondShutterStatus: 'Pending',
-          thirdShutterStatus: 'Active'
+          await checkShutterStatus({
+            firstShutterStatus: 'Shuttered',
+            secondShutterStatus: 'Active',
+            thirdShutterStatus: 'Active'
+          })
         })
 
-        await $('[data-testid="shuttered-status-2"]*=Shuttered').waitForExist({
-          timeout: oneMinute // Wait for the shuttered status to change in stubs
-        })
-      })
+        it('Should be able to shutter a service url', async () => {
+          const $shutterLink = await LinkComponent.link(
+            'shutter-link-2',
+            'Shutter'
+          )
+          await expect($shutterLink).toExist()
 
-      it('Should be able to unshutter the service', async () => {
-        await ServicesMaintenancePage.open(adminOwnedService)
-
-        await ownerCanViewTab('Shuttering', adminOwnedService, 'Maintenance')
-
-        await checkShutterStatus({
-          firstShutterStatus: 'Shuttered',
-          secondShutterStatus: 'Shuttered',
-          thirdShutterStatus: 'Active'
+          $shutterLink.click()
         })
 
-        const $shutterLink = await LinkComponent.link(
-          'shutter-link-2',
-          'Unshutter'
-        )
+        it('Should be on the shutter confirm page', async () => {
+          await expect(await ServicesMaintenancePage.navIsActive()).toBe(true)
+          await expect(
+            await PageHeadingComponent.caption('Confirm shutter')
+          ).toExist()
+          await expect(
+            await PageHeadingComponent.title(adminOwnedService)
+          ).toExist()
 
-        await expect($shutterLink).toExist()
-
-        $shutterLink.click()
-      })
-
-      it('Confirm unshutter panel should contain expected detail', async () => {
-        const $confirmShutterPanel =
-          await ServicesMaintenancePage.confirmShutterPanel()
-
-        await expect($confirmShutterPanel).toHaveHTML(
-          expect.stringContaining('Unshutter the following service url')
-        )
-        await expect($confirmShutterPanel).toHaveHTML(
-          expect.stringContaining('https://portal.cdp-int.defra.cloud')
-        )
-        await expect($confirmShutterPanel).toHaveHTML(
-          expect.stringContaining('Management')
-        )
-        await expect($confirmShutterPanel).toHaveHTML(
-          expect.stringContaining('Shuttered')
-        )
-        await expect($confirmShutterPanel).toHaveHTML(
-          expect.stringContaining('Admin User')
-        )
-
-        await expect(FormComponent.submitButton('Unshutter url')).toExist()
-      })
-
-      it('Should be able to see service unshutter', async () => {
-        await (await FormComponent.submitButton('Unshutter url')).click()
-
-        await ownerCanViewTab('Shuttering', adminOwnedService, 'Maintenance')
-
-        await checkShutterStatus({
-          firstShutterStatus: 'Shuttered',
-          secondShutterStatus: 'Pending',
-          thirdShutterStatus: 'Active'
+          await expect(TabsComponent.activeTab()).toHaveText('Maintenance')
         })
 
-        await $('[data-testid="shuttered-status-2"]*=Active').waitForExist({
-          timeout: oneMinute // Wait for the shuttered status to change in stubs
+        it('Confirm shutter panel should contain expected detail', async () => {
+          const $confirmShutterPanel =
+            await ServicesMaintenancePage.confirmShutterPanel()
+
+          await expect($confirmShutterPanel).toHaveHTML(
+            expect.stringContaining('Shutter the following service url')
+          )
+          await expect($confirmShutterPanel).toHaveHTML(
+            expect.stringContaining('https://portal.cdp-int.defra.cloud')
+          )
+          await expect($confirmShutterPanel).toHaveHTML(
+            expect.stringContaining('Management')
+          )
+          await expect($confirmShutterPanel).toHaveHTML(
+            expect.stringContaining('Active')
+          )
+          await expect($confirmShutterPanel).toHaveHTML(
+            expect.stringContaining('Admin User')
+          )
+
+          await expect(FormComponent.submitButton('Shutter url')).toExist()
         })
-      })
-    })
+
+        it('Should be able to shutter the service', async () => {
+          await FormComponent.submitButton('Shutter url').click()
+
+          await ownerCanViewTab('Shuttering', adminOwnedService, 'Maintenance')
+
+          await expect(
+            await BannerComponent.content(
+              'Shutter requested for https://portal.cdp-int.defra.cloud'
+            )
+          ).toExist()
+
+          await checkShutterStatus({
+            firstShutterStatus: 'Shuttered',
+            secondShutterStatus: 'Pending',
+            thirdShutterStatus: 'Active'
+          })
+
+          await $('[data-testid="shuttered-status-2"]*=Shuttered').waitForExist(
+            {
+              timeout: oneMinute // Wait for the shuttered status to change in stubs
+            }
+          )
+        })
+
+        it('Should be able to unshutter the service', async () => {
+          await ServicesMaintenancePage.open(adminOwnedService)
+
+          await ownerCanViewTab('Shuttering', adminOwnedService, 'Maintenance')
+
+          await checkShutterStatus({
+            firstShutterStatus: 'Shuttered',
+            secondShutterStatus: 'Shuttered',
+            thirdShutterStatus: 'Active'
+          })
+
+          const $shutterLink = await LinkComponent.link(
+            'shutter-link-2',
+            'Unshutter'
+          )
+
+          await expect($shutterLink).toExist()
+
+          $shutterLink.click()
+        })
+
+        it('Confirm unshutter panel should contain expected detail', async () => {
+          const $confirmShutterPanel =
+            await ServicesMaintenancePage.confirmShutterPanel()
+
+          await expect($confirmShutterPanel).toHaveHTML(
+            expect.stringContaining('Unshutter the following service url')
+          )
+          await expect($confirmShutterPanel).toHaveHTML(
+            expect.stringContaining('https://portal.cdp-int.defra.cloud')
+          )
+          await expect($confirmShutterPanel).toHaveHTML(
+            expect.stringContaining('Management')
+          )
+          await expect($confirmShutterPanel).toHaveHTML(
+            expect.stringContaining('Shuttered')
+          )
+          await expect($confirmShutterPanel).toHaveHTML(
+            expect.stringContaining('Admin User')
+          )
+
+          await expect(FormComponent.submitButton('Unshutter url')).toExist()
+        })
+
+        it('Should be able to see service unshutter', async () => {
+          await (await FormComponent.submitButton('Unshutter url')).click()
+
+          await ownerCanViewTab('Shuttering', adminOwnedService, 'Maintenance')
+
+          await checkShutterStatus({
+            firstShutterStatus: 'Shuttered',
+            secondShutterStatus: 'Pending',
+            thirdShutterStatus: 'Active'
+          })
+
+          await $('[data-testid="shuttered-status-2"]*=Active').waitForExist({
+            timeout: oneMinute // Wait for the shuttered status to change in stubs
+          })
+        })
+      }
+    )
   })
 })
 
-describe('Services maintenance - undeploy', () => {
-  describe('When undeploying as an admin', () => {
+describeWithAnnotations('Services maintenance - undeploy', [], () => {
+  describeWithAnnotations('When undeploying as an admin', [], () => {
     const options = {
       imageName: 'cdp-portal-frontend',
       version: '0.1.0',
@@ -284,7 +292,7 @@ describe('Services maintenance - undeploy', () => {
     })
   })
 
-  describe('When logged in as a tenant user', () => {
+  describeWithAnnotations('When logged in as a tenant user', [], () => {
     before(async () => {
       await LoginStubPage.loginAsNonAdmin()
       await ServicesPage.open(adminOwnedService)

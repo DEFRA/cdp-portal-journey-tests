@@ -1,9 +1,9 @@
 import { $ } from '@wdio/globals'
 
 /**
- * govukSummaryList helper component
+ * govUkSummaryList helper component
  */
-class GovukSummaryListComponent {
+class GovUkSummaryListComponent {
   content() {
     return $('[data-testid="govuk-summary-list"]')
   }
@@ -13,4 +13,4 @@ class GovukSummaryListComponent {
   }
 }
 
-export default new GovukSummaryListComponent()
+export default new GovUkSummaryListComponent()

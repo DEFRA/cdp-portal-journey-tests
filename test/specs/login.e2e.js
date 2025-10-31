@@ -3,8 +3,9 @@ import { expect } from '@wdio/globals'
 import HomePage from 'page-objects/home.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import LinkComponent from 'components/link.component'
+import { describeWithAnnotations } from 'helpers/test-filters.js'
 
-describe('Log in and log out', () => {
+describeWithAnnotations('Log in and log out', [], () => {
   before(async () => {
     await HomePage.open()
   })

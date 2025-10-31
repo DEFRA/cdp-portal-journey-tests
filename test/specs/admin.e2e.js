@@ -4,9 +4,10 @@ import PageHeadingComponent from 'components/page-heading.component'
 import AdminPage from 'page-objects/admin.page'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
+import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 describe('Admin', () => {
-  describe('When logged in as a non-admin user', () => {
+  describeWithAnnotations('When logged in as a non-admin user', [], () => {
     before(async () => {
       await LoginStubPage.loginAsNonAdmin()
       await AdminPage.open()
@@ -25,7 +26,7 @@ describe('Admin', () => {
     })
   })
 
-  describe('When logged in as admin user', () => {
+  describeWithAnnotations('When logged in as admin user', [], () => {
     before(async () => {
       await LoginStubPage.loginAsAdmin()
       await AdminPage.open()

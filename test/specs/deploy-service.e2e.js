@@ -13,9 +13,10 @@ import {
   populateDeploymentOptions,
   waitForDeploymentToFinish
 } from 'helpers/deploy-service.js'
+import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 describe('Deploy service', () => {
-  describe('When logged out', () => {
+  describeWithAnnotations('When logged out', [], () => {
     before(async () => {
       await DeployPage.open()
     })
@@ -29,7 +30,7 @@ describe('Deploy service', () => {
     })
   })
 
-  describe('When logged in as admin user', () => {
+  describeWithAnnotations('When logged in as admin user', [], () => {
     const options = {
       imageName: 'cdp-portal-backend',
       version: '0.3.0',
@@ -191,7 +192,7 @@ describe('Deploy service', () => {
     })
   })
 
-  describe('When logged in as tenant user', () => {
+  describeWithAnnotations('When logged in as tenant user', [], () => {
     const options = {
       imageName: 'tenant-backend',
       version: '0.1.0',

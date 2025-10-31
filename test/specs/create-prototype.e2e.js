@@ -10,9 +10,10 @@ import LoginStubPage from 'page-objects/login-stub.page'
 import GovukSummaryListComponent from 'components/govuk-summary-list.component.js'
 import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
 import StatusPage from 'page-objects/status.page.js'
+import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 describe('Create prototype', () => {
-  describe('When logged out', () => {
+  describeWithAnnotations('When logged out', ['@smoke'], () => {
     before(async () => {
       await CreatePage.open()
     })
@@ -26,7 +27,7 @@ describe('Create prototype', () => {
     })
   })
 
-  describe('When logged in as admin user', () => {
+  describeWithAnnotations('When logged in as admin user', [], () => {
     const testRepositoryName = `test-prototype-${new Date().getTime()}`
 
     before(async () => {

@@ -7,12 +7,13 @@ import PageHeadingComponent from 'components/page-heading.component'
 import LinkComponent from 'components/link.component'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
-import GovukSummaryListComponent from 'components/govuk-summary-list.component.js'
+import GovUkSummaryListComponent from 'components/govuk-summary-list.component.js'
 import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
 import StatusPage from 'page-objects/status.page.js'
+import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 describe('Create microservice', () => {
-  describe('When logged out', () => {
+  describeWithAnnotations('When logged out', ['@smoke'], () => {
     before(async () => {
       await CreatePage.open()
     })
@@ -26,7 +27,7 @@ describe('Create microservice', () => {
     })
   })
 
-  describe('When logged in as admin user', () => {
+  describeWithAnnotations('When logged in as admin user', [], () => {
     const testRepositoryName = `test-repo-${new Date().getTime()}`
     const serviceTypes = [
       'DotNet Backend',
@@ -105,20 +106,20 @@ describe('Create microservice', () => {
         )
       ).toExist()
 
-      await expect(await GovukSummaryListComponent.row('row-Kind')).toHaveText(
+      await expect(await GovUkSummaryListComponent.row('row-Kind')).toHaveText(
         'Microservice'
       )
-      await expect(await GovukSummaryListComponent.row('row-Name')).toHaveText(
+      await expect(await GovUkSummaryListComponent.row('row-Name')).toHaveText(
         testRepositoryName
       )
       await expect(
-        await GovukSummaryListComponent.row('row-Template')
+        await GovUkSummaryListComponent.row('row-Template')
       ).toHaveText(serviceType)
       await expect(
-        await GovukSummaryListComponent.row('row-Templatetag')
+        await GovUkSummaryListComponent.row('row-Templatetag')
       ).toHaveText('')
       await expect(
-        await GovukSummaryListComponent.row('row-OwningTeam')
+        await GovUkSummaryListComponent.row('row-OwningTeam')
       ).toHaveText('Platform')
 
       await FormComponent.submitButton('Create').click()
