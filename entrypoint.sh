@@ -5,7 +5,7 @@ if [ -n "$PROFILE" ]; then
   echo "Running npm test:$PROFILE..."
   npm run "test:$PROFILE"
 else
-  echo "Running default npm test..."
+  echo "Running npm test..."
   npm test
 fi
 
