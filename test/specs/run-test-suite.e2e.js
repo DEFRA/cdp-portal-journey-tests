@@ -9,7 +9,7 @@ import { describeWithAnnotations } from 'helpers/test-filters.js'
 describe('Run Test Suite', () => {
   const testSuiteName = 'cdp-env-test-suite'
 
-  describeWithAnnotations('When logged out', ['@smoke'], () => {
+  describeWithAnnotations('When logged out', [], () => {
     before(async () => {
       await TestSuitePage.open(testSuiteName)
     })
