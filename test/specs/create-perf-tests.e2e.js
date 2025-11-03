@@ -15,7 +15,7 @@ import StatusPage from 'page-objects/status.page.js'
 import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 describe('Create perf tests', () => {
-  describeWithAnnotations('When logged out', [], () => {
+  describeWithAnnotations('When logged out', ['@smoke'], () => {
     before(async () => {
       await CreatePage.open()
     })

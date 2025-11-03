@@ -1,6 +1,6 @@
 import { $, browser, expect } from '@wdio/globals'
 
-import CreatePage from 'page-objects/create.page'
+import CreatePage from 'page-objects/create.page.js'
 import FormComponent from 'components/form.component'
 import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
