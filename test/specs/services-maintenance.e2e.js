@@ -38,7 +38,7 @@ const checkShutterStatus = async ({
 }
 
 describe('Services maintenance - shuttering', () => {
-  describeWithAnnotations('When logged out', [], () => {
+  describeWithAnnotations('When logged out', ['@smoke'], () => {
     it('Should not be able to browse to maintenance page', async () => {
       await ServicesMaintenancePage.open(adminOwnedService)
       await expect(browser).toHaveTitle(

@@ -16,7 +16,7 @@ import {
 import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 describe('Deploy service', () => {
-  describeWithAnnotations('When logged out', [], () => {
+  describeWithAnnotations('When logged out', ['@smoke'], () => {
     before(async () => {
       await DeployPage.open()
     })
