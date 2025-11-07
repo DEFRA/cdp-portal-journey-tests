@@ -36,11 +36,11 @@ async function createMicroService(name, teamName) {
   // Status page
   for (const resource of [
     'Repository',
-    'TenantServices',
-    'SquidProxy',
-    'NginxUpstreams',
-    'AppConfig',
-    'GrafanaDashboard'
+    'Infra',
+    'Logs',
+    'Metrics',
+    'Nginx',
+    'Squid'
   ]) {
     await $(`[data-testid="${resource}-created"]`).waitForExist({
       timeout: oneMinute
@@ -50,7 +50,7 @@ async function createMicroService(name, teamName) {
   await waitForCreateEntityStatus('Created')
   await expect(StatusPage.overallProgress()).toHaveText('Created')
   await expect(browser).toHaveTitle(
-    `Created ${name} microservice | Core Delivery Platform - Portal`
+    `Created ${name} Microservice | Core Delivery Platform - Portal`
   )
 
   // Click link to new microservice page

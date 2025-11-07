@@ -4,7 +4,7 @@ import CreatePage from 'page-objects/create.page.js'
 import DeployPage from 'page-objects/deploy.page.js'
 import DeploymentsPage from 'page-objects/deployments.page.js'
 import FormComponent from 'components/form.component'
-import GovukSummaryListComponent from 'components/govuk-summary-list.component.js'
+import GovUkSummaryListComponent from 'components/govuk-summary-list.component.js'
 import LinkComponent from 'components/link.component'
 import LoginStubPage from 'page-objects/login-stub.page'
 import PageHeadingComponent from 'components/page-heading.component'
@@ -374,7 +374,7 @@ describeWithAnnotations('Postgres service page', [], () => {
           )
         ).toExist()
 
-        const $summaryList = await GovukSummaryListComponent.content()
+        const $summaryList = await GovUkSummaryListComponent.content()
 
         await expect($summaryList).toHaveHTML(
           expect.stringContaining(postgresService)
@@ -397,7 +397,7 @@ describeWithAnnotations('Postgres service page', [], () => {
         ).waitForExist()
 
         const updatedSummaryList =
-          await GovukSummaryListComponent.content().getHTML()
+          await GovUkSummaryListComponent.content().getHTML()
 
         await expect(
           updatedSummaryList.includes(
