@@ -127,7 +127,7 @@ describe('Create microservice', () => {
 
     it('Should be redirected to microservice status page', async () => {
       await expect(browser).toHaveTitle(
-        `Creating ${testRepositoryName} microservice | Core Delivery Platform - Portal`
+        `Creating ${testRepositoryName} Microservice | Core Delivery Platform - Portal`
       )
       await expect(await ServicesPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Service')).toExist()
@@ -144,17 +144,17 @@ describe('Create microservice', () => {
 
       for (const resource of [
         'Repository',
-        'TenantServices',
-        'SquidProxy',
-        'NginxUpstreams',
-        'AppConfig',
-        'GrafanaDashboard'
+        'Infra',
+        'Logs',
+        'Metrics',
+        'Nginx',
+        'Squid'
       ]) {
         await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
       }
 
       await expect(browser).toHaveTitle(
-        `Created ${testRepositoryName} microservice | Core Delivery Platform - Portal`
+        `Created ${testRepositoryName} Microservice | Core Delivery Platform - Portal`
       )
 
       await ServicesPage.link('Refresh').click()
