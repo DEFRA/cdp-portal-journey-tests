@@ -101,7 +101,7 @@ describe('Create perf tests', () => {
 
     it('Should be redirected to test-suite status page', async () => {
       await expect(browser).toHaveTitle(
-        `Creating ${testRepositoryName} test suite | Core Delivery Platform - Portal`
+        `Creating ${testRepositoryName} TestSuite | Core Delivery Platform - Portal`
       )
       await expect(await TestSuitesPage.navIsActive()).toBe(true)
       await expect(PageHeadingComponent.caption('Test Suite')).toExist()
@@ -118,15 +118,17 @@ describe('Create perf tests', () => {
 
       for (const resource of [
         'Repository',
-        'TenantServices',
-        'SquidProxy',
-        'AppConfig'
+        'Infra',
+        'Logs',
+        'Metrics',
+        'Nginx',
+        'Squid'
       ]) {
         await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
       }
 
       await expect(browser).toHaveTitle(
-        `Created ${testRepositoryName} test suite | Core Delivery Platform - Portal`
+        `Created ${testRepositoryName} TestSuite | Core Delivery Platform - Portal`
       )
 
       await ServicesPage.link('Refresh').click()
