@@ -1,0 +1,13 @@
+services:
+  ################################################################################
+  localstack:
+    environment:
+      - LOCALSTACK_HOST=127.0.0.1
+      - SERVICES=s3,sqs,sns,dynamodb,firehose,secretsmanager,lambda
+      - LS_LOG=WARN
+    volumes:
+      - ./scripts/localstack/assets:/opt/code/localstack/assets
+      - ./config/local-defaults.env:/etc/localstack/conf.d/defaults.env:ro
+      - ./scripts/localstack:/etc/localstack/init/ready.d
+      - /var/run/docker.sock:/var/run/docker.sock
+

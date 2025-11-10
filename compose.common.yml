@@ -116,7 +116,7 @@ services:
       cdp-self-service-ops:
         condition: service_started
       cdp-user-service-backend:
-        condition: service_started
+        condition: service_healthy
       cdp-portal-stubs:
         condition: service_healthy
 
