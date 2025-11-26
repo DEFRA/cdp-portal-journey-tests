@@ -175,7 +175,7 @@ describe('Create microservice', () => {
       await ServicesPage.open()
 
       await expect(browser).toHaveTitle(
-        'Services | Core Delivery Platform - Portal'
+        'My Services | Core Delivery Platform - Portal'
       )
       await expect(await ServicesPage.navIsActive()).toBe(true)
       await expect(await PageHeadingComponent.title('Services')).toExist()
