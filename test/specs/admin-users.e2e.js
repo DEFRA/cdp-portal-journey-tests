@@ -328,6 +328,11 @@ describe('Admin Users', () => {
           ).toExist()
 
           await LinkComponent.link('nav-services', 'Services').click()
+
+          const allServicesTab = await TabsComponent.tab('All Services')
+          await expect(allServicesTab).toExist()
+          await allServicesTab.click()
+
           await LinkComponent.link('app-link', 'tenant-backend').click()
           await expect(TabsComponent.activeTab()).toHaveText('About')
           await expect(TabsComponent.tab('Automations')).not.toExist()
