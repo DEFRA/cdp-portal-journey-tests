@@ -43,7 +43,7 @@ describe('Services page', () => {
       await ServicesPage.open()
 
       await expect(browser).toHaveTitle(
-        'Services | Core Delivery Platform - Portal'
+        'My Services | Core Delivery Platform - Portal'
       )
 
       await expect(await ServicesPage.navIsActive()).toBe(true)
@@ -234,7 +234,7 @@ describeWithAnnotations('Postgres service page', [], () => {
         await ServicesPage.open()
 
         await expect(browser).toHaveTitle(
-          'Services | Core Delivery Platform - Portal'
+          'My Services | Core Delivery Platform - Portal'
         )
 
         await expect(await ServicesPage.navIsActive()).toBe(true)
@@ -443,7 +443,7 @@ describeWithAnnotations('Postgres service page', [], () => {
           await ServicesPage.open()
 
           await expect(browser).toHaveTitle(
-            'Services | Core Delivery Platform - Portal'
+            'My Services | Core Delivery Platform - Portal'
           )
 
           await expect(await ServicesPage.navIsActive()).toBe(true)
