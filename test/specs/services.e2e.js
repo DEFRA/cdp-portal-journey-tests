@@ -449,6 +449,10 @@ describeWithAnnotations('Postgres service page', [], () => {
           await expect(await ServicesPage.navIsActive()).toBe(true)
           await expect(await PageHeadingComponent.title('Services')).toExist()
 
+          const allServicesTab = await TabsComponent.tab('All Services')
+          await expect(allServicesTab).toExist()
+          await allServicesTab.click()
+
           await LinkComponent.link('app-link', postgresService).click()
 
           await expect(browser).toHaveTitle(
