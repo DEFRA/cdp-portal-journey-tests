@@ -46,13 +46,13 @@ def ensure_topic(sns_client, name: str) -> str:
     return topic_arn
 
 
-def subscribe_queue_to_topic(sns_client, topic_arn: str, queue_arn: str) -> None:
+def subscribe_queue_to_topic(sns_client, topic_arn: str, queue_arn: str, attributes: dict[str, str]) -> None:
     try:
         sns_client.subscribe(
             TopicArn=topic_arn,
             Protocol="sqs",
             Endpoint=queue_arn,
-            Attributes={"RawMessageDelivery": "true"},
+            Attributes=attributes # e.g. {"RawMessageDelivery": "true"},
         )
         LOGGER.info("Subscribed %s to %s", queue_arn, topic_arn)
     except ClientError as exc:
@@ -208,15 +208,15 @@ def main() -> None:
     ]
 
     subscriptions = [
-        ("cdp_workflow_events", "cdp_workflow_events"),
-        ("cdp_platform_portal_events", "cdp_platform_portal_events"),
-        ("deploy-topic", "deployments-from-portal"),
-        ("cdp-notification", "cdp-notification"),
-        ("cdp-notification", "stub-slack-messages"),
-        ("secret_management", "secret_management_updates"),
-        ("secret_management", "secret_management_updates_lambda"),
-        ("run-test-topic", "run-test-from-portal"),
-        ("run-migrations-topic", "run-migrations-from-portal"),
+        ("cdp_workflow_events", "cdp_workflow_events", {}),
+        ("cdp_platform_portal_events", "cdp_platform_portal_events", {}),
+        ("deploy-topic", "deployments-from-portal", {}),
+        ("cdp-notification", "cdp-notification", {}),
+        ("cdp-notification", "stub-slack-messages", {}),
+        ("secret_management", "secret_management_updates", {}),
+        ("secret_management", "secret_management_updates_lambda", {}),
+        ("run-test-topic", "run-test-from-portal", {}),
+        ("run-migrations-topic", "run-migrations-from-portal", {}),
     ]
 
     bucket_names = [
@@ -237,11 +237,12 @@ def main() -> None:
     for topic_name in topic_names:
         topic_arns[topic_name] = ensure_topic(sns_client, topic_name)
 
-    for topic_name, queue_name in subscriptions:
+    for topic_name, queue_name, attributes in subscriptions:
         subscribe_queue_to_topic(
             sns_client,
             topic_arns[topic_name],
             queue_info[queue_name]["arn"],
+            attributes
         )
 
     LOGGER.info("Setting up buckets")
