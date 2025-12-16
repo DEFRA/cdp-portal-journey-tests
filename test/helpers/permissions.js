@@ -9,27 +9,6 @@ import PageHeadingComponent from 'components/page-heading.component.js'
 import EntityTableComponent from 'components/entity-table.component.js'
 import GovukTableComponent from 'components/govuk-table.component'
 
-async function createPermission(permissionName, applicableTo) {
-  // Go to permissions create form
-  await AdminPage.open()
-  await SplitPaneComponent.subNavItem('permissions').click()
-  await LinkComponent.link(
-    'app-page-heading-cta',
-    'Create new permission'
-  ).click()
-
-  // Fill out form
-  await FormComponent.inputLabel('Value').click()
-  await browser.keys(permissionName)
-
-  await FormComponent.inputLabel(applicableTo).click()
-
-  await FormComponent.inputLabel('Description').click()
-  await browser.keys(permissionName + ' permission')
-
-  await FormComponent.submitButton('Create').click()
-}
-
 async function addPermissionToTeam(permissionName, teamName) {
   // Go to addPermissionToTeam
   await AdminPage.open()
@@ -37,9 +16,9 @@ async function addPermissionToTeam(permissionName, teamName) {
   await EntityTableComponent.entityLink(permissionName).click()
 
   // Add permission to team
-  await LinkComponent.link('add-permission', 'Add permission to a team').click()
+  await LinkComponent.link('add-permission', 'Add permission to a').click()
 
-  await FormComponent.inputLabel('Search for a Team').click()
+  await FormComponent.inputLabel('Search for a').click()
   await browser.keys(teamName)
   await FormComponent.inputLabel(teamName).click()
 
@@ -99,28 +78,8 @@ async function removeMemberFromPermission({ permissionName, memberName }) {
   await FormComponent.submitButton('Remove permission').click()
 }
 
-async function deletePermission(permissionName) {
-  await AdminPage.open()
-  await SplitPaneComponent.subNavItem('permissions').click()
-  await LinkComponent.link('app-entity-link', permissionName).click()
-
-  await expect(PageHeadingComponent.title(permissionName)).toExist()
-  await LinkComponent.link('delete-permission', 'Delete permission').click()
-
-  await expect(PageHeadingComponent.title(permissionName)).toExist()
-  await expect(PageHeadingComponent.caption('Delete Permission')).toExist()
-  await FormComponent.submitButton('Delete permission').click()
-
-  await expect(PageHeadingComponent.title('Permissions')).toExist()
-  await expect(
-    LinkComponent.link('app-entity-link', permissionName)
-  ).not.toExist()
-}
-
 export {
   addPermissionToTeam,
   addPermissionToMember,
-  removeMemberFromPermission,
-  createPermission,
-  deletePermission
+  removeMemberFromPermission
 }

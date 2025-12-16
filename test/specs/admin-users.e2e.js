@@ -10,7 +10,8 @@ import EntityTableComponent from 'components/entity-table.component'
 import GovUkSummaryListComponent from 'components/govuk-summary-list.component'
 import LoginStubPage from 'page-objects/login-stub.page'
 import AdminTeamPage from 'page-objects/admin-team.page'
-import { createPermission, deletePermission } from 'helpers/permissions.js'
+import SplitPaneComponent from 'components/split-pane.component.js'
+
 import TabsComponent from 'components/tabs.component.js'
 import { describeWithAnnotations } from 'helpers/test-filters.js'
 
@@ -300,9 +301,12 @@ describe('Admin Users', () => {
       'When using testAsTenant permission to temporarily drop admin addPermissionToTeam',
       [],
       () => {
-        it('Should be able to create the "testAsTenant" permission and assign to admin user', async () => {
+        it('Should be able to select the "testAsTenant" permission and assign to admin user', async () => {
           await LoginStubPage.loginAsAdmin()
-          await createPermission('testAsTenant', 'User')
+
+          await AdminPage.open()
+          await SplitPaneComponent.subNavItem('permissions').click()
+          await EntityTableComponent.entityLink('testAsTenant').click()
 
           // Add permission to team
           await LinkComponent.link(
@@ -353,7 +357,7 @@ describe('Admin Users', () => {
 
         it('Remove permission and see not listed on users page', async () => {
           await LoginStubPage.loginAsAdmin()
-          await deletePermission('testAsTenant')
+          await AdminPage.open()
           await LinkComponent.link('app-subnav-link-users', 'Users').click()
           await onTheAdminUsersPage()
           await LinkComponent.link('app-entity-link', 'Admin User').click()
