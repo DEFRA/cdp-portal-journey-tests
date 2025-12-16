@@ -200,7 +200,7 @@ docker stop <container-id>
 > the [config](./config) folder.
 
 ```bash
-NODE_ENV=development APP_BASE_URL=http://cdp.127.0.0.1.sslip.io:3000 USE_SINGLE_INSTANCE_CACHE=true PORTAL_BACKEND_URL=http://cdp.127.0.0.1.sslip.io:5094 SELF_SERVICE_OPS_URL=http://cdp.127.0.0.1.sslip.io:3009 USER_SERVICE_BACKEND_URL=http://cdp.127.0.0.1.sslip.io:3001 TERMINAL_PROXY_URL=http://cdp.127.0.0.1.sslip.io:8085 AZURE_CLIENT_SECRET=test_value OIDC_WELL_KNOWN_CONFIGURATION_URL=http://cdp.127.0.0.1.sslip.io:3939/6f504113-6b64-43f2-ade9-242e05780007/v2.0/.well-known/openid-configuration AZURE_TENANT_ID=6f504113-6b64-43f2-ade9-242e05780007 OIDC_AUDIENCE=26372ac9-d8f0-4da9-a17e-938eb3161d8e npm run dev:debug
+NODE_ENV=development APP_BASE_URL=http://cdp.127.0.0.1.sslip.io:3000 USE_SINGLE_INSTANCE_CACHE=true PORTAL_BACKEND_URL=http://cdp.127.0.0.1.sslip.io:5094 SELF_SERVICE_OPS_URL=http://cdp.127.0.0.1.sslip.io:3009 USER_SERVICE_BACKEND_URL=http://cdp.127.0.0.1.sslip.io:3001 TERMINAL_PROXY_URL=http://cdp.127.0.0.1.sslip.io:8085 AZURE_CLIENT_SECRET=test_value OIDC_WELL_KNOWN_CONFIGURATION_URL=http://cdp.127.0.0.1.sslip.io:3939/6f504113-6b64-43f2-ade9-242e05780007/v2.0/.well-known/openid-configuration AZURE_TENANT_ID=6f504113-6b64-43f2-ade9-242e05780007 OIDC_AUDIENCE=26372ac9-d8f0-4da9-a17e-938eb3161d8e AZURE_CREDENTIALS_ENABLE_MOCKING=true npm run dev:debug
 ```
 
 1. Open your browser with [http://cdp.127.0.0.1.sslip.io:3000](http://cdp.127.0.0.1.sslip.io:3000)
