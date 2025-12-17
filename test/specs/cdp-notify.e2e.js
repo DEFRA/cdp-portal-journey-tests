@@ -11,14 +11,12 @@ import githubJourneyTestFailed from '../messages/github/journey-test-failed.json
 import githubJourneyTestSuccess from '../messages/github/journey-test-success.json' with { type: 'json' }
 import githubInfraFailed from '../messages/github/infra-test-failed.json' with { type: 'json' }
 import githubInfraSuccess from '../messages/github/infra-test-success.json' with { type: 'json' }
-import { describeWithAnnotations } from 'helpers/test-filters.js'
-
 describe('#cdp-notify', () => {
   beforeEach(async () => {
     await resetAlertStubs()
   })
 
-  describeWithAnnotations('Slack handler', [], () => {
+  describe('Slack handler', () => {
     it('should send Slack messages when a create workflow fails', async () => {
       const payload = githubCreateWorkflowFailed
       await sendAlerts(payload, 'github')
@@ -110,7 +108,7 @@ describe('#cdp-notify', () => {
     })
   })
 
-  describeWithAnnotations('email handler', [], () => {
+  describe('email handler', () => {
     it('should ignore the pager duty flag', async () => {
       const payload = grafanaTriggerByPagerDutyFlag
 
@@ -123,7 +121,7 @@ describe('#cdp-notify', () => {
     })
   })
 
-  describeWithAnnotations('pagerduty handler', [], () => {
+  describe('pagerduty handler', () => {
     it('should only trigger if pagerDuty field is set to true', async () => {
       const payload = grafanaTriggerByPagerDutyFlag
 

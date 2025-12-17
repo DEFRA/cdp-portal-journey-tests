@@ -9,8 +9,6 @@ import GovukSummaryListComponent from 'components/govuk-summary-list.component'
 import LoginStubPage from 'page-objects/login-stub.page'
 import AdminTeamsPage from 'page-objects/admin-teams.page'
 import AdminTeamPage from 'page-objects/admin-team.page'
-import { describeWithAnnotations } from 'helpers/test-filters.js'
-
 const mockTenantTeam = 'AnotherTenantTeam'
 
 async function onTheAdminTeamsPage() {
@@ -30,12 +28,12 @@ async function onTheAnotherTenantTeamAdminPage() {
   await expect(await PageHeadingComponent.caption('Team')).toExist()
 }
 
-describeWithAnnotations('Admin Teams', [], () => {
+describe('Admin Teams', () => {
   before(async () => {
     await LoginStubPage.loginAsAdmin()
   })
 
-  describeWithAnnotations('When creating a new team', [], () => {
+  describe('When creating a new team', () => {
     it('Should be able to view the "Admin Teams" list page', async () => {
       await AdminTeamsPage.open()
       await onTheAdminTeamsPage()
@@ -115,7 +113,7 @@ describeWithAnnotations('Admin Teams', [], () => {
     })
   })
 
-  describeWithAnnotations('When deleting a team', [], () => {
+  describe('When deleting a team', () => {
     it('Should be able to go to the Admin Teams page', async () => {
       await LinkComponent.link('app-subnav-link-teams', 'Teams').click()
       await onTheAdminTeamsPage()

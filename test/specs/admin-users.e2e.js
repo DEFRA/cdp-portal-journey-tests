@@ -13,8 +13,6 @@ import AdminTeamPage from 'page-objects/admin-team.page'
 import SplitPaneComponent from 'components/split-pane.component.js'
 
 import TabsComponent from 'components/tabs.component.js'
-import { describeWithAnnotations } from 'helpers/test-filters.js'
-
 const mockUserName = 'A Stub'
 
 async function onTheAdminUsersPage() {
@@ -45,7 +43,7 @@ async function onTheUsersPage(userName = mockUserName) {
 }
 
 describe('Admin Users', () => {
-  describeWithAnnotations('When logged in as admin', [], () => {
+  describe('When logged in as admin', () => {
     before(async () => {
       await LoginStubPage.loginAsAdmin()
       await AdminPage.open()
@@ -55,7 +53,7 @@ describe('Admin Users', () => {
       await LoginStubPage.logOut()
     })
 
-    describeWithAnnotations('When creating a new user', [], () => {
+    describe('When creating a new user', () => {
       it('Should be on the "Admin Users" list page', async () => {
         await onTheAdminUsersPage()
       })
@@ -144,116 +142,112 @@ describe('Admin Users', () => {
       })
     })
 
-    describeWithAnnotations(
-      'When adding and removing a user from the Platform team',
-      [],
-      () => {
-        it('Should be able to navigate to the "Admin Teams" page', async () => {
-          await expect(await AdminPage.navIsActive()).toBe(true)
-          await LinkComponent.link('app-subnav-link-teams', 'Teams').click()
-        })
+    describe('When adding and removing a user from the Platform team', () => {
+      it('Should be able to navigate to the "Admin Teams" page', async () => {
+        await expect(await AdminPage.navIsActive()).toBe(true)
+        await LinkComponent.link('app-subnav-link-teams', 'Teams').click()
+      })
 
-        it('Should be on the "Admin Teams" list page', async () => {
-          await expect(browser).toHaveTitle(
-            'Teams | Core Delivery Platform - Portal'
-          )
-          await expect(await AdminPage.navIsActive()).toBe(true)
-          await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
-          await expect(await PageHeadingComponent.title('Teams')).toExist()
+      it('Should be on the "Admin Teams" list page', async () => {
+        await expect(browser).toHaveTitle(
+          'Teams | Core Delivery Platform - Portal'
+        )
+        await expect(await AdminPage.navIsActive()).toBe(true)
+        await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
+        await expect(await PageHeadingComponent.title('Teams')).toExist()
 
-          await expect(EntityTableComponent.content('Platform')).toExist()
-          await expect(EntityTableComponent.content('@cdp-platform')).toExist()
-        })
+        await expect(EntityTableComponent.content('Platform')).toExist()
+        await expect(EntityTableComponent.content('@cdp-platform')).toExist()
+      })
 
-        it("Should be able to go to the Platform Team's page", async () => {
-          await LinkComponent.link('app-entity-link', 'Platform').click()
-          await onTheAdminPlatformTeamPage()
-        })
+      it("Should be able to go to the Platform Team's page", async () => {
+        await LinkComponent.link('app-entity-link', 'Platform').click()
+        await onTheAdminPlatformTeamPage()
+      })
 
-        it('Should be able to add a user to the team', async () => {
-          await LinkComponent.link(
-            'admin-add-team-member',
-            'Add member to team'
-          ).click()
+      it('Should be able to add a user to the team', async () => {
+        await LinkComponent.link(
+          'admin-add-team-member',
+          'Add member to team'
+        ).click()
 
-          await expect(browser).toHaveTitle(
-            'Add Team Member | Core Delivery Platform - Portal'
-          )
-          await expect(await AdminPage.navIsActive()).toBe(true)
-          await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
-          await expect(await PageHeadingComponent.title('Platform')).toExist()
-          await expect(
-            PageHeadingComponent.caption('Add Member to Team')
-          ).toExist()
-        })
+        await expect(browser).toHaveTitle(
+          'Add Team Member | Core Delivery Platform - Portal'
+        )
+        await expect(await AdminPage.navIsActive()).toBe(true)
+        await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
+        await expect(await PageHeadingComponent.title('Platform')).toExist()
+        await expect(
+          PageHeadingComponent.caption('Add Member to Team')
+        ).toExist()
+      })
 
-        it('Should be able to find CDP user', async () => {
-          await FormComponent.inputLabel('CDP users name or email').click()
-          await browser.keys('test')
+      it('Should be able to find CDP user', async () => {
+        await FormComponent.inputLabel('CDP users name or email').click()
+        await browser.keys('test')
 
-          const aadUserSearchResult = FormComponent.inputLabel(
-            'A Stub - a.stub@test.co'
-          )
-          await expect(aadUserSearchResult).toExist()
-          await aadUserSearchResult.click()
-          await FormComponent.submitButton('Add').click()
-        })
+        const aadUserSearchResult = FormComponent.inputLabel(
+          'A Stub - a.stub@test.co'
+        )
+        await expect(aadUserSearchResult).toExist()
+        await aadUserSearchResult.click()
+        await FormComponent.submitButton('Add').click()
+      })
 
-        it('Should be able to see the added user', async () => {
-          await onTheAdminPlatformTeamPage()
+      it('Should be able to see the added user', async () => {
+        await onTheAdminPlatformTeamPage()
 
-          await expect(AdminTeamPage.teamMembers()).toHaveText(
-            new RegExp(mockUserName, 'g')
-          )
-        })
+        await expect(AdminTeamPage.teamMembers()).toHaveText(
+          new RegExp(mockUserName, 'g')
+        )
+      })
 
-        it('Clicking on the added user takes should go to user details page, showing the team', async () => {
-          await LinkComponent.link('app-link', mockUserName).click()
-          await onTheUsersPage()
-          await expect(LinkComponent.link('app-link', 'Platform')).toExist()
-        })
+      it('Clicking on the added user takes should go to user details page, showing the team', async () => {
+        await LinkComponent.link('app-link', mockUserName).click()
+        await onTheUsersPage()
+        await expect(LinkComponent.link('app-link', 'Platform')).toExist()
+      })
 
-        it('Clicking on the team should take you to the Team page', async () => {
-          await LinkComponent.link('app-link', 'Platform').click()
-          await onTheAdminPlatformTeamPage()
-        })
+      it('Clicking on the team should take you to the Team page', async () => {
+        await LinkComponent.link('app-link', 'Platform').click()
+        await onTheAdminPlatformTeamPage()
+      })
 
-        it('Should be able to remove the user from the team', async () => {
-          await expect(AdminTeamPage.teamMembers()).toHaveText(
-            new RegExp(mockUserName, 'g')
-          )
-          await AdminTeamPage.removeButton(mockUserName).click()
-        })
+      it('Should be able to remove the user from the team', async () => {
+        await expect(AdminTeamPage.teamMembers()).toHaveText(
+          new RegExp(mockUserName, 'g')
+        )
+        await AdminTeamPage.removeButton(mockUserName).click()
+      })
 
-        it('Should be on the confirm remove member page', async () => {
-          await expect(browser).toHaveTitle(
-            'Remove Team Member | Core Delivery Platform - Portal'
-          )
-          await expect(await AdminPage.navIsActive()).toBe(true)
-          await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
-          await expect(
-            PageHeadingComponent.caption('Remove Member from Team')
-          ).toExist()
-          await expect(await PageHeadingComponent.title('Platform')).toExist()
+      it('Should be on the confirm remove member page', async () => {
+        await expect(browser).toHaveTitle(
+          'Remove Team Member | Core Delivery Platform - Portal'
+        )
+        await expect(await AdminPage.navIsActive()).toBe(true)
+        await expect(await AdminTeamPage.subNavIsActive()).toBe(true)
+        await expect(
+          PageHeadingComponent.caption('Remove Member from Team')
+        ).toExist()
+        await expect(await PageHeadingComponent.title('Platform')).toExist()
 
-          await FormComponent.submitButton('Remove team member').click()
-        })
+        await FormComponent.submitButton('Remove team member').click()
+      })
 
-        it('Member should have been removed', async () => {
-          await onTheAdminPlatformTeamPage()
+      it('Member should have been removed', async () => {
+        await onTheAdminPlatformTeamPage()
 
-          await expect(
-            BannerComponent.content('Member removed from team')
-          ).toExist()
+        await expect(
+          BannerComponent.content('Member removed from team')
+        ).toExist()
 
-          await expect(AdminTeamPage.teamMembers()).not.toHaveText(
-            new RegExp(mockUserName, 'g')
-          )
-        })
-      }
-    )
+        await expect(AdminTeamPage.teamMembers()).not.toHaveText(
+          new RegExp(mockUserName, 'g')
+        )
+      })
+    })
 
-    describeWithAnnotations('When deleting a user', [], () => {
+    describe('When deleting a user', () => {
       it('Should be able to go to the Admin Users page', async () => {
         await LinkComponent.link('app-subnav-link-users', 'Users').click()
         await onTheAdminUsersPage()
@@ -297,79 +291,75 @@ describe('Admin Users', () => {
       })
     })
 
-    describeWithAnnotations(
-      'When using testAsTenant permission to temporarily drop admin addPermissionToTeam',
-      [],
-      () => {
-        it('Should be able to select the "testAsTenant" permission and assign to admin user', async () => {
-          await LoginStubPage.loginAsAdmin()
+    describe('When using testAsTenant permission to temporarily drop admin addPermissionToTeam', () => {
+      it('Should be able to select the "testAsTenant" permission and assign to admin user', async () => {
+        await LoginStubPage.loginAsAdmin()
 
-          await AdminPage.open()
-          await SplitPaneComponent.subNavItem('permissions').click()
-          await EntityTableComponent.entityLink('testAsTenant').click()
+        await AdminPage.open()
+        await SplitPaneComponent.subNavItem('permissions').click()
+        await EntityTableComponent.entityLink('testAsTenant').click()
 
-          // Add permission to team
-          await LinkComponent.link(
-            'add-permission',
-            'Add permission to a user'
-          ).click()
+        // Add permission to team
+        await LinkComponent.link(
+          'add-permission',
+          'Add permission to a user'
+        ).click()
 
-          await FormComponent.inputLabel('Search for a User').click()
-          await browser.keys('Admin')
-          await FormComponent.inputLabel('Admin User').click()
+        await FormComponent.inputLabel('Search for a User').click()
+        await browser.keys('Admin')
+        await FormComponent.inputLabel('Admin User').click()
 
-          await FormComponent.submitButton('Add permission').click()
-        })
+        await FormComponent.submitButton('Add permission').click()
+      })
 
-        it('Should be on the Forbidden 403 page', async () => {
-          await expect(PageHeadingComponent.title('403')).toExist()
-          await expect(PageHeadingComponent.caption('Error')).toExist()
-        })
+      it('Should be on the Forbidden 403 page', async () => {
+        await expect(PageHeadingComponent.title('403')).toExist()
+        await expect(PageHeadingComponent.caption('Error')).toExist()
+      })
 
-        it('Should be able to see "Exit Test as Tenant Mode" link in the nav bar and check that admin only tabs dont show on tenant service page', async () => {
-          await expect(
-            LinkComponent.link('nav-admin', 'Exit Test as Tenant Mode')
-          ).toExist()
+      it('Should be able to see "Exit Test as Tenant Mode" link in the nav bar and check that admin only tabs dont show on tenant service page', async () => {
+        await expect(
+          LinkComponent.link('nav-admin', 'Exit Test as Tenant Mode')
+        ).toExist()
 
-          await LinkComponent.link('nav-services', 'Services').click()
+        await LinkComponent.link('nav-services', 'Services').click()
 
-          const allServicesTab = await TabsComponent.tab('All Services')
-          await expect(allServicesTab).toExist()
-          await allServicesTab.click()
+        const allServicesTab = await TabsComponent.tab('All Services')
+        await expect(allServicesTab).toExist()
+        await allServicesTab.click()
 
-          await LinkComponent.link('app-link', 'tenant-backend').click()
-          await expect(TabsComponent.activeTab()).toHaveText('About')
-          await expect(TabsComponent.tab('Automations')).not.toExist()
-          await expect(TabsComponent.tab('Proxy')).toExist()
-          await expect(TabsComponent.tab('Resources')).toExist()
-          await expect(TabsComponent.tab('Secrets')).not.toExist()
-          await expect(TabsComponent.tab('Terminal')).not.toExist()
-        })
+        await LinkComponent.link('app-link', 'tenant-backend').click()
+        await expect(TabsComponent.activeTab()).toHaveText('About')
+        await expect(TabsComponent.tab('Automations')).not.toExist()
+        await expect(TabsComponent.tab('Proxy')).toExist()
+        await expect(TabsComponent.tab('Resources')).toExist()
+        await expect(TabsComponent.tab('Secrets')).not.toExist()
+        await expect(TabsComponent.tab('Terminal')).not.toExist()
+      })
 
-        it('Should be able to see "Exit Test as Tenant Mode" link in the nav bar', async () => {
-          await LinkComponent.link(
-            'nav-admin',
-            'Exit Test as Tenant Mode'
-          ).click()
+      it('Should be able to see "Exit Test as Tenant Mode" link in the nav bar', async () => {
+        await LinkComponent.link(
+          'nav-admin',
+          'Exit Test as Tenant Mode'
+        ).click()
 
-          await expect(LinkComponent.link('nav-admin', 'Admin')).toExist()
-        })
+        await expect(LinkComponent.link('nav-admin', 'Admin')).toExist()
+      })
 
-        it('Remove permission and see not listed on users page', async () => {
-          await LoginStubPage.loginAsAdmin()
-          await AdminPage.open()
-          await LinkComponent.link('app-subnav-link-users', 'Users').click()
-          await onTheAdminUsersPage()
-          await LinkComponent.link('app-entity-link', 'Admin User').click()
-          await onTheUsersPage('Admin User')
-          await expect(
-            LinkComponent.link('app-link', 'canGrantBreakGlass')
-          ).toExist()
-          await expect(LinkComponent.link('app-link', 'breakGlass')).toExist()
-          await expect(LinkComponent.link('app-link', 'externalTest')).toExist()
-          await expect(LinkComponent.link('app-link', 'admin')).toExist()
-        })
-      }
-    )
+      it('Remove permission and see not listed on users page', async () => {
+        await LoginStubPage.loginAsAdmin()
+        await AdminPage.open()
+        await LinkComponent.link('app-subnav-link-users', 'Users').click()
+        await onTheAdminUsersPage()
+        await LinkComponent.link('app-entity-link', 'Admin User').click()
+        await onTheUsersPage('Admin User')
+        await expect(
+          LinkComponent.link('app-link', 'canGrantBreakGlass')
+        ).toExist()
+        await expect(LinkComponent.link('app-link', 'breakGlass')).toExist()
+        await expect(LinkComponent.link('app-link', 'externalTest')).toExist()
+        await expect(LinkComponent.link('app-link', 'admin')).toExist()
+      })
+    })
   })
 })

@@ -4,12 +4,10 @@ import LoginStubPage from 'page-objects/login-stub.page'
 import BannerComponent from 'components/banner.component.js'
 import TabsComponent from 'components/tabs.component.js'
 import { waitForTestStatus } from 'helpers/test-suites.js'
-import { describeWithAnnotations } from 'helpers/test-filters.js'
-
 describe('Run Test Suite', () => {
   const testSuiteName = 'cdp-env-test-suite'
 
-  describeWithAnnotations('When logged out', [], () => {
+  describe('When logged out', () => {
     before(async () => {
       await TestSuitePage.open(testSuiteName)
     })
@@ -23,7 +21,7 @@ describe('Run Test Suite', () => {
     })
   })
 
-  describeWithAnnotations('When logged in as admin user', [], () => {
+  describe('When logged in as admin user', () => {
     before(async () => {
       await LoginStubPage.loginAsAdmin()
       await TestSuitePage.open(testSuiteName)
@@ -54,29 +52,25 @@ describe('Run Test Suite', () => {
     })
   })
 
-  describeWithAnnotations(
-    'When logged in as tenant user who doesnt own the test-suite',
-    [],
-    () => {
-      before(async () => {
-        await LoginStubPage.loginAsNonAdmin()
-        await TestSuitePage.open(testSuiteName)
-      })
+  describe('When logged in as tenant user who doesnt own the test-suite', () => {
+    before(async () => {
+      await LoginStubPage.loginAsNonAdmin()
+      await TestSuitePage.open(testSuiteName)
+    })
 
-      it('Should be on the test run page', async () => {
-        await expect(browser).toHaveTitle(
-          `Test Suite - ${testSuiteName} | Core Delivery Platform - Portal`
-        )
+    it('Should be on the test run page', async () => {
+      await expect(browser).toHaveTitle(
+        `Test Suite - ${testSuiteName} | Core Delivery Platform - Portal`
+      )
 
-        await expect(TabsComponent.activeTab()).toHaveText('About')
-        await expect(TabsComponent.tab('Secrets')).not.toExist()
-        await expect(TabsComponent.tab('Proxy')).toExist()
-      })
+      await expect(TabsComponent.activeTab()).toHaveText('About')
+      await expect(TabsComponent.tab('Secrets')).not.toExist()
+      await expect(TabsComponent.tab('Proxy')).toExist()
+    })
 
-      it('should not allow the test suite to be run in infra-dev', async () => {
-        await expect(TestSuitePage.selectEnvironment()).not.toBeDisplayed()
-        await expect(TestSuitePage.startButton()).not.toBeDisplayed()
-      })
-    }
-  )
+    it('should not allow the test suite to be run in infra-dev', async () => {
+      await expect(TestSuitePage.selectEnvironment()).not.toBeDisplayed()
+      await expect(TestSuitePage.startButton()).not.toBeDisplayed()
+    })
+  })
 })
