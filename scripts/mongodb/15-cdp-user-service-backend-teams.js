@@ -2,12 +2,81 @@ db = db.getSiblingDB('cdp-user-service-backend')
 
 db.scopes.updateOne(
   {
+    value: 'testAsTenant'
+  },
+  {
+    $setOnInsert: {
+      _id: new ObjectId('68650ff52cca2f334b19ba73'),
+      userId: '90552794-0613-4023-819a-512aa9d40023',
+      value: 'testAsTenant',
+      kind: ['user'],
+      description:
+        'When added to an individual, it will temporarily disable admin permission to allow the user to test the portal as if they were a tenant.',
+      teams: [],
+      users: [],
+      members: [],
+      createdAt: '2024-12-02T17:34:21.295Z',
+      updatedAt: '2024-12-02T17:34:21.295Z'
+    }
+  },
+  { upsert: true }
+)
+
+db.scopes.updateOne(
+  {
+    value: 'restrictedTechPostgres'
+  },
+  {
+    $setOnInsert: {
+      _id: new ObjectId('67ff92737e4db64d50654c4d'),
+      userId: '90552794-0613-4023-819a-512aa9d40023',
+      scopeId: 'restrictedTechPostgres',
+      value: 'restrictedTechPostgres',
+      kind: ['user', 'team'],
+      description:
+        'A restricted tech permission to allow Postgres service management to a team or user',
+      teams: [],
+      users: [],
+      members: [],
+      createdAt: '2024-12-02T17:34:21.295Z',
+      updatedAt: '2024-12-02T17:34:21.295Z'
+    }
+  },
+  { upsert: true }
+)
+
+db.scopes.updateOne(
+  {
+    value: 'restrictedTechPython'
+  },
+  {
+    $setOnInsert: {
+      _id: new ObjectId('67d298c20bac2c4a0dc553ac'),
+      userId: '90552794-0613-4023-819a-512aa9d40023',
+      scopeId: 'restrictedTechPython',
+      value: 'restrictedTechPython',
+      kind: ['user', 'team'],
+      description:
+        'A restricted tech permission to provide Python service creation and management to a team or user',
+      teams: [],
+      users: [],
+      members: [],
+      createdAt: '2024-12-02T17:34:21.295Z',
+      updatedAt: '2024-12-02T17:34:21.295Z'
+    }
+  },
+  { upsert: true }
+)
+
+db.scopes.updateOne(
+  {
     value: 'externalTest'
   },
   {
     $setOnInsert: {
       _id: new ObjectId('674def9d30093e3a3aa49d35'),
       userId: '90552794-0613-4023-819a-512aa9d40023',
+      scopeId: 'externalTest',
       value: 'externalTest',
       kind: ['team'],
       description:
@@ -35,6 +104,7 @@ db.scopes.updateOne(
     $setOnInsert: {
       _id: new ObjectId('6750708d454fcbbcc1568154'),
       userId: '90552794-0613-4023-819a-512aa9d40023',
+      scopeId: 'breakGlass',
       value: 'breakGlass',
       kind: ['user', 'member'],
       description:
@@ -66,6 +136,7 @@ db.scopes.updateOne(
     $setOnInsert: {
       _id: new ObjectId('6824a65285c4bfd4d458ab74'),
       userId: '90552794-0613-4023-819a-512aa9d40023',
+      scopeId: 'scopeId',
       value: 'admin',
       kind: ['team', 'user'],
       description: 'CDP Portal Admin addPermissionToTeam',
@@ -92,6 +163,7 @@ db.scopes.updateOne(
     $setOnInsert: {
       _id: new ObjectId('68b5c553a9d77b9d2ef90aa9'),
       userId: '90552794-0613-4023-819a-512aa9d40023',
+      scopeId: 'canGrantBreakGlass',
       value: 'canGrantBreakGlass',
       kind: ['user', 'member'],
       description:

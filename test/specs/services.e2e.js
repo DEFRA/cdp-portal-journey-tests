@@ -12,11 +12,7 @@ import ServicesPage from 'page-objects/services.page'
 import TabsComponent from 'components/tabs.component.js'
 import ApplyChangelog from 'page-objects/apply-changelog.page.js'
 import { createMicroService } from 'helpers/create-micro-service.js'
-import {
-  addPermissionToTeam,
-  createPermission,
-  deletePermission
-} from 'helpers/permissions.js'
+import { addPermissionToTeam } from 'helpers/permissions.js'
 import { describeWithAnnotations } from 'helpers/test-filters.js'
 
 const adminService = 'cdp-portal-frontend'
@@ -221,13 +217,7 @@ describeWithAnnotations('Postgres service page', [], () => {
         const permissionName = 'restrictedTechPostgres'
 
         await LoginStubPage.loginAsAdmin()
-        await createPermission(permissionName, 'Team')
         await addPermissionToTeam(permissionName, 'Platform')
-      })
-
-      after(async () => {
-        await LoginStubPage.loginAsAdmin()
-        await deletePermission('restrictedTechPostgres')
       })
 
       it("Should be on the 'Services' list page", async () => {
