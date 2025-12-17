@@ -10,10 +10,8 @@ import LoginStubPage from 'page-objects/login-stub.page'
 import GovUkSummaryListComponent from 'components/govuk-summary-list.component.js'
 import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
 import StatusPage from 'page-objects/status.page.js'
-import { describeWithAnnotations } from 'helpers/test-filters.js'
-
 describe('Create microservice', () => {
-  describeWithAnnotations('When logged out', ['@smoke'], () => {
+  describe('When logged out', () => {
     before(async () => {
       await CreatePage.open()
     })
@@ -27,7 +25,7 @@ describe('Create microservice', () => {
     })
   })
 
-  describeWithAnnotations('When logged in as admin user', [], () => {
+  describe('When logged in as admin user', () => {
     const testRepositoryName = `test-repo-${new Date().getTime()}`
     const serviceTypes = [
       'DotNet Backend',
