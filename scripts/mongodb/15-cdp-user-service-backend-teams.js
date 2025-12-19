@@ -198,11 +198,11 @@ db.teams.updateOne(
       users: ['90552794-0613-4023-819a-512aa9d40023'],
       scopes: [
         {
-          scopeId: new ObjectId('674def9d30093e3a3aa49d35'),
+          scopeId: 'externalTest',
           scopeName: 'externalTest'
         },
         {
-          scopeId: new ObjectId('6824a65285c4bfd4d458ab74'),
+          scopeId: 'admin',
           scopeName: 'admin'
         }
       ],

@@ -31,11 +31,11 @@ db.users.updateOne(
           endDate: '2023-11-26T12:51:00.028Z'
         },
         {
-          scopeId: new ObjectId('674def9d30093e3a3aa49d35'),
+          scopeId: 'externalTest',
           scopeName: 'externalTest'
         },
         {
-          scopeId: new ObjectId('6824a65285c4bfd4d458ab74'),
+          scopeId: 'admin',
           scopeName: 'admin'
         }
       ]
