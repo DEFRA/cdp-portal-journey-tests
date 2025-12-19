@@ -6,7 +6,7 @@ db.scopes.updateOne(
   },
   {
     $setOnInsert: {
-      _id: new ObjectId('68650ff52cca2f334b19ba73'),
+      _id: 'testAsTenant',
       userId: '90552794-0613-4023-819a-512aa9d40023',
       value: 'testAsTenant',
       kind: ['user'],
@@ -28,7 +28,7 @@ db.scopes.updateOne(
   },
   {
     $setOnInsert: {
-      _id: new ObjectId('67ff92737e4db64d50654c4d'),
+      _id: 'restrictedTechPostgres',
       userId: '90552794-0613-4023-819a-512aa9d40023',
       scopeId: 'restrictedTechPostgres',
       value: 'restrictedTechPostgres',
@@ -51,7 +51,7 @@ db.scopes.updateOne(
   },
   {
     $setOnInsert: {
-      _id: new ObjectId('67d298c20bac2c4a0dc553ac'),
+      _id: 'restrictedTechPython',
       userId: '90552794-0613-4023-819a-512aa9d40023',
       scopeId: 'restrictedTechPython',
       value: 'restrictedTechPython',
@@ -74,7 +74,7 @@ db.scopes.updateOne(
   },
   {
     $setOnInsert: {
-      _id: new ObjectId('674def9d30093e3a3aa49d35'),
+      _id: 'externalTest',
       userId: '90552794-0613-4023-819a-512aa9d40023',
       scopeId: 'externalTest',
       value: 'externalTest',
@@ -102,7 +102,7 @@ db.scopes.updateOne(
   },
   {
     $setOnInsert: {
-      _id: new ObjectId('6750708d454fcbbcc1568154'),
+      _id: 'breakGlass',
       userId: '90552794-0613-4023-819a-512aa9d40023',
       scopeId: 'breakGlass',
       value: 'breakGlass',
@@ -134,7 +134,7 @@ db.scopes.updateOne(
   },
   {
     $setOnInsert: {
-      _id: new ObjectId('6824a65285c4bfd4d458ab74'),
+      _id: 'scopeId',
       userId: '90552794-0613-4023-819a-512aa9d40023',
       scopeId: 'scopeId',
       value: 'admin',
@@ -161,7 +161,7 @@ db.scopes.updateOne(
   },
   {
     $setOnInsert: {
-      _id: new ObjectId('68b5c553a9d77b9d2ef90aa9'),
+      _id: 'canGrantBreakGlass',
       userId: '90552794-0613-4023-819a-512aa9d40023',
       scopeId: 'canGrantBreakGlass',
       value: 'canGrantBreakGlass',

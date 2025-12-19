@@ -17,13 +17,13 @@ db.users.updateOne(
       teams: ['platform'],
       scopes: [
         {
-          scopeId: new ObjectId('68b5c553a9d77b9d2ef90aa9'),
+          scopeId: 'canGrantBreakGlass',
           scopeName: 'canGrantBreakGlass',
           teamId: 'platform',
           teamName: 'Platform'
         },
         {
-          scopeId: new ObjectId('6750708d454fcbbcc1568154'),
+          scopeId: 'breakGlass',
           scopeName: 'breakGlass',
           teamId: 'platform',
           teamName: 'Platform',
