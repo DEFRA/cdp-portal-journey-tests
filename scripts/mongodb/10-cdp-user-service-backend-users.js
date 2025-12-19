@@ -17,13 +17,13 @@ db.users.updateOne(
       teams: ['platform'],
       scopes: [
         {
-          scopeId: new ObjectId('68b5c553a9d77b9d2ef90aa9'),
+          scopeId: 'canGrantBreakGlass',
           scopeName: 'canGrantBreakGlass',
           teamId: 'platform',
           teamName: 'Platform'
         },
         {
-          scopeId: new ObjectId('6750708d454fcbbcc1568154'),
+          scopeId: 'breakGlass',
           scopeName: 'breakGlass',
           teamId: 'platform',
           teamName: 'Platform',
@@ -31,11 +31,11 @@ db.users.updateOne(
           endDate: '2023-11-26T12:51:00.028Z'
         },
         {
-          scopeId: new ObjectId('674def9d30093e3a3aa49d35'),
+          scopeId: 'externalTest',
           scopeName: 'externalTest'
         },
         {
-          scopeId: new ObjectId('6824a65285c4bfd4d458ab74'),
+          scopeId: 'admin',
           scopeName: 'admin'
         }
       ]
