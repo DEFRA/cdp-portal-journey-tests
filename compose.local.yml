@@ -27,7 +27,6 @@ services:
       - "cdp.--1.sslip.io:host-gateway"
     ports:
       - 27017:27017
-    restart: always
 
   ################################################################################
   localstack:
@@ -40,7 +39,6 @@ services:
     ports:
       - 4566:4566
       - 4510-4559:4510-4559
-    restart: always
     env_file:
       - config/local-defaults.env
     volumes:
