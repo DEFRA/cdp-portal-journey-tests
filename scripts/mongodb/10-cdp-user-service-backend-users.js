@@ -39,8 +39,8 @@ const users = [
     name: 'Non-Admin User',
     email: 'non-admin.user@oidc.mock',
     github: 'nonadminuser',
-    createdAt: '2024-11-11T13:51:00.028Z',
-    updatedAt: '2024-11-12T13:24:00.028Z',
+    createdAt: new Date('2024-11-11T13:51:00.028Z'),
+    updatedAt: new Date('2024-11-12T13:24:00.028Z'),
     teams: ['tenantteam1'],
     scopes: []
   }
@@ -50,18 +50,9 @@ const relationships = [
   {
     subject: '90552794-0613-4023-819a-512aa9d40023',
     subjectType: 'user',
-    relation: 'granted',
-    resource: 'canGrantBreakGlass',
-    resourceType: 'permission'
-  },
-  {
-    subject: '90552794-0613-4023-819a-512aa9d40023',
-    subjectType: 'user',
-    relation: 'breakGlass',
-    resource: 'team',
-    resourceType: 'platform',
-    start: '2023-10-26T12:51:00.028Z',
-    end: '2023-11-26T12:51:00.028Z'
+    relation: 'canGrantBreakGlass',
+    resource: 'platform',
+    resourceType: 'team'
   },
   {
     subject: '90552794-0613-4023-819a-512aa9d40023',
