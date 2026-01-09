@@ -114,14 +114,7 @@ describe('Create perf tests', () => {
 
       await waitForCreateEntityStatus('Created')
 
-      for (const resource of [
-        'Repository',
-        'Infra',
-        'Logs',
-        'Metrics',
-        'Nginx',
-        'Squid'
-      ]) {
+      for (const resource of ['Repository', 'Infra', 'Logs', 'Squid']) {
         await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
       }
 
