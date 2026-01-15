@@ -1,4 +1,5 @@
 db = db.getSiblingDB('cdp-user-service-backend')
+portalBackendDB = db.getSiblingDB('cdp-user-service-backend')
 
 const teams = [
   {
@@ -8,18 +9,7 @@ const teams = [
     github: 'cdp-platform',
     alertEmailAddresses: ['platform@cdp.local'],
     createdAt: '2023-10-26T12:51:00.028Z',
-    updatedAt: '2023-10-26T12:51:00.028Z',
-    users: ['90552794-0613-4023-819a-512aa9d40023'],
-    scopes: [
-      {
-        scopeId: 'externalTest',
-        scopeName: 'externalTest'
-      },
-      {
-        scopeId: 'admin',
-        scopeName: 'admin'
-      }
-    ]
+    updatedAt: '2023-10-26T12:51:00.028Z'
   },
   {
     _id: 'tenantteam1',
@@ -27,9 +17,7 @@ const teams = [
     description: 'A test team',
     github: 'cdp-tenant-1',
     createdAt: '2024-10-26T12:51:00.028Z',
-    updatedAt: '2024-10-26T12:55:00.028Z',
-    users: ['dfa791eb-76b2-434c-ad1f-bb9dc1dd8b48'],
-    scopes: []
+    updatedAt: '2024-10-26T12:55:00.028Z'
   }
 ]
 
@@ -69,6 +57,26 @@ db.teams.bulkWrite(
     updateOne: {
       filter: { _id: r._id },
       update: { $setOnInsert: r },
+      upsert: true
+    }
+  })),
+  { ordered: false }
+)
+
+const pbeTeamsToInsert = teams.map((t) => ({
+  teamId: t._id, // map _id to TeamId
+  name: t.name,
+  description: t.description,
+  github: t.github,
+  created: t.createdAt,
+  serviceCode: null
+}))
+
+portalBackendDB.teams.bulkWrite(
+  pbeTeamsToInsert.map((team) => ({
+    updateOne: {
+      filter: { teamId: team.teamId },
+      update: { $setOnInsert: team },
       upsert: true
     }
   })),

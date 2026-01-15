@@ -7,32 +7,7 @@ const users = [
     email: 'admin.user@oidc.mock',
     github: 'adminuser',
     createdAt: '2023-10-26T12:51:00.028Z',
-    updatedAt: '2023-10-26T12:51:00.028Z',
-    teams: ['platform'],
-    scopes: [
-      {
-        scopeId: 'canGrantBreakGlass',
-        scopeName: 'canGrantBreakGlass',
-        teamId: 'platform',
-        teamName: 'Platform'
-      },
-      {
-        scopeId: 'breakGlass',
-        scopeName: 'breakGlass',
-        teamId: 'platform',
-        teamName: 'Platform',
-        startDate: '2023-10-26T12:51:00.028Z',
-        endDate: '2023-11-26T12:51:00.028Z'
-      },
-      {
-        scopeId: 'externalTest',
-        scopeName: 'externalTest'
-      },
-      {
-        scopeId: 'admin',
-        scopeName: 'admin'
-      }
-    ]
+    updatedAt: '2023-10-26T12:51:00.028Z'
   },
   {
     _id: 'dfa791eb-76b2-434c-ad1f-bb9dc1dd8b48',
@@ -40,9 +15,7 @@ const users = [
     email: 'non-admin.user@oidc.mock',
     github: 'nonadminuser',
     createdAt: new Date('2024-11-11T13:51:00.028Z'),
-    updatedAt: new Date('2024-11-12T13:24:00.028Z'),
-    teams: ['tenantteam1'],
-    scopes: []
+    updatedAt: new Date('2024-11-12T13:24:00.028Z')
   }
 ]
 

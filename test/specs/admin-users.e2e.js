@@ -307,7 +307,7 @@ describe('Admin Users', () => {
 
         await FormComponent.inputLabel('Search for a User').click()
         await browser.keys('Admin')
-        await FormComponent.inputLabel('Admin User').click()
+        await $('label=Admin User').click()
 
         await FormComponent.submitButton('Add permission').click()
       })
