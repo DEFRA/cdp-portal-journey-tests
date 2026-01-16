@@ -3,49 +3,16 @@ services:
   # infrastructure services
   ################################################################################
   mongodb:
-    image: mongo:6.0.26
+    image: mongo:7.0.28
     container_name: cdp-infra-mongodb
-    command: ["--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - ./scripts/mongodb:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.adminCommand({ ping: 1 })' && exit 0 || exit 1"]
+      test: ["CMD", "mongosh", "--eval", "db.hello().ok"]
       interval: 10s
       timeout: 5s
       retries: 3
       start_period: 30s
-
-  # Step 1: Initialize replica set
-  mongodb-replica-init:
-    image: mongo:6.0.26
-    network_mode: "service:mongodb"
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    volumes:
-      - ./scripts/init-replica-set.js:/init-replica-set.js
-    command: mongosh --file /init-replica-set.js
-    restart: "no"
-
-  # Step 2: Run data initialization scripts (after replica set is ready)
-  mongodb-data-init:
-    image: mongo:6.0.26
-    network_mode: "service:mongodb"
-    depends_on:
-      mongodb-replica-init:
-        condition: service_completed_successfully
-    volumes:
-      - ./scripts/mongodb:/scripts
-    command: >
-      bash -c "
-        echo 'Running data initialisation scripts...'
-        for script in /scripts/*.js; do
-          if [ -f \"$$script\" ]; then
-            echo 'Running:' $$script
-            mongosh --file $$script
-          fi
-        done
-        echo 'Data initialisation complete'
-      "
-    restart: "no"
 
   ################################################################################
   localstack:
@@ -110,8 +77,6 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_healthy
-      mongodb-data-init:
-        condition: service_completed_successfully
       cdp-self-service-ops:
         condition: service_started
       cdp-user-service-backend:
@@ -128,8 +93,6 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_healthy
-      mongodb-data-init:
-        condition: service_completed_successfully
       cdp-portal-stubs:
         condition: service_healthy
     healthcheck:
@@ -148,8 +111,6 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_healthy
-      mongodb-data-init:
-        condition: service_completed_successfully
       cdp-portal-stubs:
         condition: service_healthy
     environment:
@@ -175,8 +136,6 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_healthy
-      mongodb-data-init:
-        condition: service_completed_successfully
       redis:
         condition: service_started
     healthcheck:
@@ -197,8 +156,6 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_healthy
-      mongodb-data-init:
-        condition: service_completed_successfully
       redis:
         condition: service_started
     healthcheck:
