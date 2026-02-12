@@ -399,7 +399,7 @@ Alternatively you can run the test suite as a GitHub workflow.
 Test runs on GitHub are not able to connect to the CDP Test environments. Instead, they run the tests against a version
 of the services running in docker.
 A docker compose `compose.yml` is included as a starting point, which includes the databases (mongodb, redis) and
-infrastructure (localstack) pre-setup.
+infrastructure (localstack) pre-setup
 
 Steps:
 
