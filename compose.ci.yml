@@ -3,9 +3,9 @@
 # This template provides comparable infrastructure to the real environment.
 #   - mongodb
 #   - redis
-#   - localstack (s3, sqs, sns)
+#   - moto (s3, sqs, sns)
 #
-# Both mongo and localstack have init scripts included for setting up resources
+# Both mongo and moto have init scripts included for setting up resources
 # on startup. These scripts are in scripts/.
 #
 # It also includes a selenium-chrome container for running the browser headless.
@@ -25,10 +25,6 @@ services:
   localstack:
     env_file:
       - ./config/docker-defaults.env
-    volumes:
-      - ./scripts/localstack/assets:/opt/code/localstack/assets
-      - ./config/docker-defaults.env:/etc/localstack/conf.d/defaults.env:ro
-      - ./scripts/localstack:/etc/localstack/init/ready.d
 
   ################################################################################
   # Headless browser, used by the test suite to actually run the tests against the

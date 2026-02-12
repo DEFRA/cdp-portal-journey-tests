@@ -41,6 +41,7 @@ WDIO tests against an environment, github workflow or locally.
   - [Running the tests](#running-the-tests)
 - [Requirements of CDP Environment Tests](#requirements-of-cdp-environment-tests)
 - [Running on GitHub](#running-on-github)
+- [Moving from Localstack to Moto](#moto)
 - [Licence](#licence)
   - [About the licence](#about-the-licence)
 
@@ -412,6 +413,12 @@ By default, the provided workflow will run when triggered manually from GitHub o
 
 If you want to use the repository exclusively for running docker composed based test suites consider displaying the
 publish.yml workflow.
+
+## Moving from Localstack to Moto
+
+Due to licensing changes in Localstack (requiring a dev key etc) we are trying out using [Moto](https://docs.getmoto.org) instead.
+Moto is a python library that mocks a large number of AWS services. It also provides a standalone 'server' mode which runs as a container.
+It works as a drop-in replacement for Localstack.
 
 ## Licence
 

@@ -1,5 +1,5 @@
 db = db.getSiblingDB('cdp-user-service-backend')
-portalBackendDB = db.getSiblingDB('cdp-user-service-backend')
+portalBackendDB = db.getSiblingDB('cdp-portal-backend')
 
 const teams = [
   {
