@@ -16,12 +16,16 @@ services:
 
   ################################################################################
   localstack:
-    image: localstack/localstack:4.3.0
+    image: motoserver/moto:latest
     container_name: cdp-infra-localstack
     environment:
-      - LOCALSTACK_HOST=127.0.0.1
-      - SERVICES=s3,sqs,sns,dynamodb,firehose,secretsmanager
-      - LS_LOG=WARN
+      - AWS_ENDPOINT_URL=http://localhost:4566
+      - MOTO_URL=http://localhost:4566
+      - MOTO_ASSETS_DIR=/scripts/assets
+      - MOTO_ACCOUNT_ID=000000000000
+    volumes:
+      - ./scripts/moto:/scripts
+    entrypoint: ["/bin/sh", "/scripts/entrypoint.sh"]
     healthcheck:
       test: ["CMD", "stat", "/tmp/READY"]
       interval: 3s

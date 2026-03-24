@@ -41,10 +41,6 @@ services:
       - 4510-4559:4510-4559
     env_file:
       - config/local-defaults.env
-    volumes:
-      - ./scripts/localstack/assets:/opt/code/localstack/assets
-      - ./config/local-defaults.env:/etc/localstack/conf.d/defaults.env:ro
-      - ./scripts/localstack:/etc/localstack/init/ready.d
 
   ################################################################################
   redis:
