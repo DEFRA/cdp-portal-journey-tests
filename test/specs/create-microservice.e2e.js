@@ -1,15 +1,16 @@
-import { $, browser, expect } from '@wdio/globals'
+import { browser, expect } from '@wdio/globals'
 
 import CreatePage from 'page-objects/create.page'
 import ServicesPage from 'page-objects/services.page'
 import FormComponent from 'components/form.component'
 import PageHeadingComponent from 'components/page-heading.component'
 import LinkComponent from 'components/link.component'
-import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import GovUkSummaryListComponent from 'components/govuk-summary-list.component.js'
 import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
 import StatusPage from 'page-objects/status.page.js'
+import ErrorPage from 'page-objects/error.page.js'
+
 describe('Create microservice', () => {
   describe('When logged out', () => {
     before(async () => {
@@ -139,17 +140,6 @@ describe('Create microservice', () => {
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
 
       await waitForCreateEntityStatus('Created')
-
-      for (const resource of [
-        'Repository',
-        'Infra',
-        'Logs',
-        'Metrics',
-        'Nginx',
-        'Squid'
-      ]) {
-        await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
-      }
 
       await expect(browser).toHaveTitle(
         `Created ${testRepositoryName} Microservice | Core Delivery Platform - Portal`

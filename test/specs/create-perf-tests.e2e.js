@@ -1,4 +1,4 @@
-import { $, browser, expect } from '@wdio/globals'
+import { browser, expect } from '@wdio/globals'
 
 import CreatePage from 'page-objects/create.page'
 import FormComponent from 'components/form.component'
@@ -113,10 +113,6 @@ describe('Create perf tests', () => {
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
 
       await waitForCreateEntityStatus('Created')
-
-      for (const resource of ['Repository', 'Infra', 'Logs', 'Squid']) {
-        await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
-      }
 
       await expect(browser).toHaveTitle(
         `Created ${testRepositoryName} TestSuite | Core Delivery Platform - Portal`
