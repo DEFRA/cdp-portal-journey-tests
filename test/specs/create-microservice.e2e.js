@@ -9,8 +9,10 @@ import LoginStubPage from 'page-objects/login-stub.page'
 import GovUkSummaryListComponent from 'components/govuk-summary-list.component.js'
 import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
 import StatusPage from 'page-objects/status.page.js'
+import ErrorPage from 'page-objects/error.page.js'
+
 describe('Create microservice', () => {
-  /*describe('When logged out', () => {
+  describe('When logged out', () => {
     before(async () => {
       await CreatePage.open()
     })
@@ -22,7 +24,7 @@ describe('Create microservice', () => {
       await expect(ErrorPage.title('401')).toExist()
       await expect(ErrorPage.message()).toHaveText('Unauthorized')
     })
-  })*/
+  })
 
   describe('When logged in as admin user', () => {
     const testRepositoryName = `test-repo-${new Date().getTime()}`
