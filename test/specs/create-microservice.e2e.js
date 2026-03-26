@@ -5,11 +5,11 @@ import ServicesPage from 'page-objects/services.page'
 import FormComponent from 'components/form.component'
 import PageHeadingComponent from 'components/page-heading.component'
 import LinkComponent from 'components/link.component'
+import ErrorPage from 'page-objects/error.page'
 import LoginStubPage from 'page-objects/login-stub.page'
 import GovUkSummaryListComponent from 'components/govuk-summary-list.component.js'
 import { waitForCreateEntityStatus } from 'helpers/wait-for-create-entity-status.js'
 import StatusPage from 'page-objects/status.page.js'
-import ErrorPage from 'page-objects/error.page.js'
 
 describe('Create microservice', () => {
   describe('When logged out', () => {
