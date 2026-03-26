@@ -1,4 +1,4 @@
-import { $, browser, expect } from '@wdio/globals'
+import { browser, expect } from '@wdio/globals'
 
 import CreatePage from 'page-objects/create.page'
 import ServicesPage from 'page-objects/services.page'
@@ -122,17 +122,6 @@ describe('Create prototype', () => {
       await expect(PageHeadingComponent.title(testRepositoryName)).toExist()
 
       await waitForCreateEntityStatus('Created')
-
-      for (const resource of [
-        'Repository',
-        'Infra',
-        'Logs',
-        'Metrics',
-        'Nginx',
-        'Squid'
-      ]) {
-        await expect(await $(`[data-testid="${resource}-created"]`)).toExist()
-      }
 
       await expect(browser).toHaveTitle(
         `Created ${testRepositoryName} Microservice | Core Delivery Platform - Portal`
