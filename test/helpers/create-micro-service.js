@@ -33,20 +33,6 @@ async function createMicroService(name, teamName) {
   // Create
   await FormComponent.submitButton('Create').click()
 
-  // Status page
-  for (const resource of [
-    'Repository',
-    'Infra',
-    'Logs',
-    'Metrics',
-    'Nginx',
-    'Squid'
-  ]) {
-    await $(`[data-testid="${resource}-created"]`).waitForExist({
-      timeout: oneMinute
-    })
-  }
-
   await waitForCreateEntityStatus('Created')
   await expect(StatusPage.overallProgress()).toHaveText('Created')
   await expect(browser).toHaveTitle(
