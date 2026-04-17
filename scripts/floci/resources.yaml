@@ -1,0 +1,296 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CDP Bootstrap Infrastructure'
+
+Resources:
+  EcsDeploymentsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "ecs-deployments"
+
+  EcrPushEventsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "ecr-push-events"
+
+  GithubEventsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "github-events"
+
+  CdpWorkflowEventsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "cdp_workflow_events"
+
+  LambdaEventsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "lambda-events"
+
+  CdpPlatformPortalEventsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "cdp_platform_portal_events"
+
+  DeploymentsFromPortalQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "deployments-from-portal"
+
+  CdpNotificationQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "cdp-notification"
+
+  SecretManagementUpdatesQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "secret_management_updates"
+
+  SecretManagementUpdatesLambdaQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "secret_management_updates_lambda"
+
+  CdpClamavResultsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "cdp-clamav-results"
+
+  CdpUploaderScanResultsCallbackQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "cdp-uploader-scan-results-callback.fifo"
+      FifoQueue: true
+
+  MockClamavQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "mock-clamav"
+
+  CdpUploaderDownloadRequestsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "cdp-uploader-download-requests"
+
+  CdpGrafanaAlertsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "cdp_grafana_alerts"
+
+  CdpNotifyGithubEventsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "cdp-notify-github-events"
+
+  StubSlackMessagesQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "stub-slack-messages"
+
+  RunTestFromPortalQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "run-test-from-portal"
+
+  RunMigrationsFromPortalQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "run-migrations-from-portal"
+
+  # --- SNS Topics ---
+  WorkflowEventsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "cdp_workflow_events"
+
+  CdpPlatformPortalEventsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "cdp_platform_portal_events"
+
+  DeployTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "deploy-topic"
+
+  CdpNotificationsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "cdp-notification"
+
+  SecretManagementTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "secret_management"
+
+  RunTestTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "run-test-topic"
+
+  RunWebshellTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "run-webshell-topic"
+
+  RunMigrationsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "run-migrations-topic"
+
+  MonoLambdaTriggerTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "mono-lambda-trigger-topic"
+
+  # --- Subscriptions ---
+  FooSub:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref MonoLambdaTriggerTopic
+      Endpoint: "foo@bar.com"
+      Protocol: email
+
+  WorkflowSubscription:
+    Type: AWS::SNS::Subscription
+    DependsOn:
+      - WorkflowEventsTopic
+      - EcsDeploymentsQueue
+    Properties:
+      TopicArn: !Ref WorkflowEventsTopic
+      Endpoint: !GetAtt
+        - EcsDeploymentsQueue
+        - Arn
+      Protocol: sqs
+
+    CdpPlatformPortalEventsSubscription:
+      Type: AWS::SNS::Subscription
+      DependsOn:
+        - CdpPlatformPortalEventsTopic
+        - CdpPlatformPortalEventsQueue
+      Properties:
+        TopicArn: !Ref CdpPlatformPortalEventsTopic
+        Endpoint: !Ref CdpPlatformPortalEventsQueue
+        Protocol: sqs
+
+    DeploySubscription:
+      Type: AWS::SNS::Subscription
+      DependsOn:
+        - DeployTopic
+        - DeploymentsFromPortalQueue
+      Properties:
+        TopicArn: !Ref DeployTopic
+        Endpoint: !GetAtt DeploymentsFromPortalQueue.Arn
+        Protocol: sqs
+
+  CdpNotificationsSubscription:
+    Type: AWS::SNS::Subscription
+    DependsOn:
+      - CdpNotificationsTopic
+      - CdpNotificationQueue
+    Properties:
+      TopicArn: !Ref CdpNotificationsTopic
+      Endpoint: !GetAtt CdpNotificationQueue.Arn
+      Protocol: sqs
+
+  CdpNotificationsStubSubscription:
+    Type: AWS::SNS::Subscription
+    DependsOn:
+      - CdpNotificationsTopic
+      - StubSlackMessagesQueue
+    Properties:
+      TopicArn: !Ref CdpNotificationsTopic
+      Endpoint: !GetAtt StubSlackMessagesQueue.Arn
+      Protocol: sqs
+
+  SecretManagementUpdatesSubscription:
+    Type: AWS::SNS::Subscription
+    DependsOn:
+      - SecretManagementTopic
+      - SecretManagementUpdatesQueue
+    Properties:
+      TopicArn: !Ref SecretManagementTopic
+      Endpoint: !GetAtt SecretManagementUpdatesQueue.Arn
+      Protocol: sqs
+
+  SecretManagementUpdatesLambdaSubscription:
+    Type: AWS::SNS::Subscription
+    DependsOn:
+      - SecretManagementTopic
+      - SecretManagementUpdatesLambdaQueue
+    Properties:
+      TopicArn: !Ref SecretManagementTopic
+      Endpoint: !GetAtt SecretManagementUpdatesLambdaQueue.Arn
+      Protocol: sqs
+
+  RunTestSubscription:
+    Type: AWS::SNS::Subscription
+    DependsOn:
+      - RunTestTopic
+      - RunTestFromPortalQueue
+    Properties:
+      TopicArn: !Ref RunTestTopic
+      Endpoint: !GetAtt RunTestFromPortalQueue.Arn
+      Protocol: sqs
+
+  RunMigrationsSubscription:
+    Type: AWS::SNS::Subscription
+    DependsOn:
+      - RunMigrationsTopic
+      - RunMigrationsFromPortalQueue
+    Properties:
+      TopicArn: !Ref RunMigrationsTopic
+      Endpoint: !GetAtt RunMigrationsFromPortalQueue.Arn
+      Protocol: sqs
+
+
+  # --- S3 Buckets ---
+  QuarantineBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "cdp-uploader-quarantine"
+      NotificationConfiguration:
+        QueueConfigurations:
+          - Event: "s3:ObjectCreated:*"
+            Queue: !GetAtt MockClamAVQueue.Arn
+
+  CdpExampleNodeFrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "cdp-example-node-frontend"
+
+  CdpDocumentation:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "cdp-documentation"
+
+  MigrationBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "cdp-migrations"
+
+  # --- DynamoDB ---
+  SessionTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "cdp-portal-frontend-session"
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TimeToLiveSpecification:
+        AttributeName: "expiresAt"
+        Enabled: true
+
+  # --- Secrets Manager ---
+  PlatformSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: "cdp/notify/backend/integration-keys/Platform"
+      SecretString: "abc123def456ghi789jkl012mno345pq"
