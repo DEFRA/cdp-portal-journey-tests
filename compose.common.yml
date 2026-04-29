@@ -147,23 +147,3 @@ services:
       retries: 10
 
   ################################################################################
-  cdp-notify:
-    image: defradigital/cdp-notify:${CDP_NOTIFY:-latest}
-    container_name: cdp-notify
-    environment:
-      - PORT=3007
-    depends_on:
-      localstack:
-        condition: service_healthy
-      mongodb:
-        condition: service_healthy
-      redis:
-        condition: service_started
-    healthcheck:
-      test: ["CMD", "curl", "http://localhost:3007/health"]
-      interval: 5s
-      timeout: 2s
-      start_period: 20s
-      retries: 10
-
-  ################################################################################

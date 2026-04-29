@@ -72,11 +72,3 @@ services:
       - ./config/cdp-portal-stubs.env
 
 ################################################################################
-  cdp-notify:
-    env_file:
-      - ./config/docker-defaults.env
-      - ./config/cdp-notify.env
-    environment:
-      - PORT=3007
-
-################################################################################

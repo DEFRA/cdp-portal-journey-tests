@@ -178,22 +178,6 @@ services:
       - "cdp.127.0.0.1.sslip.io:host-gateway"
       - "cdp.--1.sslip.io:host-gateway"
 
-  ################################################################################
-  cdp-notify:
-    networks:
-      - cdpnet
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-      - "cdp.127.0.0.1.sslip.io:host-gateway"
-      - "cdp.--1.sslip.io:host-gateway"
-    env_file:
-      - config/local-defaults.env
-      - config/cdp-notify.env
-    ports:
-      - 3007:3007
-    profiles:
-      - portal
-
 ################################################################################
 
 volumes:
