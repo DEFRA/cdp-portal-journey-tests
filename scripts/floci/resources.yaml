@@ -78,11 +78,6 @@ Resources:
     Properties:
       QueueName: "cdp_grafana_alerts"
 
-  CdpNotifyGithubEventsQueue:
-    Type: AWS::SQS::Queue
-    Properties:
-      QueueName: "cdp-notify-github-events"
-
   StubSlackMessagesQueue:
     Type: AWS::SQS::Queue
     Properties:
