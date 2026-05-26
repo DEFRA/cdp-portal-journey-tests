@@ -1,13 +1,16 @@
 import { $, expect } from '@wdio/globals'
-
 import { Page } from 'page-objects/page'
 import TabsComponent from 'components/tabs.component.js'
 
 class ServicesPage extends Page {
-  /**
-   * Check if the services nav link is active
-   * @returns {Promise<boolean>}
-   */
+  get title() {
+    return $('[data-testid="app-page-heading-title"]')
+  }
+
+  get serviceName() {
+    return $('[data-testid="app-service-header-service-name"]')
+  }
+
   navIsActive() {
     return super.navIsActive('services')
   }
