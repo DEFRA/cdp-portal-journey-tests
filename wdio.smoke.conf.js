@@ -25,7 +25,7 @@ export const config = {
   hostname: process.env.CHROMEDRIVER_URL || 'localhost',
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
-  specs: ['./test/specs/**/*.js'],
+  specs: ['./test/specs/smoke-tests.e2e.js'],
   // Tests to exclude
   exclude: [],
   maxInstances: 1,
