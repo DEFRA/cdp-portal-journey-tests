@@ -6,8 +6,8 @@ const users = [
     name: 'Admin User',
     email: 'admin.user@oidc.mock',
     github: 'adminuser',
-    createdAt: '2023-10-26T12:51:00.028Z',
-    updatedAt: '2023-10-26T12:51:00.028Z',
+    createdAt: new Date('2023-10-26T12:51:00.028Z'),
+    updatedAt: new Date('2023-10-26T12:51:00.028Z'),
     lastActive: new Date('2024-11-13T09:15:00.028Z')
   },
   {
