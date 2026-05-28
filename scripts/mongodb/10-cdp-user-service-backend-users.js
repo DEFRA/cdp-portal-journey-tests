@@ -6,8 +6,9 @@ const users = [
     name: 'Admin User',
     email: 'admin.user@oidc.mock',
     github: 'adminuser',
-    createdAt: '2023-10-26T12:51:00.028Z',
-    updatedAt: '2023-10-26T12:51:00.028Z'
+    createdAt: new Date('2023-10-26T12:51:00.028Z'),
+    updatedAt: new Date('2023-10-26T12:51:00.028Z'),
+    lastActive: new Date('2024-11-13T09:15:00.028Z')
   },
   {
     _id: 'dfa791eb-76b2-434c-ad1f-bb9dc1dd8b48',
@@ -15,7 +16,8 @@ const users = [
     email: 'non-admin.user@oidc.mock',
     github: 'nonadminuser',
     createdAt: new Date('2024-11-11T13:51:00.028Z'),
-    updatedAt: new Date('2024-11-12T13:24:00.028Z')
+    updatedAt: new Date('2024-11-12T13:24:00.028Z'),
+    lastActive: new Date('2024-11-12T13:24:00.028Z')
   }
 ]
 
