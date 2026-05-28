@@ -18,14 +18,14 @@ inputs:
     type: string
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         repository: DEFRA/cdp-portal-journey-tests
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
-        node-version: 20
+        node-version: 22
         cache: npm
     - name: Setup the tests
       run: npm i
@@ -33,12 +33,12 @@ runs:
 
     - name: Start docker compose
       run: |
-          CDP_SELF_SERVICE_OPS=${{inputs.self-service-ops}} \
-          CDP_PORTAL_FRONTEND=${{inputs.portal-frontend}} \
-          CDP_PORTAL_BACKEND=${{inputs.portal-backend}} \
-          CDP_USER_SERVICE_BACKEND=${{inputs.user-service-backend}} \
-          CDP_PORTAL_STUBS=${{inputs.portal-stubs}} \
-          docker compose -f compose.common.yml -f compose.ci.yml up --wait-timeout 300 -d --quiet-pull
+        CDP_SELF_SERVICE_OPS=${{inputs.self-service-ops}} \
+        CDP_PORTAL_FRONTEND=${{inputs.portal-frontend}} \
+        CDP_PORTAL_BACKEND=${{inputs.portal-backend}} \
+        CDP_USER_SERVICE_BACKEND=${{inputs.user-service-backend}} \
+        CDP_PORTAL_STUBS=${{inputs.portal-stubs}} \
+        docker compose -f compose.common.yml -f compose.ci.yml up --wait-timeout 300 -d --quiet-pull
       shell: bash
     - name: Run the tests
       run: |
@@ -53,13 +53,13 @@ runs:
       shell: bash
     - name: Upload allure report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: allure-report
         path: ./allure-report
     - name: Upload docker compose logs
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: docker-compose-logs
         path: ./logs.txt
