@@ -65,7 +65,7 @@ db.teams.bulkWrite(
 
 const pbeTeamsToInsert = teams.map((t) => ({
   teamId: t._id, // map _id to TeamId
-  name: t.name,
+  teamName: t.name,
   description: t.description,
   github: t.github,
   created: t.createdAt,
