@@ -133,7 +133,7 @@ describe('Teams', () => {
         ).toExist()
         await expect(await AnnouncementComponent.content()).toHaveText(
           new RegExp(
-            `You have active break glass for the ${teamName} team. From today`,
+            `You have active break glass for the ${teamName} team\\. From .* until .*`,
             'gi'
           )
         )
