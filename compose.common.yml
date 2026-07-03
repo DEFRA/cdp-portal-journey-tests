@@ -17,7 +17,7 @@ services:
   ################################################################################
   # Now using floci due to localstack licensing changes
   localstack:
-    image: hectorvent/floci:latest-aws
+    image: floci/floci:latest-compat
     container_name: cdp-infra-localstack
     environment:
       - AWS_ENDPOINT_URL=http://localhost:4566

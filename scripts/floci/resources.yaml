@@ -139,6 +139,63 @@ Resources:
     Properties:
       TopicName: "mono-lambda-trigger-topic"
 
+  # --- SNS Subscriptions ---
+  WorkflowEventsSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref WorkflowEventsTopic
+      Protocol: sqs
+      Endpoint: !GetAtt CdpWorkflowEventsQueue.Arn
+
+  DeployTopicSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref DeployTopic
+      Protocol: sqs
+      Endpoint: !GetAtt DeploymentsFromPortalQueue.Arn
+
+  CdpNotificationSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref CdpNotificationsTopic
+      Protocol: sqs
+      Endpoint: !GetAtt CdpNotificationQueue.Arn
+
+  CdpNotificationStubSlackSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref CdpNotificationsTopic
+      Protocol: sqs
+      Endpoint: !GetAtt StubSlackMessagesQueue.Arn
+
+  SecretManagementUpdatesSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref SecretManagementTopic
+      Protocol: sqs
+      Endpoint: !GetAtt SecretManagementUpdatesQueue.Arn
+
+  SecretManagementUpdatesLambdaSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref SecretManagementTopic
+      Protocol: sqs
+      Endpoint: !GetAtt SecretManagementUpdatesLambdaQueue.Arn
+
+  RunTestTopicSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref RunTestTopic
+      Protocol: sqs
+      Endpoint: !GetAtt RunTestFromPortalQueue.Arn
+
+  RunMigrationsTopicSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref RunMigrationsTopic
+      Protocol: sqs
+      Endpoint: !GetAtt RunMigrationsFromPortalQueue.Arn
+
   # --- S3 Buckets ---
   QuarantineBucket:
     Type: AWS::S3::Bucket
