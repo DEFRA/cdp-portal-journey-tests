@@ -93,6 +93,11 @@ Resources:
     Properties:
       QueueName: "run-migrations-from-portal"
 
+  MonoLambdaFromPortalQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "monolambda"
+
   # --- SNS Topics ---
   WorkflowEventsTopic:
     Type: AWS::SNS::Topic
@@ -195,6 +200,13 @@ Resources:
       TopicArn: !Ref RunMigrationsTopic
       Protocol: sqs
       Endpoint: !GetAtt RunMigrationsFromPortalQueue.Arn
+
+  MonoLambdaTopicSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref MonoLambdaTriggerTopic
+      Protocol: sqs
+      Endpoint: !GetAtt MonoLambdaFromPortalQueue.Arn
 
   # --- S3 Buckets ---
   QuarantineBucket:
