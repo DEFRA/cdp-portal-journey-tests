@@ -173,13 +173,6 @@ Resources:
       Protocol: sqs
       Endpoint: !GetAtt StubSlackMessagesQueue.Arn
 
-  SecretManagementUpdatesSubscription:
-    Type: AWS::SNS::Subscription
-    Properties:
-      TopicArn: !Ref SecretManagementTopic
-      Protocol: sqs
-      Endpoint: !GetAtt SecretManagementUpdatesQueue.Arn
-
   SecretManagementUpdatesLambdaSubscription:
     Type: AWS::SNS::Subscription
     Properties:
