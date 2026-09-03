@@ -7,7 +7,6 @@ aws cloudformation create-stack \
   --debug
 
 aws s3 cp --recursive ./assets/cdp-documentation/ s3://cdp-documentation
-aws s3 cp ./assets/migrations.tgz s3://cdp-migrations/cdp-postgres-service/0.1.0/migrations.tgz
-aws s3 cp ./assets/migrations.tgz s3://cdp-migrations/cdp-postgres-service/0.2.0/migrations.tgz
+aws s3 cp --recursive ./assets/cdp-migrations/ s3://cdp-migrations
 
 echo READY > /tmp/READY
