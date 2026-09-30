@@ -1,4 +1,4 @@
-import { browser, expect } from '@wdio/globals'
+import { $, browser, expect } from '@wdio/globals'
 
 import AnnouncementComponent from 'components/announcement.component'
 import BannerComponent from 'components/banner.component'
@@ -142,7 +142,8 @@ describe('Teams', () => {
       it('Should be able to view the "prod" terminal', async () => {
         await goToServiceTerminalPage({ tenantService })
 
-        await expect(GovukTableComponent.content()).toHaveText(/Prod/gi)
+        // Matches both the environments table and the environment sub-navigation layouts
+        await expect($('main')).toHaveText(/\bProd\b/)
       })
 
       it('Should be able to go to the users team page via the announcement banner', async () => {
@@ -200,7 +201,7 @@ describe('Teams', () => {
       it('Should not be able to view the "prod" terminal', async () => {
         await goToServiceTerminalPage({ tenantService })
 
-        await expect(GovukTableComponent.content()).not.toHaveText(/Prod/gi)
+        await expect($('main')).not.toHaveText(/\bProd\b/)
       })
     })
   })
