@@ -14,7 +14,7 @@ on:
 jobs:
   cdp-workflows:
     name: Run Pull Request Checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -27,7 +27,7 @@ jobs:
           npm run lint
   tests:
     name: Run Journey Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
       - uses: ./run-journey-tests

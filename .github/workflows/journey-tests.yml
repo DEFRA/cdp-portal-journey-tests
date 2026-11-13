@@ -14,6 +14,6 @@ on:
 jobs:
   build:
     name: Run Journey Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: DEFRA/cdp-portal-journey-tests/run-journey-tests@main
